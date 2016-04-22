@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:camel="http://camel.apache.org/schema/spring"
+       xmlns:cxf="http://camel.apache.org/schema/cxf"
+       xsi:schemaLocation="
+    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd
+    http://camel.apache.org/schema/cxf http://camel.apache.org/schema/cxf/camel-cxf.xsd">
+
+
+
+    <bean id="encryptSOAPBody" class="org.apache.camel.model.dataformat.XMLSecurityDataFormat">
+    </bean>
+
+    <bean id="encryptXML" class="org.apache.camel.model.dataformat.XMLSecurityDataFormat">
+    </bean>
+
+    <bean id="decryptXML" class="org.apache.camel.model.dataformat.XMLSecurityDataFormat">
+    </bean>
+
+    <bean id="utils" class="org.jboss.fuse.security.encryption.Utils"/>
+    <bean id="service" class="org.jboss.fuse.security.encryption.CheeseProcessImpl"/>
+
+
+</beans>

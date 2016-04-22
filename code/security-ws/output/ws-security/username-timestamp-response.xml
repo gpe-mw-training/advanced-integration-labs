@@ -1,0 +1,30 @@
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+    <SOAP-ENV:Header xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+        <wsse:Security
+                xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd"
+                xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd"
+                soap:mustUnderstand="1">
+            <wsse:UsernameToken wsu:Id="UsernameToken-c75b5704-5fcf-419c-8172-060529fd3a95">
+                <wsse:Username>cmoulliard</wsse:Username>
+                <wsse:Password
+                        Type="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordDigest">
+                    EnH1Akn+UeR2e2se9a8WYJr6juQ=
+                </wsse:Password>
+                <wsse:Nonce
+                        EncodingType="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-soap-message-security-1.0#Base64Binary">
+                    zVJB6yiZPbra4dk+1gdCnA==
+                </wsse:Nonce>
+                <wsu:Created>2016-04-11T09:33:40.475Z</wsu:Created>
+            </wsse:UsernameToken>
+            <wsu:Timestamp wsu:Id="TS-b89d33cc-af08-43ed-ba81-13ffdf86d858">
+                <wsu:Created>2016-04-11T09:33:40.475Z</wsu:Created>
+                <wsu:Expires>2016-04-11T09:38:40.475Z</wsu:Expires>
+            </wsu:Timestamp>
+        </wsse:Security>
+    </SOAP-ENV:Header>
+    <soap:Body>
+        <ns2:echoResponse xmlns:ns2="http://service.security.fuse.jboss.org/">
+            <return>test</return>
+        </ns2:echoResponse>
+    </soap:Body>
+</soap:Envelope>

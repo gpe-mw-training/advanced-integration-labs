@@ -1,0 +1,64 @@
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+    <SOAP-ENV:Header xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+        <wsse:Security
+                xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd"
+                xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd"
+                soap:mustUnderstand="1">
+            <ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#"
+                          Id="SIG-ee829a52-a2b4-497d-9324-36f5833e24b2">
+                <ds:SignedInfo>
+                    <ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#">
+                        <ec:InclusiveNamespaces xmlns:ec="http://www.w3.org/2001/10/xml-exc-c14n#"
+                                                PrefixList="soap"/>
+                    </ds:CanonicalizationMethod>
+                    <ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
+                    <ds:Reference URI="#id-41d00bd5-8579-4c0d-b0b5-c572ffbccc92">
+                        <ds:Transforms>
+                            <ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#">
+                                <ec:InclusiveNamespaces xmlns:ec="http://www.w3.org/2001/10/xml-exc-c14n#"
+                                                        PrefixList=""/>
+                            </ds:Transform>
+                        </ds:Transforms>
+                        <ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+                        <ds:DigestValue>bRZVlerBsu2H6waZKvhDncH1vrV53XqJIhQhBPecEhs=</ds:DigestValue>
+                    </ds:Reference>
+                    <ds:Reference URI="#TS-d671f2bc-feb0-4d49-b9a1-9efa47bc717d">
+                        <ds:Transforms>
+                            <ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#">
+                                <ec:InclusiveNamespaces xmlns:ec="http://www.w3.org/2001/10/xml-exc-c14n#"
+                                                        PrefixList="wsse soap"/>
+                            </ds:Transform>
+                        </ds:Transforms>
+                        <ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+                        <ds:DigestValue>Nl5S+b/K22BWFMyjI3Fs29J8dNbUpm1gPFuKzx/DCbM=</ds:DigestValue>
+                    </ds:Reference>
+                </ds:SignedInfo>
+                <ds:SignatureValue>
+                    EeMnB5QwkUFRGcioXrnOlTMr0kZj8VWWXU4pVB9UkI1UUl/ky9N7k2SMxY6j7uJdI/jRVx1qVo5By2bo8twH0Bsid24Qdz74rDbkqU7bxPPf/EEgTXcM+Uhmf4WI76ZArU2iVpuECpfJhR4DZMXD76oLDwLKbG433M4/PR59C7WjRwYTi61sIqxy90t3LaYE+xZ0caFYjSzhc0igu8F1Yz4J6i7MO7GmbYFzyQ8+Fj9Bu9Xm5RL7PNW0pI6BhkQNE3m8BqlcIp8Jx2kAdoosCokWMKUU3mpCrmfGuvtlsbcjWcGHuBkYgE/8AgB3zpdvxQo4vEYzZsVcQChh82hStg==
+                </ds:SignatureValue>
+                <ds:KeyInfo Id="KI-c3cf10e0-a2d4-48c8-8838-e08bb00aa04f">
+                    <wsse:SecurityTokenReference wsu:Id="STR-ff10f316-3212-4de4-bb00-cea8e45fda30">
+                        <ds:X509Data>
+                            <ds:X509IssuerSerial>
+                                <ds:X509IssuerName>
+                                    CN=localhost,OU=Unknown,O=Unknown,L=Unknown,ST=Unknown,C=Unknown
+                                </ds:X509IssuerName>
+                                <ds:X509SerialNumber>863863773</ds:X509SerialNumber>
+                            </ds:X509IssuerSerial>
+                        </ds:X509Data>
+                    </wsse:SecurityTokenReference>
+                </ds:KeyInfo>
+            </ds:Signature>
+            <wsu:Timestamp wsu:Id="TS-d671f2bc-feb0-4d49-b9a1-9efa47bc717d">
+                <wsu:Created>2016-04-11T10:25:48.436Z</wsu:Created>
+                <wsu:Expires>2016-04-11T10:30:48.436Z</wsu:Expires>
+            </wsu:Timestamp>
+        </wsse:Security>
+    </SOAP-ENV:Header>
+    <soap:Body xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd"
+               wsu:Id="id-41d00bd5-8579-4c0d-b0b5-c572ffbccc92">
+        <ns2:echoResponse xmlns:ns2="http://service.security.fuse.jboss.org/">
+            <return>test</return>
+        </ns2:echoResponse>
+    </soap:Body>
+</soap:Envelope>

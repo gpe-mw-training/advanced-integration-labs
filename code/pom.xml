@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.jboss.fuse</groupId>
+    <artifactId>project</artifactId>
+    <version>1.0</version>
+    <name>Fuse Integration Advanced :: Project</name>
+    <packaging>pom</packaging>
+
+    <properties>
+        <!-- Fuse 6.2.1.GA -->
+        <version.fabric8>1.2.0.redhat-621084</version.fabric8>
+        <version.camel>2.15.1.redhat-621084</version.camel>
+        <version.cxf>3.0.4.redhat-621084</version.cxf>
+
+        <!-- Fuse 6.3 Beta
+        <version.fabric8>1.2.0.redhat-630055</version.fabric8>
+        <version.camel>2.17.0.redhat-630055</version.camel>
+        <version.cxf>3.1.5.redhat-630055</version.cxf>
+        -->
+
+        <version.xmlunit>1.5</version.xmlunit>
+    </properties>
+
+    <!-- Deps -->
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>io.fabric8.bom</groupId>
+                <artifactId>fabric8-bom</artifactId>
+                <version>${version.fabric8}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+            <!-- Camel -->
+            <dependency>
+                <groupId>org.apache.camel</groupId>
+                <artifactId>camel-parent</artifactId>
+                <version>${version.camel}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+
+            <!-- Dep not declared within the BOM -->
+            <dependency>
+                <groupId>xmlunit</groupId>
+                <artifactId>xmlunit</artifactId>
+                <version>${version.xmlunit}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.cxf</groupId>
+                    <artifactId>cxf-codegen-plugin</artifactId>
+                    <version>${version.cxf}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.cxf</groupId>
+                    <artifactId>cxf-java2ws-plugin</artifactId>
+                    <version>${version.cxf}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.camel</groupId>
+                    <artifactId>camel-maven-plugin</artifactId>
+                    <version>${version.camel}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+    <modules>
+        <module>security-ws</module>
+        <module>security-rest</module>
+    </modules>
+
+</project>

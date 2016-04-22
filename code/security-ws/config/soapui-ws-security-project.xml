@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:soapui-project id="37579912-8cc5-4e0a-9c90-9ace912515a3" activeEnvironment="Default" name="ws-security"
+                    resourceRoot="" soapui-version="5.2.1" abortOnError="false" runType="SEQUENTIAL"
+                    xmlns:con="http://eviware.com/soapui/config">
+    <con:settings/>
+    <con:interface xsi:type="con:WsdlInterface" id="1cf87110-24a9-4254-b7b0-91b20eef1532" wsaVersion="NONE"
+                   name="EchoImplServiceSoapBinding" type="wsdl"
+                   bindingName="{http://service.security.fuse.jboss.org/}EchoImplServiceSoapBinding"
+                   soapVersion="1_1" anonymous="optional" definition="http://localhost:9001/Echo?wsdl"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <con:settings/>
+        <con:definitionCache type="TEXT" rootPart="http://localhost:9001/Echo?wsdl">
+            <con:part>
+                <con:url>http://localhost:9001/Echo?wsdl</con:url>
+                <con:content><![CDATA[<wsdl:definitions name="EchoImplService" targetNamespace="http://service.security.fuse.jboss.org/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://service.security.fuse.jboss.org/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http">
+  <wsdl:types>
+    <xs:schema elementFormDefault="unqualified" targetNamespace="http://service.security.fuse.jboss.org/" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:element name="echo" type="tns:echo"/>
+      <xs:element name="echoResponse" type="tns:echoResponse"/>
+      <xs:complexType name="echo">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="text" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="echoResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="return" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="echoResponse">
+    <wsdl:part element="tns:echoResponse" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="echo">
+    <wsdl:part element="tns:echo" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="Echo">
+    <wsdl:operation name="echo">
+      <wsdl:input message="tns:echo" name="echo"></wsdl:input>
+      <wsdl:output message="tns:echoResponse" name="echoResponse"></wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="EchoImplServiceSoapBinding" type="tns:Echo">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="echo">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="echo">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="echoResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="EchoImplService">
+    <wsdl:port binding="tns:EchoImplServiceSoapBinding" name="EchoImplPort">
+      <soap:address location="http://localhost:9001/Echo"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>]]></con:content>
+                <con:type>http://schemas.xmlsoap.org/wsdl/</con:type>
+            </con:part>
+        </con:definitionCache>
+        <con:endpoints>
+            <con:endpoint>http://localhost:9001/Echo</con:endpoint>
+        </con:endpoints>
+        <con:operation id="0b578f3b-5791-4d6f-8528-d926daaa2403" isOneWay="false" action="" name="echo"
+                       bindingOperationName="echo" type="Request-Response" outputName="echoResponse"
+                       inputName="echo" receivesAttachments="false" sendsAttachments="false"
+                       anonymous="optional">
+            <con:settings/>
+            <con:call id="efbb4ac3-d80e-4ac8-9bbb-14ac534555d8" name="Request1" outgoingWss="out">
+                <con:settings>
+                    <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
+                </con:settings>
+                <con:encoding>UTF-8</con:encoding>
+                <con:endpoint>http://localhost:9001/Echo</con:endpoint>
+                <con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://service.security.fuse.jboss.org/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <ser:echo>
+         <!--Optional:-->
+         <text>Hello</text>
+      </ser:echo>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request>
+                <con:credentials>
+                    <con:selectedAuthProfile>Basic</con:selectedAuthProfile>
+                    <con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes>
+                    <con:authType>Global HTTP Settings</con:authType>
+                </con:credentials>
+                <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
+                <con:jmsPropertyConfig/>
+                <con:wsaConfig mustUnderstand="NONE" version="200508"
+                               action="http://service.security.fuse.jboss.org/Echo/echo"/>
+                <con:wsrmConfig version="1.2"/>
+            </con:call>
+        </con:operation>
+    </con:interface>
+    <con:properties/>
+    <con:wssContainer>
+        <con:crypto>
+            <con:source>
+                /Home/fuse-integration-advanced/code/security/src/test/resources/integrationstore.jks
+            </con:source>
+            <con:password>secUr1t8</con:password>
+            <con:type>KEYSTORE</con:type>
+        </con:crypto>
+        <con:outgoing>
+            <con:name>out</con:name>
+            <con:entry type="Timestamp">
+                <con:configuration>
+                    <timeToLive>60000</timeToLive>
+                    <strictTimestamp>true</strictTimestamp>
+                </con:configuration>
+            </con:entry>
+            <con:entry type="Username" username="cmoulliard" password="drailluomc">
+                <con:configuration>
+                    <addCreated>true</addCreated>
+                    <addNonce>true</addNonce>
+                    <passwordType>PasswordText</passwordType>
+                </con:configuration>
+            </con:entry>
+        </con:outgoing>
+    </con:wssContainer>
+    <con:oAuth2ProfileContainer/>
+    <con:sensitiveInformation/>
+</con:soapui-project>

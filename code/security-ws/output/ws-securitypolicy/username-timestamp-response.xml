@@ -1,0 +1,18 @@
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+    <SOAP-ENV:Header xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+        <wsse:Security
+                xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd"
+                xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd"
+                soap:mustUnderstand="1">
+            <wsu:Timestamp wsu:Id="TS-a26ce899-f004-4c40-ba22-76b46ac364b5">
+                <wsu:Created>2016-04-18T16:16:39.512Z</wsu:Created>
+                <wsu:Expires>2016-04-18T16:21:39.512Z</wsu:Expires>
+            </wsu:Timestamp>
+        </wsse:Security>
+    </SOAP-ENV:Header>
+    <soap:Body>
+        <greetMeResponse xmlns="http://jboss.org/HelloWorld/types">
+            <responseType>Hello Charles</responseType>
+        </greetMeResponse>
+    </soap:Body>
+</soap:Envelope>

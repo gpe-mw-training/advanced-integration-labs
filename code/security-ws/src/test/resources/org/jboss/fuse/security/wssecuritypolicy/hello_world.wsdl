@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:tns="http://jboss.org/HelloWorld"
+                  xmlns:x1="http://jboss.org/HelloWorld/types"
+                  xmlns:wsp="http://www.w3.org/ns/ws-policy"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                  name="HelloWorld" targetNamespace="http://jboss.org/HelloWorld">
+    <wsdl:types>
+        <schema xmlns="http://www.w3.org/2001/XMLSchema"
+                xmlns:tns="http://jboss.org/HelloWorld/types"
+                targetNamespace="http://jboss.org/HelloWorld/types"
+                elementFormDefault="qualified">
+            <simpleType name="MyStringType">
+                <restriction base="string">
+                    <maxLength value="30"/>
+                </restriction>
+            </simpleType>
+            <element name="greetMe">
+                <complexType>
+                    <sequence>
+                        <element name="requestType" type="tns:MyStringType"/>
+                    </sequence>
+                </complexType>
+            </element>
+            <element name="greetMeResponse">
+                <complexType>
+                    <sequence>
+                        <element name="responseType" type="string"/>
+                    </sequence>
+                </complexType>
+            </element>
+        </schema>
+    </wsdl:types>
+    <wsdl:message name="greetMeRequest">
+        <wsdl:part element="x1:greetMe" name="in"/>
+    </wsdl:message>
+    <wsdl:message name="greetMeResponse">
+        <wsdl:part element="x1:greetMeResponse" name="out"/>
+    </wsdl:message>
+    <wsdl:portType name="Greeter">
+        <wsdl:operation name="greetMe">
+            <wsdl:input message="tns:greetMeRequest" name="greetMeRequest"/>
+            <wsdl:output message="tns:greetMeResponse" name="greetMeResponse"/>
+        </wsdl:operation>
+    </wsdl:portType>
+
+    <wsdl:binding name="GreeterBinding" type="tns:Greeter">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="greetMe">
+            <soap:operation soapAction="" style="document"/>
+            <wsdl:input name="greetMeRequest">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="greetMeResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+
+    <wsdl:binding name="GreeterSignEncryptBinding" type="tns:Greeter">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="greetMe">
+            <soap:operation soapAction="" style="document"/>
+            <wsdl:input name="greetMeRequest">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="greetMeResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+
+    <wsdl:service name="GreeterService">
+        <!-- GreeterService with policy GreetMeAuthenticationPolicy -->
+        <wsdl:port binding="tns:GreeterBinding" name="GreeterPort">
+            <wsp:PolicyReference xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+                                 URI="#GreetMeAuthenticationPolicy"/>
+            <soap:address location="https://localhost:9001/ws/Hello"/>
+        </wsdl:port>
+
+        <!-- GreeterService used to sign the Message -->
+        <wsdl:port binding="tns:GreeterBinding" name="GreeterSignedPort">
+            <soap:address location="https://localhost:9001/ws/Hello"/>
+        </wsdl:port>
+
+        <!-- GreeterService used to sign/encrypt the Message -->
+        <wsdl:port binding="tns:GreeterSignEncryptBinding" name="GreeterSignEncryptPort">
+            <soap:address location="https://localhost:9001/ws/Hello"/>
+        </wsdl:port>
+    </wsdl:service>
+
+    <!-- Generate SOAP Header with wsse section containing a TimeStamp and a Username with a Hashed password -->
+</wsdl:definitions>

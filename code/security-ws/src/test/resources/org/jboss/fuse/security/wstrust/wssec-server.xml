@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:cxf="http://cxf.apache.org/core"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:http="http://cxf.apache.org/transports/http/configuration"
+       xmlns:jaxws="http://cxf.apache.org/jaxws"
+       xsi:schemaLocation="             http://cxf.apache.org/core             http://cxf.apache.org/schemas/core.xsd              http://cxf.apache.org/configuration/security                       http://cxf.apache.org/schemas/configuration/security.xsd             http://cxf.apache.org/jaxws             http://cxf.apache.org/schemas/jaxws.xsd             http://cxf.apache.org/transports/http/configuration             http://cxf.apache.org/schemas/configuration/http-conf.xsd             http://cxf.apache.org/transports/http-jetty/configuration             http://cxf.apache.org/schemas/configuration/http-jetty.xsd             http://www.springframework.org/schema/beans             http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <cxf:bus>
+        <cxf:features>
+            <!--<cxf:logging/>-->
+        </cxf:features>
+    </cxf:bus>
+    <jaxws:endpoint id="server"
+                    xmlns:s="http://apache.org/hello_world_soap_http"
+                    implementor="org.jboss.fuse.security.wstrust.GreeterImpl"
+                    endpointName="s:SoapPort"
+                    serviceName="s:SOAPService"
+                    address="http://localhost:9001/SoapContext/SoapPort"
+                    wsdlLocation="src/test/resources/org/jboss/fuse/security/wstrust/hello_world.wsdl">
+        <jaxws:properties>
+            <entry key="ws-security.signature.username" value="myservicekey"/>
+            <entry key="ws-security.callback-handler" value="org.jboss.fuse.security.wstrust.ServerCallbackHandler"/>
+            <entry key="ws-security.signature.properties" value="org/jboss/fuse/security/wstrust/serviceKeystore.properties"/>
+            <entry key="ws-security.encryption.properties" value="org/jboss/fuse/security/wstrust/serviceKeystore.properties"/>
+        </jaxws:properties>
+    </jaxws:endpoint>
+</beans>

@@ -1,0 +1,5 @@
+<ns2:country id="Italy" xmlns:ns2="http://encryption.security.fuse.jboss.org">
+    <source>cow</source>
+    <cheese>Parmezan</cheese>
+    <rating>9/10</rating>
+</ns2:country>

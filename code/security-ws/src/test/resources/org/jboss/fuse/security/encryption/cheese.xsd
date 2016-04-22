@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+  <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+             xmlns:tns="http://encryption.security.fuse.jboss.org"
+             targetNamespace="http://encryption.security.fuse.jboss.org">
+
+  <!-- Request type -->
+  <xs:element name="processCheese" type="tns:processCheese"/>
+  <xs:complexType name="processCheese">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- Response type -->
+  <xs:element name="processCheeseResponse" type="tns:processCheeseResponse"/>
+  <xs:complexType name="processCheeseResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:country"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- Country Type containing cheese info -->
+  <xs:element name="country" type="tns:country"/>
+  <xs:complexType name="country">
+    <xs:sequence>
+      <xs:element name="source">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="cow"/>
+            <xs:enumeration value="goat"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="cheese">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="gouda"/>
+            <xs:enumeration value="gorgonzola"/>
+            <xs:enumeration value="brie"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="rating" type="xs:string"/>
+    </xs:sequence>
+    <xs:attribute type="xs:string" name="id" use="required"/>
+  </xs:complexType>
+
+</xs:schema>

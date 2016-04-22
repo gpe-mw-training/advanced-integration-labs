@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="CheeseProcessService"
+                  targetNamespace="http://encryption.security.fuse.jboss.org"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:tns="http://encryption.security.fuse.jboss.org"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+
+    <wsdl:types>
+        <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+            <xs:import namespace="http://encryption.security.fuse.jboss.org" schemaLocation="cheese.xsd"/>
+        </xs:schema>
+    </wsdl:types>
+
+    <wsdl:message name="processCheeseResponse">
+        <wsdl:part name="parameters" element="tns:processCheeseResponse">
+        </wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="processCheese">
+        <wsdl:part name="parameters" element="tns:processCheese">
+        </wsdl:part>
+    </wsdl:message>
+
+    <wsdl:portType name="CheeseProcess">
+        <wsdl:operation name="processCheese">
+            <wsdl:input name="processCheese" message="tns:processCheese">
+            </wsdl:input>
+            <wsdl:output name="processCheeseResponse" message="tns:processCheeseResponse">
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:portType>
+
+    <wsdl:binding name="CheeseProcessServiceSoapBinding" type="tns:CheeseProcess">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="processCheese">
+            <soap:operation soapAction="" style="document"/>
+            <wsdl:input name="processCheese">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="processCheeseResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+
+    <wsdl:service name="CheeseProcessService">
+        <wsdl:port name="CheeseProcessPort" binding="tns:CheeseProcessServiceSoapBinding">
+            <soap:address location="http://localhost:9090/CheeseProcessPort"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>
