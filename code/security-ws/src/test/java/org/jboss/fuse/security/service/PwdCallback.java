@@ -21,14 +21,5 @@ public class PwdCallback implements CallbackHandler {
     }
 
     public void handle(Callback[] callbacks) throws IOException, UnsupportedCallbackException {
-        for (int i = 0; i < callbacks.length; i++) {
-            WSPasswordCallback pc = (WSPasswordCallback)callbacks[i];
-
-            String pass = passwords.get(pc.getIdentifier());
-            if (pass != null) {
-                pc.setPassword(pass);
-                return;
-            }
-        }
     }
 }
