@@ -80,4 +80,27 @@
         <module>security-rest</module>
     </modules>
 
+    <!-- Repository -->
+    <repositories>
+        <repository>
+            <id>JBoss Fuse Public</id>
+            <url>http://repository.jboss.org/nexus/content/groups/fs-public</url>
+        </repository>
+        <repository>
+            <id>JBoss Public</id>
+            <url>https://repository.jboss.org/nexus/content/groups/public/</url>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>JBoss Fuse Public</id>
+            <url>http://repository.jboss.org/nexus/content/groups/fs-public</url>
+        </pluginRepository>
+        <pluginRepository>
+            <id>JBoss Public</id>
+            <url>https://repository.jboss.org/nexus/content/groups/public/</url>
+        </pluginRepository>
+    </pluginRepositories>
+
 </project>
