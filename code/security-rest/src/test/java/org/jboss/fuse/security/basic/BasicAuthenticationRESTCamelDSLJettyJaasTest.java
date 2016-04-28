@@ -14,11 +14,12 @@ import org.eclipse.jetty.security.*;
 import org.eclipse.jetty.security.authentication.BasicAuthenticator;
 import org.eclipse.jetty.util.security.Constraint;
 import org.jboss.fuse.security.common.BaseJettyTest;
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -35,6 +36,12 @@ public class BasicAuthenticationRESTCamelDSLJettyJaasTest extends BaseJettyTest 
         return jndi;
     }
 
+    @Before
+    public void init() throws IOException {
+        URL jaasURL = BasicAuthenticationRESTCamelDSLJettyJaasTest.class.getResource("myrealm-jaas.txt");
+        System.setProperty("java.security.auth.login.config", jaasURL.toExternalForm());
+    }
+
     private SecurityHandler getSecurityHandler() throws IOException {
         Constraint constraint = new Constraint(Constraint.__BASIC_AUTH, "user");
         constraint.setAuthenticate(true);
@@ -47,13 +54,14 @@ public class BasicAuthenticationRESTCamelDSLJettyJaasTest extends BaseJettyTest 
         sh.setAuthenticator(new BasicAuthenticator());
         sh.setConstraintMappings(Arrays.asList(new ConstraintMapping[] { cm }));
 
-        JAASLoginService loginService = new JAASLoginService();
-        loginService.setName("myrealm");
-
         DefaultIdentityService dis = new DefaultIdentityService();
 
+        JAASLoginService loginService = new JAASLoginService();
+        loginService.setName("myrealm");
+        loginService.setLoginModuleName("propsFileModule");
+        loginService.setIdentityService(dis);
+
         sh.setLoginService(loginService);
-        sh.setIdentityService(dis);
         sh.setConstraintMappings(Arrays.asList(new ConstraintMapping[] { cm }));
 
         return sh;
@@ -83,8 +91,7 @@ public class BasicAuthenticationRESTCamelDSLJettyJaasTest extends BaseJettyTest 
             response.setCode(httpclient.executeMethod(get));
 
             InputStream is = get.getResponseBodyAsStream();
-            Scanner s = new Scanner(is).useDelimiter("\\A");
-            response.setMessage(s.hasNext() ? s.next() : "");
+            response.setMessage(inputStreamToString(is));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -96,6 +103,11 @@ public class BasicAuthenticationRESTCamelDSLJettyJaasTest extends BaseJettyTest 
         return response;
     }
 
+
+    protected String inputStreamToString(InputStream is) {
+        Scanner s = new Scanner(is).useDelimiter("\\A");
+        return s.hasNext() ? s.next() : "";
+    }
 
     protected class HttpResult {
         int code;
