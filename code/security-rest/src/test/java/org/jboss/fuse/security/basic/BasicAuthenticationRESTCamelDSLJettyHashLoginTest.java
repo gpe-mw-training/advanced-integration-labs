@@ -49,7 +49,7 @@ public class BasicAuthenticationRESTCamelDSLJettyHashLoginTest extends BaseJetty
         sh.setConstraintMappings(Arrays.asList(new ConstraintMapping[] { cm }));
 
         HashLoginService loginService = new HashLoginService("MyRealm",
-                "src/test/resources/org/jboss/fuse/security/basic/myRealm.properties");
+                "src/test/resources/org/jboss/fuse/security/basic/myrealm.props");
         sh.setLoginService(loginService);
         sh.setConstraintMappings(Arrays.asList(new ConstraintMapping[] { cm }));
 

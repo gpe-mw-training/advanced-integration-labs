@@ -39,7 +39,7 @@ public class BasicAuthenticationCamelTest extends BaseJettyTest {
         sh.setAuthenticator(new BasicAuthenticator());
         sh.setConstraintMappings(Arrays.asList(new ConstraintMapping[] {cm}));
 
-        HashLoginService loginService = new HashLoginService("MyRealm", "src/test/resources/org/jboss/fuse/security/basic/myRealm.properties");
+        HashLoginService loginService = new HashLoginService("MyRealm", "src/test/resources/org/jboss/fuse/security/basic/myrealm.props");
         sh.setLoginService(loginService);
         sh.setConstraintMappings(Arrays.asList(new ConstraintMapping[]{cm}));
 

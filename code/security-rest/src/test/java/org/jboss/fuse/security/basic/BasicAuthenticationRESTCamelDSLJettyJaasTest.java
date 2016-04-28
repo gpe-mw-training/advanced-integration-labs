@@ -38,7 +38,7 @@ public class BasicAuthenticationRESTCamelDSLJettyJaasTest extends BaseJettyTest 
 
     @Before
     public void init() throws IOException {
-        URL jaasURL = BasicAuthenticationRESTCamelDSLJettyJaasTest.class.getResource("myrealm-jaas.txt");
+        URL jaasURL = BasicAuthenticationRESTCamelDSLJettyJaasTest.class.getResource("myrealm-jaas.cfg");
         System.setProperty("java.security.auth.login.config", jaasURL.toExternalForm());
     }
 
