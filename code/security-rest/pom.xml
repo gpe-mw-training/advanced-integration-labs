@@ -41,6 +41,7 @@
 
         <!-- CXF -->
 
+
         <!-- JAXRS Client -->
 
         <!-- Jetty -->
@@ -167,5 +168,60 @@
 
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>cxf-jetty9</id>
+            <properties>
+                <version.cxf>3.1.5.redhat-630055</version.cxf></properties>
+            <dependencies>
+                <dependency>
+                    <groupId>org.apache.cxf</groupId>
+                    <artifactId>cxf-core</artifactId>
+                    <version>${version.cxf}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.cxf</groupId>
+                    <artifactId>cxf-rt-frontend-jaxrs</artifactId>
+                    <version>${version.cxf}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.cxf</groupId>
+                    <artifactId>cxf-rt-rs-client</artifactId>
+                    <version>${version.cxf}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.cxf</groupId>
+                    <artifactId>cxf-rt-transports-http</artifactId>
+                    <version>${version.cxf}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.cxf</groupId>
+                    <artifactId>cxf-rt-transports-http-jetty</artifactId>
+                    <version>${version.cxf}</version>
+                </dependency>
+            </dependencies>
+            <build>
+                <defaultGoal>test</defaultGoal>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <phase>test</phase>
+                                <goals>
+                                    <goal>java</goal>
+                                </goals>
+                                <configuration>
+                                    <mainClass>org.jboss.fuse.security.role.cxf.Server</mainClass>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
 </project>

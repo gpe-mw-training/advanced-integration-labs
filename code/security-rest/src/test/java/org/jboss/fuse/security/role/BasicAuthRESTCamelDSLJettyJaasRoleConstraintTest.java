@@ -1,4 +1,4 @@
-package org.jboss.fuse.security.basic;
+package org.jboss.fuse.security.role;
 
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.impl.JndiRegistry;
@@ -10,21 +10,24 @@ import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.apache.commons.httpclient.auth.AuthScope;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.eclipse.jetty.jaas.JAASLoginService;
-import org.eclipse.jetty.security.*;
+import org.eclipse.jetty.security.ConstraintMapping;
+import org.eclipse.jetty.security.ConstraintSecurityHandler;
+import org.eclipse.jetty.security.DefaultIdentityService;
+import org.eclipse.jetty.security.SecurityHandler;
 import org.eclipse.jetty.security.authentication.BasicAuthenticator;
 import org.eclipse.jetty.util.security.Constraint;
 import org.jboss.fuse.security.common.BaseJettyTest;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Scanner;
 
-public class BasicAuthRESTCamelDSLJettyJaasTest extends BaseJettyTest {
+public class BasicAuthRESTCamelDSLJettyJaasRoleConstraintTest extends BaseJettyTest {
 
     private static String HOST = "localhost";
     private static int PORT = getPort1();
@@ -36,14 +39,14 @@ public class BasicAuthRESTCamelDSLJettyJaasTest extends BaseJettyTest {
     }
 
     @Before public void init() throws IOException {
-        URL jaasURL = BasicAuthRESTCamelDSLJettyJaasTest.class.getResource("/org/jboss/fuse/security/basic/myrealm-jaas.cfg");
+        URL jaasURL = BasicAuthRESTCamelDSLJettyJaasRoleConstraintTest.class.getResource("/org/jboss/fuse/security/basic/myrealm-jaas.cfg");
         System.setProperty("java.security.auth.login.config", jaasURL.toExternalForm());
     }
 
 
 
 
-    private HttpResult runAndValidate(String host, String url, String user, String password, String realm) {
+    private HttpResult callRestEndpoint(String host, String url, String user, String password, String realm) {
 
         HttpResult response = new HttpResult();
 
@@ -77,15 +80,8 @@ public class BasicAuthRESTCamelDSLJettyJaasTest extends BaseJettyTest {
         return response;
     }
 
-    private SecurityHandler getSecurityHandler() throws IOException {
-        // Describe the Authentication Constraint to be applied (BASIC, DISGEST, NEGOTIATE, ...)
-        Constraint constraint = new Constraint(Constraint.__BASIC_AUTH, "user");
-        constraint.setAuthenticate(true);
 
-        // Define Constraint mapping
-        ConstraintMapping cm = new ConstraintMapping();
-        cm.setPathSpec("/*");
-        cm.setConstraint(constraint);
+    private SecurityHandler getSecurityHandler() throws IOException {
 
         /* A security handler is a jetty handler that secures content behind a
          *  particular portion of a url space. The ConstraintSecurityHandler is a
@@ -97,7 +93,7 @@ public class BasicAuthRESTCamelDSLJettyJaasTest extends BaseJettyTest {
          */
         ConstraintSecurityHandler sh = new ConstraintSecurityHandler();
         sh.setAuthenticator(new BasicAuthenticator());
-        sh.setConstraintMappings(Arrays.asList(new ConstraintMapping[] { cm }));
+        sh.setConstraintMappings(getConstraintMappings());
 
         /*
          * The DefaultIdentityService service handles only role reference maps passed in an
@@ -116,10 +112,33 @@ public class BasicAuthRESTCamelDSLJettyJaasTest extends BaseJettyTest {
         loginService.setIdentityService(dis);
 
         sh.setLoginService(loginService);
-        sh.setConstraintMappings(Arrays.asList(new ConstraintMapping[] { cm }));
+        sh.setConstraintMappings(getConstraintMappings());
 
         return sh;
     }
 
+    private List<ConstraintMapping> getConstraintMappings() {
+
+        // Access allowed for role Admin
+        Constraint constraint0 = new Constraint(Constraint.__BASIC_AUTH, "user");
+        constraint0.setAuthenticate(true);
+        constraint0.setName("allowedForAll");
+        constraint0.setRoles(new String[] { "user", "admin" });
+        ConstraintMapping mapping0 = new ConstraintMapping();
+        mapping0.setPathSpec("/say/hello/*");
+        mapping0.setMethod("GET");
+        mapping0.setConstraint(constraint0);
+
+        Constraint constraint1 = new Constraint();
+        constraint1.setAuthenticate(true);
+        constraint1.setName("allowedForRoleAdmin");
+        constraint1.setRoles(new String[]{ "admin" });
+        ConstraintMapping mapping1 = new ConstraintMapping();
+        mapping1.setPathSpec("/say/bye/*");
+        mapping1.setMethod("GET");
+        mapping1.setConstraint(constraint1);
+
+        return Arrays.asList(mapping0, mapping1);
+    }
 
 }
