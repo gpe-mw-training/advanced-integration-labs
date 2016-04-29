@@ -7,7 +7,9 @@ import org.apache.camel.test.AvailablePortFinder;
 import org.apache.camel.test.junit4.CamelTestSupport;
 import org.junit.BeforeClass;
 
+import java.io.InputStream;
 import java.util.Properties;
+import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class BaseJettyTest extends CamelTestSupport{
@@ -40,6 +42,33 @@ public class BaseJettyTest extends CamelTestSupport{
         prop.setProperty("port2", "" + getPort1());
         jndi.bind("prop", prop);
         return jndi;
+    }
+
+    protected String inputStreamToString(InputStream is) {
+        Scanner s = new Scanner(is).useDelimiter("\\A");
+        return s.hasNext() ? s.next() : "";
+    }
+
+    public class HttpResult {
+        int code;
+        String message;
+
+        public int getCode() {
+            return code;
+        }
+
+        public void setCode(int code) {
+            this.code = code;
+        }
+
+        public String getMessage() {
+            return message;
+        }
+
+        public void setMessage(String message) {
+            this.message = message;
+        }
+
     }
 
     protected int getNextPort() {

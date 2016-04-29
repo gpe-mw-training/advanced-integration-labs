@@ -69,7 +69,9 @@ public class BasicAuthRESTCamelDSLJettyHashLoginTest extends BaseJettyTest {
 
 
 
-    protected HttpResult runAndValidate(String host, String url, String user, String password, String realm) {
+
+
+    protected HttpResult callRestEndpoint(String host, String url, String user, String password, String realm) {
 
         HttpResult response = new HttpResult();
 
@@ -102,29 +104,6 @@ public class BasicAuthRESTCamelDSLJettyHashLoginTest extends BaseJettyTest {
         }
 
         return response;
-    }
-
-
-    protected class HttpResult {
-        int code;
-        String message;
-
-        public int getCode() {
-            return code;
-        }
-
-        public void setCode(int code) {
-            this.code = code;
-        }
-
-        public String getMessage() {
-            return message;
-        }
-
-        public void setMessage(String message) {
-            this.message = message;
-        }
-
     }
 
 }
