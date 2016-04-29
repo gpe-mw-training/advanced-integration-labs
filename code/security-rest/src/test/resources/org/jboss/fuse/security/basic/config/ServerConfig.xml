@@ -2,18 +2,48 @@
 <!--
   ** This file configures the Server which exposes the REST endpoint.
 -->
-<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:sec="http://cxf.apache.org/configuration/security" xmlns:http="http://cxf.apache.org/transports/http/configuration" xmlns:httpj="http://cxf.apache.org/transports/http-jetty/configuration" xsi:schemaLocation="        http://cxf.apache.org/configuration/security                  http://cxf.apache.org/schemas/configuration/security.xsd        http://cxf.apache.org/transports/http/configuration        http://cxf.apache.org/schemas/configuration/http-conf.xsd        http://cxf.apache.org/transports/http-jetty/configuration        http://cxf.apache.org/schemas/configuration/http-jetty.xsd        http://www.springframework.org/schema/beans        http://www.springframework.org/schema/beans/spring-beans.xsd">
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:sec="http://cxf.apache.org/configuration/security"
+       xmlns:http="http://cxf.apache.org/transports/http/configuration"
+       xmlns:httpj="http://cxf.apache.org/transports/http-jetty/configuration"
+       xsi:schemaLocation="        http://cxf.apache.org/configuration/security                  http://cxf.apache.org/schemas/configuration/security.xsd        http://cxf.apache.org/transports/http/configuration        http://cxf.apache.org/schemas/configuration/http-conf.xsd        http://cxf.apache.org/transports/http-jetty/configuration        http://cxf.apache.org/schemas/configuration/http-jetty.xsd        http://www.springframework.org/schema/beans        http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"/>
     <httpj:engine-factory bus="cxf">
-<!--        <httpj:engine port="9000">
-            <httpj:tlsServerParameters>
-                <sec:keyManagers keyPassword="skpass">
-                    <sec:keyStore file="src/test/resources/org/jboss/fuse/security/basic/config/serviceKeystore.jks" password="sspass" type="JKS"/>
-                </sec:keyManagers>
-                <sec:trustManagers>
-                    <sec:keyStore file="src/test/resources/org/jboss/fuse/security/basic/config/serviceKeystore.jks" password="sspass" type="JKS"/>
-                </sec:trustManagers>
-                <sec:clientAuthentication want="false" required="false"/>
-            </httpj:tlsServerParameters>
-        </httpj:engine>-->
+        <httpj:engine port="${testutil.ports.BasicAuthCxfRSRoleTest}">
+            <httpj:handlers>
+                <bean class="org.eclipse.jetty.security.ConstraintSecurityHandler">
+                    <property name="loginService" ref="securityLoginService"/>
+                    <property name="constraintMappings">
+                        <list>
+                            <ref bean="securityConstraintMapping"/>
+                        </list>
+                    </property>
+                </bean>
+            </httpj:handlers>
+        </httpj:engine>
+        <!--        <httpj:tlsServerParameters>
+                    <sec:keyManagers keyPassword="skpass">
+                        <sec:keyStore file="src/test/resources/org/jboss/fuse/security/basic/config/serviceKeystore.jks" password="sspass" type="JKS"/>
+                    </sec:keyManagers>
+                    <sec:trustManagers>
+                        <sec:keyStore file="src/test/resources/org/jboss/fuse/security/basic/config/serviceKeystore.jks" password="sspass" type="JKS"/>
+                    </sec:trustManagers>
+                    <sec:clientAuthentication want="false" required="false"/>
+                </httpj:tlsServerParameters>-->
     </httpj:engine-factory>
+    <bean id="securityLoginService" class="org.eclipse.jetty.security.HashLoginService">
+        <property name="name" value="myrealm"/>
+        <property name="config"
+                  value="src/test/resources/org/jboss/fuse/security/basic/myrealm.props"/>
+    </bean>
+    <bean id="securityConstraint" class="org.eclipse.jetty.util.security.Constraint">
+        <property name="name" value="BASIC"/>
+        <property name="roles" value="user"/>
+        <property name="authenticate" value="true"/>
+    </bean>
+    <bean id="securityConstraintMapping" class="org.eclipse.jetty.security.ConstraintMapping">
+        <property name="constraint" ref="securityConstraint"/>
+        <property name="pathSpec" value="/*"/>
+    </bean>
 </beans>

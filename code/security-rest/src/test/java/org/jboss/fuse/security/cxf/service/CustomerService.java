@@ -31,7 +31,7 @@ public interface CustomerService {
 
     @GET
     @Path("/customers/{id}/")
-    @RolesAllowed({"ADMIN","USER"})
+    @RolesAllowed({"user"})
     Customer getCustomer(@PathParam("id") String id);
     
     @PUT
@@ -40,7 +40,7 @@ public interface CustomerService {
      
     @POST
     @Path("/customers/")
-    @RolesAllowed({"ADMIN"})
+    @RolesAllowed({"admin"})
     Response addCustomer(Customer customer);
 
     @DELETE
