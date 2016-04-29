@@ -86,7 +86,6 @@ public class BasicAuthCxfRSRoleTest extends BaseCXF {
 
         Assert.assertEquals("Response status is 200", Response.Status.OK.getStatusCode(), res.getCode());
         Assert.assertEquals(CustomerResponse, res.getMessage());
-
     }
 
     @Test public void deniedForUmperioNotCorrectRole() {
