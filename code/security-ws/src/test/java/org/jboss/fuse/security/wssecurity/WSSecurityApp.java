@@ -2,7 +2,7 @@ package org.jboss.fuse.security.wssecurity;
 
 import org.apache.cxf.testutil.common.TestUtil;
 import org.apache.wss4j.dom.handler.WSHandlerConstants;
-import org.jboss.fuse.security.service.PwdCallback;
+import org.jboss.fuse.security.cxf.service.PwdCallback;
 
 public class WSSecurityApp {
 

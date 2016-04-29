@@ -3,8 +3,6 @@ package org.jboss.fuse.security.wssecurity;
 import org.apache.cxf.endpoint.Client;
 import org.apache.cxf.endpoint.Server;
 import org.apache.cxf.frontend.ClientProxy;
-import org.apache.cxf.interceptor.LoggingInInterceptor;
-import org.apache.cxf.interceptor.LoggingOutInterceptor;
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 import org.apache.cxf.jaxws.JaxWsServerFactoryBean;
 import org.apache.cxf.service.Service;
@@ -16,9 +14,9 @@ import org.apache.wss4j.dom.handler.WSHandlerConstants;
 
 import org.apache.wss4j.stax.ext.WSSConstants;
 import org.jboss.fuse.security.AbstractSecurityTest;
-import org.jboss.fuse.security.service.Echo;
-import org.jboss.fuse.security.service.EchoImpl;
-import org.jboss.fuse.security.service.PwdCallback;
+import org.jboss.fuse.security.cxf.service.Echo;
+import org.jboss.fuse.security.cxf.service.EchoImpl;
+import org.jboss.fuse.security.cxf.service.PwdCallback;
 import org.junit.Before;
 import org.junit.Test;
 

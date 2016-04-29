@@ -20,7 +20,7 @@
     </cxf:bus>
     <jaxws:endpoint xmlns:s="http://jboss.org/HelloWorld" id="server"
                     endpointName="s:GreeterSignEncryptPort"
-                    serviceName="s:GreeterService" implementor="org.jboss.fuse.security.service.GreeterImpl"
+                    serviceName="s:GreeterService" implementor="org.jboss.fuse.security.cxf.service.GreeterImpl"
                     wsdlLocation="src/test/resources/org/jboss/fuse/security/wssecuritypolicy/hello_world.wsdl"
                     address="https://localhost:9001/ws/Hello"
                     depends-on="ClientAuthHttpsSettings">
