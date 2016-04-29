@@ -20,8 +20,7 @@ import java.util.Arrays;
 
 public class BasicAuthenticationCamelTest extends BaseJettyTest {
 
-    @Override
-    protected JndiRegistry createRegistry() throws Exception {
+    @Override protected JndiRegistry createRegistry() throws Exception {
         JndiRegistry jndi = super.createRegistry();
         jndi.bind("myAuthHandler", getSecurityHandler());
         return jndi;
@@ -37,31 +36,33 @@ public class BasicAuthenticationCamelTest extends BaseJettyTest {
         cm.setPathSpec("/*");
         cm.setConstraint(constraint);
 
-        // A security handler is a jetty handler that secures content behind a
-        // particular portion of a url space. The ConstraintSecurityHandler is a
-        // more specialized handler that allows matching of urls to different
-        // constraints. The server sets this as the first handler in the chain,
-        // effectively applying these constraints to all subsequent handlers in
-        // the chain.
+        /* A security handler is a jetty handler that secures content behind a
+           particular portion of a url space. The ConstraintSecurityHandler is a
+           more specialized handler that allows matching of urls to different
+           constraints. The server sets this as the first handler in the chain,
+           effectively applying these constraints to all subsequent handlers in
+           the chain.
+           The BasicAuthenticator instance is the object that actually checks the credentials
+        */
         ConstraintSecurityHandler sh = new ConstraintSecurityHandler();
         sh.setAuthenticator(new BasicAuthenticator());
-        sh.setConstraintMappings(Arrays.asList(new ConstraintMapping[] {cm}));
+        sh.setConstraintMappings(Arrays.asList(new ConstraintMapping[] { cm }));
 
-        //  An implementation of UserRealm that stores users and roles in-memory in HashMaps.
-        HashLoginService loginService = new HashLoginService("MyRealm", "src/test/resources/org/jboss/fuse/security/basic/myrealm.props");
+        //  The HashLogin is an implementation of a UserRealm that stores users and roles in-memory in HashMaps.
+        HashLoginService loginService = new HashLoginService("MyRealm",
+                "src/test/resources/org/jboss/fuse/security/basic/myrealm.props");
         sh.setLoginService(loginService);
-        sh.setConstraintMappings(Arrays.asList(new ConstraintMapping[]{cm}));
+        sh.setConstraintMappings(Arrays.asList(new ConstraintMapping[] { cm }));
 
         return sh;
     }
 
-    @Test
-    public void testHttpBasicAuthCamel() throws Exception {
-        String out = template.requestBody("http://localhost:{{port1}}/test?authMethod=Basic&authUsername=donald&authPassword=duck", "Hello World", String.class);
+    @Test public void testHttpBasicAuthCamel() throws Exception {
+        String out = template.requestBody(
+                "http://localhost:{{port1}}/test?authMethod=Basic&authUsername=donald&authPassword=duck",
+                "Hello World", String.class);
         assertEquals("Bye World", out);
     }
-
-
 
 
 }
