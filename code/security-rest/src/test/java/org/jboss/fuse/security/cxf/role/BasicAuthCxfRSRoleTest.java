@@ -13,6 +13,7 @@ import org.apache.cxf.jaxrs.JAXRSServerFactoryBean;
 import org.apache.cxf.jaxrs.lifecycle.SingletonResourceProvider;
 import org.apache.cxf.jaxrs.validation.ValidationExceptionMapper;
 import org.apache.cxf.testutil.common.AbstractBusTestServerBase;
+import org.jboss.fuse.security.camel.basic.BasicAuthRESTCamelDSLJettyJaasTest;
 import org.jboss.fuse.security.cxf.common.BaseCXF;
 import org.jboss.fuse.security.cxf.service.CustomerServiceImpl;
 import org.junit.*;
@@ -21,6 +22,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.core.Response;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.Scanner;
 
 public class BasicAuthCxfRSRoleTest extends BaseCXF {
@@ -71,6 +73,8 @@ public class BasicAuthCxfRSRoleTest extends BaseCXF {
     @BeforeClass public static void startServers() throws Exception {
         assertTrue("server did not launch correctly", launchServer(Server.class, true));
         createStaticBus();
+        URL jaasURL = BasicAuthCxfRSRoleTest.class.getResource("/org/jboss/fuse/security/basic/myrealm-jaas.cfg");
+        System.setProperty("java.security.auth.login.config", jaasURL.toExternalForm());
     }
 
     @Test public void allowForDonalUserCorrectRoleTest() {
@@ -91,7 +95,8 @@ public class BasicAuthCxfRSRoleTest extends BaseCXF {
 
         HttpResult res = callRestEndpoint("localhost", BASE_SERVICE_URL, "umperio", "bogarto", "myrealm");
 
-        Assert.assertEquals("Response status is 403", Response.Status.FORBIDDEN.getStatusCode(), res.getCode());
+        Assert.assertEquals("Response status is 500", Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), res.getCode());
+        Assert.assertEquals("Unauthorized",true,res.getMessage().contains("Unauthorized"));
 
     }
 

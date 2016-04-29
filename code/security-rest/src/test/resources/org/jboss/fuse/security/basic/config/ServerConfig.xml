@@ -13,11 +13,15 @@
         <httpj:engine port="${testutil.ports.BasicAuthCxfRSRoleTest}">
             <httpj:handlers>
                 <bean class="org.eclipse.jetty.security.ConstraintSecurityHandler">
-                    <property name="loginService" ref="securityLoginService"/>
+                    <!--<property name="loginService" ref="securityLoginService"/>-->
+                    <property name="loginService" ref="securityJAASLoginService"/>
                     <property name="constraintMappings">
                         <list>
                             <ref bean="securityConstraintMapping"/>
                         </list>
+                    </property>
+                    <property name="authenticator">
+                        <bean class="org.eclipse.jetty.security.authentication.BasicAuthenticator"/>
                     </property>
                 </bean>
             </httpj:handlers>
@@ -32,14 +36,21 @@
                     <sec:clientAuthentication want="false" required="false"/>
                 </httpj:tlsServerParameters>-->
     </httpj:engine-factory>
-    <bean id="securityLoginService" class="org.eclipse.jetty.security.HashLoginService">
+<!--    <bean id="securityLoginService" class="org.eclipse.jetty.security.HashLoginService">
         <property name="name" value="myrealm"/>
         <property name="config"
                   value="src/test/resources/org/jboss/fuse/security/basic/myrealm.props"/>
+    </bean>-->
+    <bean id="identityService" class="org.eclipse.jetty.security.DefaultIdentityService"/>
+    <bean id="securityJAASLoginService" class="org.eclipse.jetty.jaas.JAASLoginService">
+        <property name="name" value="myrealm"/>
+        <property name="loginModuleName" value="propsFileModule"/>
+        <property name="identityService" ref="identityService"/>
     </bean>
     <bean id="securityConstraint" class="org.eclipse.jetty.util.security.Constraint">
         <property name="name" value="BASIC"/>
-        <property name="roles" value="user"/>
+        <!-- User roles that Jetty JAAS will accept to access the path resource -->
+        <property name="roles" value="user,author"/>
         <property name="authenticate" value="true"/>
     </bean>
     <bean id="securityConstraintMapping" class="org.eclipse.jetty.security.ConstraintMapping">
