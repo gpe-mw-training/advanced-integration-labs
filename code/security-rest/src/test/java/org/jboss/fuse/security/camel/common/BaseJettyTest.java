@@ -5,19 +5,24 @@ import org.apache.camel.component.properties.PropertiesComponent;
 import org.apache.camel.impl.JndiRegistry;
 import org.apache.camel.test.AvailablePortFinder;
 import org.apache.camel.test.junit4.CamelTestSupport;
+import org.junit.Before;
 import org.junit.BeforeClass;
 
 import java.io.InputStream;
+import java.net.URL;
 import java.util.Properties;
 import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class BaseJettyTest extends CamelTestSupport{
+public class BaseJettyTest extends CamelTestSupport {
 
     private static volatile int port1;
     private static volatile int port2;
 
+    private static final String NULL_VALUE_MARKER = CamelTestSupport.class.getCanonicalName();
+
     private final AtomicInteger counter = new AtomicInteger(1);
+    protected Properties originalValues = new Properties();
 
     @BeforeClass
     public static void initPort() throws Exception {
@@ -25,6 +30,22 @@ public class BaseJettyTest extends CamelTestSupport{
         port1 = AvailablePortFinder.getNextAvailable(23000);
         // start from somewhere in the 23xxx range
         port2 = AvailablePortFinder.getNextAvailable(24000);
+    }
+
+    protected void setSystemProp(String key, String value) {
+        String originalValue = System.setProperty(key, value);
+        originalValues.put(key, originalValue != null ? originalValue : NULL_VALUE_MARKER);
+    }
+
+    protected void restoreSystemProperties() {
+        for (Object key : originalValues.keySet()) {
+            Object value = originalValues.get(key);
+            if (NULL_VALUE_MARKER.equals(value)) {
+                System.getProperties().remove(key);
+            } else {
+                System.setProperty((String)key, (String)value);
+            }
+        }
     }
 
     @Override

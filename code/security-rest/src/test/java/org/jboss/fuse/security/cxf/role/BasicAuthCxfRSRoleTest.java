@@ -5,6 +5,7 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.apache.commons.httpclient.auth.AuthScope;
 import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.httpclient.protocol.Protocol;
 import org.apache.cxf.Bus;
 import org.apache.cxf.BusFactory;
 import org.apache.cxf.bus.spring.SpringBusFactory;
@@ -13,13 +14,13 @@ import org.apache.cxf.jaxrs.JAXRSServerFactoryBean;
 import org.apache.cxf.jaxrs.lifecycle.SingletonResourceProvider;
 import org.apache.cxf.jaxrs.validation.ValidationExceptionMapper;
 import org.apache.cxf.testutil.common.AbstractBusTestServerBase;
-import org.jboss.fuse.security.camel.basic.BasicAuthRESTCamelDSLJettyJaasTest;
 import org.jboss.fuse.security.cxf.common.BaseCXF;
 import org.jboss.fuse.security.cxf.service.CustomerServiceImpl;
 import org.junit.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.net.ssl.SSLContext;
 import javax.ws.rs.core.Response;
 import java.io.InputStream;
 import java.net.URL;
@@ -73,7 +74,8 @@ public class BasicAuthCxfRSRoleTest extends BaseCXF {
     @BeforeClass public static void startServers() throws Exception {
         assertTrue("server did not launch correctly", launchServer(Server.class, true));
         createStaticBus();
-        URL jaasURL = BasicAuthCxfRSRoleTest.class.getResource("/org/jboss/fuse/security/basic/myrealm-jaas.cfg");
+        URL jaasURL = BasicAuthCxfRSRoleTest.class
+                .getResource("/org/jboss/fuse/security/basic/myrealm-jaas.cfg");
         System.setProperty("java.security.auth.login.config", jaasURL.toExternalForm());
     }
 
@@ -94,13 +96,19 @@ public class BasicAuthCxfRSRoleTest extends BaseCXF {
 
         HttpResult res = callRestEndpoint("localhost", BASE_SERVICE_URL, "umperio", "bogarto", "myrealm");
 
-        Assert.assertEquals("Response status is 500", Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), res.getCode());
-        Assert.assertEquals("Unauthorized",true,res.getMessage().contains("Unauthorized"));
+        Assert.assertEquals("Response status is 500", Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(),
+                res.getCode());
+        Assert.assertEquals("Unauthorized", true, res.getMessage().contains("Unauthorized"));
 
     }
 
     protected HttpResult callRestEndpoint(String host, String url, String user, String password,
             String realm) {
+        return callRestEndpoint(false, host, url, user, password, realm);
+    }
+
+    protected HttpResult callRestEndpoint(boolean isHttps, String host, String url, String user,
+            String password, String realm) {
 
         HttpResult response = new HttpResult();
 
