@@ -38,8 +38,10 @@ public class TLSRestCamelDSLJettyTest extends BaseJettyTest {
 
     private static String HOST = "localhost";
     private static int PORT = getPort1();
+    protected String pwd = "secUr1t8";
 
-    @Override protected JndiRegistry createRegistry() throws Exception {
+    @Override
+    protected JndiRegistry createRegistry() throws Exception {
         JndiRegistry jndi = super.createRegistry();
         jndi.bind("myAuthHandler", getSecurityHandler());
         jndi.bind("scp", getSSLContextParameters());
@@ -51,13 +53,12 @@ public class TLSRestCamelDSLJettyTest extends BaseJettyTest {
     public void setUp() throws Exception {
         super.setUp();
 
-        URL jaasURL = BasicAuthRESTCamelDSLJettyJaasRoleConstraintTest.class.getResource("/org/jboss/fuse/security/basic/myrealm-jaas.cfg");
+        URL jaasURL = this.getClass().getResource("/org/jboss/fuse/security/basic/myrealm-jaas.cfg");
         setSystemProp("java.security.auth.login.config", jaasURL.toExternalForm());
 
-        // ensure jsse clients can validate the self signed dummy localhost cert,
-        // use the server keystore as the trust store for these tests
-        URL trustStoreUrl = getClass().getClassLoader().getResource("org/jboss/fuse/security/camel/tls/serverstore.jks");
+        URL trustStoreUrl = this.getClass().getResource("serverstore.jks");
         setSystemProp("javax.net.ssl.trustStore", trustStoreUrl.toURI().getPath());
+        setSystemProp("javax.net.ssl.trustStorePassword", pwd);
     }
 
     @After
@@ -109,11 +110,11 @@ public class TLSRestCamelDSLJettyTest extends BaseJettyTest {
         // TLS
         KeyStoreParameters ksp = new KeyStoreParameters();
         ksp.setResource("org/jboss/fuse/security/camel/tls/serverstore.jks");
-        ksp.setPassword("secUr1t8");
+        ksp.setPassword(pwd);
 
         KeyManagersParameters kmp = new KeyManagersParameters();
         kmp.setKeyStore(ksp);
-        kmp.setKeyPassword("secUr1t8");
+        kmp.setKeyPassword(pwd);
 
         SSLContextParameters scp = new SSLContextParameters();
         scp.setKeyManagers(kmp);
