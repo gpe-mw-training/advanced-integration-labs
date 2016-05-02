@@ -1,8 +1,10 @@
 package org.jboss.fuse.security.camel.tls;
 
+import org.apache.camel.CamelExecutionException;
 import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.component.http4.HttpOperationFailedException;
 import org.apache.camel.impl.JndiRegistry;
 import org.apache.camel.model.rest.RestBindingMode;
 import org.apache.camel.model.rest.RestPropertyDefinition;
@@ -41,6 +43,7 @@ public class SslRestCamelDSLJettyTest extends BaseJettyTest {
     @Override
     protected JndiRegistry createRegistry() throws Exception {
         JndiRegistry jndi = super.createRegistry();
+        jndi.bind("myAuthHandler", getSecurityHandler());
         jndi.bind("scp", getSSLContextParameters());
         return jndi;
     }
@@ -70,11 +73,24 @@ public class SslRestCamelDSLJettyTest extends BaseJettyTest {
         return this.getClass().getResource("serverstore.jks");
     }
 
-    @Test public void simpleCamelHttpsCall() {
+    @Test public void allowForUserDonaldAndRoleUser() {
         Map<String, Object> headers = new HashMap<String, Object>();
         headers.put(Exchange.HTTP_METHOD,"GET");
-        InputStream result = (InputStream) template.sendBodyAndHeaders("https://localhost:" + PORT + "/say/hello/charles?sslContextParametersRef=#scp",ExchangePattern.InOut,"",headers);
+        InputStream result = (InputStream) template.sendBodyAndHeaders("https4:localhost:" + PORT + "/say/hello/charles?sslContextParametersRef=#scp&authUsername=donald&authPassword=duck&authenticationPreemptive=true&authHost=localhost",ExchangePattern.InOut,"",headers);
         assertEquals("\"<b>Hello World</b>\"",inputStreamToString(result));
+    }
+
+    @Test public void sayByeNotAllowedForUserRoleTest() {
+        Map<String, Object> headers = new HashMap<String, Object>();
+        headers.put(Exchange.HTTP_METHOD,"GET");
+        try {
+            InputStream result = (InputStream) template.sendBodyAndHeaders("https4:localhost:" + PORT + "/say/bye/charles?sslContextParametersRef=#scp&authUsername=donald&authPassword=duck&authenticationPreemptive=true&authHost=localhost",ExchangePattern.InOut,"",headers);
+            fail();
+        } catch(Exception e) {
+            HttpOperationFailedException httpError = (HttpOperationFailedException) ((CamelExecutionException)e).getCause();
+            assertEquals(403,httpError.getStatusCode());
+            assertEquals("HTTP operation failed invoking https://localhost:23000/say/bye/charles with statusCode: 403",httpError.getMessage());
+        }
     }
 
 
@@ -91,6 +107,67 @@ public class SslRestCamelDSLJettyTest extends BaseJettyTest {
         SSLContextParameters scp = new SSLContextParameters();
         scp.setKeyManagers(kmp);
         return scp;
+    }
+
+    private SecurityHandler getSecurityHandler() throws IOException {
+
+        /* A security handler is a jetty handler that secures content behind a
+         *  particular portion of a url space. The ConstraintSecurityHandler is a
+         *  more specialized handler that allows matching of urls to different
+         *  constraints. The server sets this as the first handler in the chain,
+         *  effectively applying these constraints to all subsequent handlers in
+         *  the chain.
+         *  The BasicAuthenticator instance is the object that actually checks the credentials
+         */
+        ConstraintSecurityHandler sh = new ConstraintSecurityHandler();
+        sh.setAuthenticator(new BasicAuthenticator());
+        sh.setConstraintMappings(getConstraintMappings());
+
+        /*
+         * The DefaultIdentityService service handles only role reference maps passed in an
+         * associated org.eclipse.jetty.server.UserIdentity.Scope.  If there are roles
+         * refs present, then associate will wrap the UserIdentity with one that uses the role references in the
+         * org.eclipse.jetty.server.UserIdentity#isUserInRole(String, org.eclipse.jetty.server.UserIdentity.Scope)}
+         * implementation.
+         *
+        */
+        DefaultIdentityService dis = new DefaultIdentityService();
+
+        // Service which create a UserRealm suitable for use with JAAS
+        JAASLoginService loginService = new JAASLoginService();
+        loginService.setName("myrealm");
+        loginService.setLoginModuleName("propsFileModule");
+        loginService.setIdentityService(dis);
+
+        sh.setLoginService(loginService);
+        sh.setConstraintMappings(getConstraintMappings());
+
+        return sh;
+    }
+
+    private List<ConstraintMapping> getConstraintMappings() {
+
+        // Access allowed for roles User, Admin
+        Constraint constraint0 = new Constraint(Constraint.__BASIC_AUTH, "user");
+        constraint0.setAuthenticate(true);
+        constraint0.setName("allowedForAll");
+        constraint0.setRoles(new String[] { "user", "admin" });
+        ConstraintMapping mapping0 = new ConstraintMapping();
+        mapping0.setPathSpec("/say/hello/*");
+        mapping0.setMethod("GET");
+        mapping0.setConstraint(constraint0);
+
+        // Access alowed only for Admin role
+        Constraint constraint1 = new Constraint();
+        constraint1.setAuthenticate(true);
+        constraint1.setName("allowedForRoleAdmin");
+        constraint1.setRoles(new String[]{ "admin" });
+        ConstraintMapping mapping1 = new ConstraintMapping();
+        mapping1.setPathSpec("/say/bye/*");
+        mapping1.setMethod("GET");
+        mapping1.setConstraint(constraint1);
+
+        return Arrays.asList(mapping0, mapping1);
     }
 
 }
