@@ -1,5 +1,7 @@
 package org.jboss.fuse.security.camel.tls;
 
+import org.apache.camel.Exchange;
+import org.apache.camel.ExchangePattern;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.impl.JndiRegistry;
 import org.apache.camel.model.rest.RestBindingMode;
@@ -20,7 +22,6 @@ import org.eclipse.jetty.security.SecurityHandler;
 import org.eclipse.jetty.security.authentication.BasicAuthenticator;
 import org.eclipse.jetty.util.security.Constraint;
 import org.jboss.fuse.security.camel.common.BaseJettyTest;
-import org.jboss.fuse.security.camel.role.BasicAuthRESTCamelDSLJettyJaasRoleConstraintTest;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -28,11 +29,8 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class TLSRestCamelDSLJettyTest extends BaseJettyTest {
 
@@ -51,14 +49,20 @@ public class TLSRestCamelDSLJettyTest extends BaseJettyTest {
     @Before
     @Override
     public void setUp() throws Exception {
-        super.setUp();
-
         URL jaasURL = this.getClass().getResource("/org/jboss/fuse/security/basic/myrealm-jaas.cfg");
         setSystemProp("java.security.auth.login.config", jaasURL.toExternalForm());
 
         URL trustStoreUrl = this.getClass().getResource("serverstore.jks");
         setSystemProp("javax.net.ssl.trustStore", trustStoreUrl.toURI().getPath());
-        setSystemProp("javax.net.ssl.trustStorePassword", pwd);
+/*        setSystemProp("javax.net.ssl.trustStorePassword", pwd);
+
+        setSystemProp("org.eclipse.jetty.ssl.keystore",getKeyStore().toURI().getPath());
+        setSystemProp("org.eclipse.jetty.ssl.keypassword",pwd);
+        setSystemProp("org.eclipse.jetty.ssl.password",pwd);*/
+
+        // setSystemProp("javax.net.debug","ssl,handshake,data");
+
+        super.setUp();
     }
 
     @After
@@ -66,6 +70,18 @@ public class TLSRestCamelDSLJettyTest extends BaseJettyTest {
     public void tearDown() throws Exception {
         super.tearDown();
         restoreSystemProperties();
+    }
+
+
+    public URL getKeyStore() {
+        return this.getClass().getResource("serverstore.jks");
+    }
+
+    @Test @Ignore public void simpleCamelHttpsCall() {
+        Map<String, Object> headers = new HashMap<String, Object>();
+        headers.put(Exchange.HTTP_METHOD,"GET");
+        InputStream result = (InputStream) template.sendBodyAndHeaders("https://localhost:" + PORT + "/say/hello/Charles?sslContextParametersRef=#scp",ExchangePattern.InOut,"",headers);
+        assertEquals("\"Hello World Charles\"",inputStreamToString(result));
     }
 
 
