@@ -211,6 +211,12 @@
                 </dependency>
             </dependencies>
         </profile>
+        <profile>
+            <id>camel-2.16</id>
+            <properties>
+                <version.camel>2.16.3</version.camel>
+            </properties>
+        </profile>
     </profiles>
 
 </project>
