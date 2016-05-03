@@ -68,28 +68,6 @@ public class BaseNetty4Test extends CamelTestSupport {
         return s.hasNext() ? s.next() : "";
     }
 
-    public class HttpResult {
-        int code;
-        String message;
-
-        public int getCode() {
-            return code;
-        }
-
-        public void setCode(int code) {
-            this.code = code;
-        }
-
-        public String getMessage() {
-            return message;
-        }
-
-        public void setMessage(String message) {
-            this.message = message;
-        }
-
-    }
-
     protected int getNextPort() {
         return AvailablePortFinder.getNextAvailable(port1 + counter.getAndIncrement());
     }

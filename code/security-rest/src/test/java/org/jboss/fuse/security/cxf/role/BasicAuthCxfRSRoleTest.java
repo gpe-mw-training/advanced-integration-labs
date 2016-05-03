@@ -30,6 +30,7 @@ public class BasicAuthCxfRSRoleTest extends BaseCXF {
 
     private static final Logger log = LoggerFactory.getLogger(BasicAuthCxfRSRoleTest.class);
     public static final String PORT = allocatePort(BasicAuthCxfRSRoleTest.class);
+    private static JAXRSServerFactoryBean sf;
 
     @Ignore public static class Server extends AbstractBusTestServerBase {
 
@@ -40,7 +41,7 @@ public class BasicAuthCxfRSRoleTest extends BaseCXF {
         }
 
         protected void run() {
-            JAXRSServerFactoryBean sf = new JAXRSServerFactoryBean();
+            sf = new JAXRSServerFactoryBean();
 
             // Configure the Interceptor responsible to scan the Classes, Interface in order to detect @RolesAllowed Annotation
             // and creating a RolesMap
@@ -77,6 +78,11 @@ public class BasicAuthCxfRSRoleTest extends BaseCXF {
         URL jaasURL = BasicAuthCxfRSRoleTest.class
                 .getResource("/org/jboss/fuse/security/basic/myrealm-jaas.cfg");
         System.setProperty("java.security.auth.login.config", jaasURL.toExternalForm());
+    }
+
+    @AfterClass public static void shutdown() {
+        sf.getServer().stop();
+        sf.getServer().destroy();
     }
 
     @Test public void allowForDonalUserCorrectRoleTest() {

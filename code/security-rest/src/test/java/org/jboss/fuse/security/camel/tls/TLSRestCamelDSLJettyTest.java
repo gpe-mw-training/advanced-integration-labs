@@ -32,6 +32,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.*;
 
+@Ignore
 public class TLSRestCamelDSLJettyTest extends BaseJettyTest {
 
     private static String HOST = "localhost";
@@ -77,7 +78,7 @@ public class TLSRestCamelDSLJettyTest extends BaseJettyTest {
         return this.getClass().getResource("serverstore.jks");
     }
 
-    @Test @Ignore public void simpleCamelHttpsCall() {
+    @Test public void simpleCamelHttpsCall() {
         Map<String, Object> headers = new HashMap<String, Object>();
         headers.put(Exchange.HTTP_METHOD,"GET");
         InputStream result = (InputStream) template.sendBodyAndHeaders("https://localhost:" + PORT + "/say/hello/Charles?sslContextParametersRef=#scp",ExchangePattern.InOut,"",headers);
