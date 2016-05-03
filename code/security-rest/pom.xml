@@ -27,7 +27,23 @@
         </dependency>
         <dependency>
             <groupId>org.apache.camel</groupId>
+            <artifactId>camel-http4</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
             <artifactId>camel-jetty9</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-netty4-http</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-jetty-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-cxf-transport</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.camel</groupId>
@@ -144,7 +160,9 @@
                 <groupId>org.apache.camel</groupId>
                 <artifactId>camel-maven-plugin</artifactId>
                 <configuration>
-                    <fileApplicationContextUri>src/test/resources/org/jboss/fuse/security/encryption/EncryptDecryptPayloadTest-context.xml</fileApplicationContextUri>
+                    <fileApplicationContextUri>
+                        src/test/resources/org/jboss/fuse/security/encryption/EncryptDecryptPayloadTest-context.xml
+                    </fileApplicationContextUri>
                 </configuration>
             </plugin>
             <plugin>
@@ -172,7 +190,9 @@
         <profile>
             <id>cxf-jetty9</id>
             <properties>
-                <version.cxf>3.1.5.redhat-630055</version.cxf></properties>
+                <version.cxf>3.1.5.redhat-630055</version.cxf>
+                <version.camel>2.16.3</version.camel>
+            </properties>
             <dependencies>
                 <dependency>
                     <groupId>org.apache.cxf</groupId>
@@ -209,6 +229,52 @@
                     <artifactId>validation-api</artifactId>
                     <version>1.1.0.Final</version>
                 </dependency>
+<!--                <dependency>
+                    <groupId>org.apache.camel</groupId>
+                    <artifactId>camel-core</artifactId>
+                    <version>${version.camel}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.camel</groupId>
+                    <artifactId>camel-spring</artifactId>
+                    <version>${version.camel}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.camel</groupId>
+                    <artifactId>camel-jetty-common</artifactId>
+                    <version>${version.camel}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.camel</groupId>
+                    <artifactId>camel-cxf-transport</artifactId>
+                    <version>${version.camel}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.camel</groupId>
+                    <artifactId>camel-cxf</artifactId>
+                    <version>${version.camel}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.camel</groupId>
+                    <artifactId>camel-jaxb</artifactId>
+                    <version>${version.camel}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.camel</groupId>
+                    <artifactId>camel-jetty9</artifactId>
+                    <version>${version.camel}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.camel</groupId>
+                    <artifactId>camel-jackson</artifactId>
+                    <version>${version.camel}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.camel</groupId>
+                    <artifactId>camel-test-spring3</artifactId>
+                    <version>${version.camel}</version>
+                    <scope>test</scope>
+                </dependency>-->
             </dependencies>
         </profile>
         <profile>
