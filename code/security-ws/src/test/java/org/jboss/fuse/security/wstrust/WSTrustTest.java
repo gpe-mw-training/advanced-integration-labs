@@ -21,7 +21,8 @@ public class WSTrustTest extends AbstractBusClientServerTestBase {
 
     private static final QName PORT_NAME = new QName("http://apache.org/hello_world_soap_http", "SoapPort");
 
-    @BeforeClass public static void startServers() throws Exception {
+    @BeforeClass
+    public static void startServers() throws Exception {
     }
 
     @AfterClass public static void cleanup() throws Exception {
