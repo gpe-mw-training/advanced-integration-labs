@@ -32,7 +32,6 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.*;
 
-@Ignore
 public class TLSRestCamelDSLJettyTest extends BaseJettyTest {
 
     private static String HOST = "localhost";
