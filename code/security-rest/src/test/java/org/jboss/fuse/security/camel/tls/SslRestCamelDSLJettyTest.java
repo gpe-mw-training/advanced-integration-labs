@@ -7,6 +7,7 @@ import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.http4.HttpOperationFailedException;
 import org.apache.camel.impl.JndiRegistry;
 import org.apache.camel.model.rest.RestBindingMode;
+import org.apache.camel.test.junit4.CamelTestSupport;
 import org.apache.camel.util.jsse.KeyManagersParameters;
 import org.apache.camel.util.jsse.KeyStoreParameters;
 import org.apache.camel.util.jsse.SSLContextParameters;
@@ -32,6 +33,8 @@ import java.util.Map;
 
 public class SslRestCamelDSLJettyTest extends BaseJettyTest {
 
+    private static final String NULL_VALUE_MARKER = CamelTestSupport.class.getCanonicalName();
+
     private static String HOST = "localhost";
     private static int PORT = getPort1();
     protected String pwd = "secUr1t8";
@@ -44,7 +47,6 @@ public class SslRestCamelDSLJettyTest extends BaseJettyTest {
         return jndi;
     }
 
-    @Before
     @Override
     public void setUp() throws Exception {
         URL jaasURL = this.getClass().getResource("/org/jboss/fuse/security/basic/myrealm-jaas.cfg");
@@ -57,13 +59,27 @@ public class SslRestCamelDSLJettyTest extends BaseJettyTest {
         super.setUp();
     }
 
-    @After
     @Override
     public void tearDown() throws Exception {
-        super.tearDown();
         restoreSystemProperties();
+        super.tearDown();
     }
 
+    protected void setSystemProp(String key, String value) {
+        String originalValue = System.setProperty(key, value);
+        originalValues.put(key, originalValue != null ? originalValue : NULL_VALUE_MARKER);
+    }
+
+    protected void restoreSystemProperties() {
+        for (Object key : originalValues.keySet()) {
+            Object value = originalValues.get(key);
+            if (NULL_VALUE_MARKER.equals(value)) {
+                System.getProperties().remove(key);
+            } else {
+                System.setProperty((String) key, (String) value);
+            }
+        }
+    }
 
     public URL getKeyStore() {
         return this.getClass().getResource("serverstore.jks");

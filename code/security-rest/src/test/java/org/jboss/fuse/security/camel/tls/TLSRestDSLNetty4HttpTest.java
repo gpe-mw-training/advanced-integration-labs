@@ -5,6 +5,7 @@ import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.netty4.http.*;
 import org.apache.camel.impl.JndiRegistry;
 import org.apache.camel.model.rest.RestBindingMode;
+import org.apache.camel.test.junit4.CamelTestSupport;
 import org.apache.camel.util.jsse.KeyManagersParameters;
 import org.apache.camel.util.jsse.KeyStoreParameters;
 import org.apache.camel.util.jsse.SSLContextParameters;
@@ -17,8 +18,7 @@ import java.net.URL;
 
 public class TLSRestDSLNetty4HttpTest extends BaseNetty4Test {
 
-    private static String HOST = "localhost";
-    private static String SCHEME_HTTP = "http";
+    private static final String NULL_VALUE_MARKER = CamelTestSupport.class.getCanonicalName();
     private static String SCHEME_HTTPS = "https";
     private static int PORT = getPort1();
     protected String pwd = "secUr1t8";
@@ -33,34 +33,48 @@ public class TLSRestDSLNetty4HttpTest extends BaseNetty4Test {
         return jndi;
     }
 
-    @Before
-    @Override public void setUp() throws Exception {
+    @Override
+    public void setUp() throws Exception {
         URL jaasURL = this.getClass().getResource("myjaas.config");
         setSystemProp("java.security.auth.login.config", jaasURL.toExternalForm());
 
         URL trustStoreUrl = this.getClass().getResource("serverstore.jks");
         setSystemProp("javax.net.ssl.trustStore", trustStoreUrl.toURI().getPath());
-
         //setSystemProp("javax.net.debug","ssl,handshake,data");
         super.setUp();
     }
 
-    @After
-    @Override public void tearDown() throws Exception {
-        super.tearDown();
+    @Override
+    public void tearDown() throws Exception {
         restoreSystemProperties();
+        super.tearDown();
     }
 
-    @Test public void testBasicAuth() {
+    protected void setSystemProp(String key, String value) {
+        String originalValue = System.setProperty(key, value);
+        originalValues.put(key, originalValue != null ? originalValue : NULL_VALUE_MARKER);
+    }
+
+    protected void restoreSystemProperties() {
+        for (Object key : originalValues.keySet()) {
+            Object value = originalValues.get(key);
+            if (NULL_VALUE_MARKER.equals(value)) {
+                System.getProperties().remove(key);
+            } else {
+                System.setProperty((String) key, (String) value);
+            }
+        }
+    }
+
+    @Test
+    public void testBasicAuth() {
         String result;
 
         try {
-            template.requestBody("netty4-http://https://localhost:" + PORT + "/say/hello/noauthheader", "",
-                    String.class);
+            template.requestBody("netty4-http://https://localhost:" + PORT + "/say/hello/noauthheader","", String.class);
             fail("Should send back 401");
         } catch (CamelExecutionException e) {
-            NettyHttpOperationFailedException cause = assertIsInstanceOf(
-                    NettyHttpOperationFailedException.class, e.getCause());
+            NettyHttpOperationFailedException cause = assertIsInstanceOf(NettyHttpOperationFailedException.class, e.getCause());
             assertEquals(401, cause.getStatusCode());
         }
 
@@ -70,7 +84,8 @@ public class TLSRestDSLNetty4HttpTest extends BaseNetty4Test {
         assertEquals("\"Hello World Donald\"", result);
     }
 
-    @Test public void testBasicAuthAndSecConstraint() {
+    @Test
+    public void testBasicAuthAndSecConstraint() {
         String result;
         // username:password is donald:duck
         String auth = "Basic ZG9uYWxkOmR1Y2s=";

@@ -79,8 +79,6 @@ public class BasicAuthCxfRSRoleTest extends BaseCXF {
     }
 
     @AfterClass public static void shutdown() {
-        sf.getServer().stop();
-        sf.getServer().destroy();
         sf.getBus().shutdown(true);
     }
 

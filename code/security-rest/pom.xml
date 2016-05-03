@@ -276,7 +276,7 @@
                         <configuration>
                             <excludes>
                                 <exclude>org.jboss.fuse.security.camel.tls.TLSRestCamelDSLJettyTest*</exclude>
-                                <exclude>org.jboss.fuse.security.camel.tls.TLSRestDSLNetty4HttpTest*</exclude>
+                                <!--<exclude>org.jboss.fuse.security.camel.tls.TLSRestDSLNetty4HttpTest*</exclude>-->
                             </excludes>
                         </configuration>
                     </plugin>

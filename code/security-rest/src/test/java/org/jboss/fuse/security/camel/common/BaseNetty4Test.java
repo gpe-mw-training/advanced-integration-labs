@@ -30,22 +30,6 @@ public class BaseNetty4Test extends CamelTestSupport {
         port2 = AvailablePortFinder.getNextAvailable(24000);
     }
 
-    protected void setSystemProp(String key, String value) {
-        String originalValue = System.setProperty(key, value);
-        originalValues.put(key, originalValue != null ? originalValue : NULL_VALUE_MARKER);
-    }
-
-    protected void restoreSystemProperties() {
-        for (Object key : originalValues.keySet()) {
-            Object value = originalValues.get(key);
-            if (NULL_VALUE_MARKER.equals(value)) {
-                System.getProperties().remove(key);
-            } else {
-                System.setProperty((String)key, (String)value);
-            }
-        }
-    }
-
     @Override
     protected CamelContext createCamelContext() throws Exception {
         CamelContext context = super.createCamelContext();
@@ -61,11 +45,6 @@ public class BaseNetty4Test extends CamelTestSupport {
         prop.setProperty("port2", "" + getPort1());
         jndi.bind("prop", prop);
         return jndi;
-    }
-
-    protected String inputStreamToString(InputStream is) {
-        Scanner s = new Scanner(is).useDelimiter("\\A");
-        return s.hasNext() ? s.next() : "";
     }
 
     protected int getNextPort() {
