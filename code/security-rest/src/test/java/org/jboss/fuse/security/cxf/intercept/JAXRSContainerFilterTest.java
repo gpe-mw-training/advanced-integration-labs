@@ -104,7 +104,11 @@ public class JAXRSContainerFilterTest extends AbstractBusClientServerTestBase {
         public void filter(ContainerRequestContext requestContext) throws IOException {
 
             String auth = requestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
+
+            // Extract 'Base ' text from the String
             String base64 = auth.substring(6,auth.length());
+
+            // Decrypt the base64 text
             String decoded = new String(Base64.getDecoder().decode(base64), "UTF-8");
 
             String[] values = decoded.split(":");
