@@ -1,7 +1,8 @@
 package org.jboss.fuse.security.wstrust;
 
-import java.util.logging.Logger;
 import org.apache.hello_world_soap_http.Greeter;
+
+import java.util.logging.Logger;
 
 @javax.jws.WebService(name = "Greeter", serviceName = "SOAPService", 
                       targetNamespace = "http://apache.org/hello_world_soap_http")

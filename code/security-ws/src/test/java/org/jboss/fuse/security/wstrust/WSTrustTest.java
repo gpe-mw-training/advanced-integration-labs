@@ -3,12 +3,11 @@ package org.jboss.fuse.security.wstrust;
 import org.apache.cxf.Bus;
 import org.apache.cxf.bus.spring.SpringBusFactory;
 import org.apache.cxf.testutil.common.AbstractBusClientServerTestBase;
+import org.apache.hello_world_soap_http.Greeter;
 import org.jboss.fuse.security.SecurityTestUtil;
 import org.jboss.fuse.security.Server;
-import org.apache.hello_world_soap_http.Greeter;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.xml.namespace.QName;

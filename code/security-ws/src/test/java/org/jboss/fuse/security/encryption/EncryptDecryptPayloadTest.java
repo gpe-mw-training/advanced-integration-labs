@@ -2,15 +2,16 @@ package org.jboss.fuse.security.encryption;
 
 import org.apache.camel.test.spring.CamelSpringTestSupport;
 import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.methods.*;
-import org.junit.Assert;
-import org.junit.Ignore;
+import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.httpclient.methods.RequestEntity;
+import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.w3c.dom.*;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;

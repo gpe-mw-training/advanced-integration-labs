@@ -3,7 +3,7 @@
                   xmlns:tns="http://jboss.org/HelloWorld"
                   xmlns:x1="http://jboss.org/HelloWorld/types"
                   xmlns:wsp="http://www.w3.org/ns/ws-policy"
-                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
                   name="HelloWorld" targetNamespace="http://jboss.org/HelloWorld">
     <wsdl:types>
         <schema xmlns="http://www.w3.org/2001/XMLSchema"

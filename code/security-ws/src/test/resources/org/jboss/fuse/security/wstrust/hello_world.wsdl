@@ -9,7 +9,7 @@
                   xmlns:sp="http://docs.oasis-open.org/ws-sx/ws-securitypolicy/200702"
                   xmlns:t="http://docs.oasis-open.org/ws-sx/ws-trust/200512"
                   xmlns:wsaw="http://www.w3.org/2005/08/addressing"
-                  xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="HelloWorld"
+                  name="HelloWorld"
                   targetNamespace="http://apache.org/hello_world_soap_http">
     <wsdl:types>
         <schema xmlns="http://www.w3.org/2001/XMLSchema"

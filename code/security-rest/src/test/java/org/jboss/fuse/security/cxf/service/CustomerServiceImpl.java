@@ -18,13 +18,9 @@
  */
 package org.jboss.fuse.security.cxf.service;
 
-import org.jboss.fuse.security.cxf.service.Customer;
-import org.jboss.fuse.security.cxf.service.CustomerService;
-
+import javax.ws.rs.core.Response;
 import java.util.HashMap;
 import java.util.Map;
-
-import javax.ws.rs.core.Response;
 
 
 public class CustomerServiceImpl implements CustomerService {

@@ -11,7 +11,6 @@ import org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor;
 import org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor;
 import org.apache.wss4j.dom.WSConstants;
 import org.apache.wss4j.dom.handler.WSHandlerConstants;
-
 import org.apache.wss4j.stax.ext.WSSConstants;
 import org.jboss.fuse.security.AbstractSecurityTest;
 import org.jboss.fuse.security.cxf.service.Echo;
@@ -19,8 +18,6 @@ import org.jboss.fuse.security.cxf.service.EchoImpl;
 import org.jboss.fuse.security.cxf.service.PwdCallback;
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
 
 public class WSSecurityTest extends AbstractSecurityTest {
 

@@ -5,11 +5,9 @@ import org.apache.camel.component.properties.PropertiesComponent;
 import org.apache.camel.impl.JndiRegistry;
 import org.apache.camel.test.AvailablePortFinder;
 import org.apache.camel.test.junit4.CamelTestSupport;
-import org.junit.Before;
 import org.junit.BeforeClass;
 
 import java.io.InputStream;
-import java.net.URL;
 import java.util.Properties;
 import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicInteger;

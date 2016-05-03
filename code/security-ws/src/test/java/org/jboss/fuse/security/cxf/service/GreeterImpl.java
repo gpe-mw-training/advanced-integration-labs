@@ -1,8 +1,8 @@
 package org.jboss.fuse.security.cxf.service;
 
-import java.util.logging.Logger;
-
 import org.jboss.helloworld.Greeter;
+
+import java.util.logging.Logger;
 
 @javax.jws.WebService(name = "Greeter", serviceName = "SOAPService",
         targetNamespace = "http://jboss.org/HelloWorld")
