@@ -57,13 +57,6 @@ public class TLSRestCamelDSLJettyTest extends BaseJettyTest {
         URL trustStoreUrl = this.getClass().getResource("serverstore.jks");
         setSystemProp("javax.net.ssl.trustStore", trustStoreUrl.toURI().getPath());
 
-        /*
-        setSystemProp("javax.net.ssl.trustStorePassword", pwd);
-        setSystemProp("org.eclipse.jetty.ssl.keystore",getKeyStore().toURI().getPath());
-        setSystemProp("org.eclipse.jetty.ssl.keypassword",pwd);
-        setSystemProp("org.eclipse.jetty.ssl.password",pwd);
-        */
-
         // setSystemProp("javax.net.debug","ssl,handshake,data");
 
         super.setUp();
@@ -82,7 +75,7 @@ public class TLSRestCamelDSLJettyTest extends BaseJettyTest {
     @Test public void simpleCamelHttpsCall() {
         Map<String, Object> headers = new HashMap<String, Object>();
         headers.put(Exchange.HTTP_METHOD,"GET");
-        InputStream result = (InputStream) template.sendBodyAndHeaders("https://localhost:" + PORT + "/say/hello/Charles?sslContextParametersRef=#scp",ExchangePattern.InOut,"",headers);
+        InputStream result = template.requestBodyAndHeaders("https://localhost:" + PORT + "/say/hello/Charles","",headers, InputStream.class);
         assertEquals("\"Hello World Charles\"",inputStreamToString(result));
     }
 
