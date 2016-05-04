@@ -10,7 +10,6 @@ import org.jboss.fuse.security.camel.common.BaseNetty4Test;
 import org.junit.Test;
 
 import javax.ws.rs.core.Response;
-import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 

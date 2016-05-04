@@ -7,9 +7,7 @@ import org.apache.camel.test.AvailablePortFinder;
 import org.apache.camel.test.junit4.CamelTestSupport;
 import org.junit.BeforeClass;
 
-import java.io.InputStream;
 import java.util.Properties;
-import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class BaseNetty4Test extends CamelTestSupport {

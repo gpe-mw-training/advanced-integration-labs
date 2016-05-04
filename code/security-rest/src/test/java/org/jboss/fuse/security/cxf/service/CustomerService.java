@@ -18,7 +18,6 @@
  */
 package org.jboss.fuse.security.cxf.service;
 
-import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 

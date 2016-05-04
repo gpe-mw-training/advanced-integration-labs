@@ -1,11 +1,11 @@
 package org.jboss.fuse.security.cxf.mutualtls;
 
-import java.security.cert.X509Certificate;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import javax.net.ssl.X509TrustManager;
 import java.security.cert.CertificateException;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.security.cert.X509Certificate;
 
 /**
  * <p>

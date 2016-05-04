@@ -6,7 +6,6 @@ import org.apache.commons.httpclient.protocol.Protocol;
 import org.apache.cxf.Bus;
 import org.apache.cxf.BusFactory;
 import org.apache.cxf.bus.spring.SpringBusFactory;
-import org.apache.cxf.interceptor.security.SecureAnnotationsInterceptor;
 import org.apache.cxf.jaxrs.JAXRSServerFactoryBean;
 import org.apache.cxf.jaxrs.lifecycle.SingletonResourceProvider;
 import org.apache.cxf.jaxrs.validation.ValidationExceptionMapper;

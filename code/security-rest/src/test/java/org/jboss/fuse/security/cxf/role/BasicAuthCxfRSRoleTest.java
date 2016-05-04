@@ -14,7 +14,6 @@ import org.apache.cxf.jaxrs.lifecycle.SingletonResourceProvider;
 import org.apache.cxf.jaxrs.validation.ValidationExceptionMapper;
 import org.apache.cxf.testutil.common.AbstractBusTestServerBase;
 import org.jboss.fuse.security.cxf.common.BaseCXF;
-import org.jboss.fuse.security.cxf.service.CustomerServiceImpl;
 import org.jboss.fuse.security.cxf.service.CustomerServiceWithRole;
 import org.jboss.fuse.security.cxf.service.CustomerServiceWithRoleImpl;
 import org.junit.*;

@@ -10,8 +10,6 @@ import org.apache.camel.util.jsse.KeyManagersParameters;
 import org.apache.camel.util.jsse.KeyStoreParameters;
 import org.apache.camel.util.jsse.SSLContextParameters;
 import org.jboss.fuse.security.camel.common.BaseNetty4Test;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.net.URL;
