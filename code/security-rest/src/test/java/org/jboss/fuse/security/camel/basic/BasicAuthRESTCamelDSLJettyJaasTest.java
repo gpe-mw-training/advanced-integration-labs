@@ -4,6 +4,7 @@ import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.impl.JndiRegistry;
 import org.apache.camel.model.rest.RestBindingMode;
 import org.apache.camel.model.rest.RestPropertyDefinition;
+import org.apache.camel.test.junit4.CamelTestSupport;
 import org.apache.commons.httpclient.Credentials;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
@@ -29,6 +30,7 @@ import java.util.List;
 
 public class BasicAuthRESTCamelDSLJettyJaasTest extends BaseJettyTest {
 
+    private static final String NULL_VALUE_MARKER = CamelTestSupport.class.getCanonicalName();
     private static String HOST = "localhost";
     private static int PORT = getPort1();
 
@@ -38,9 +40,33 @@ public class BasicAuthRESTCamelDSLJettyJaasTest extends BaseJettyTest {
         return jndi;
     }
 
-    @Before public void init() throws IOException {
-        URL jaasURL = BasicAuthRESTCamelDSLJettyJaasTest.class.getResource("/org/jboss/fuse/security/basic/myrealm-jaas.cfg");
-        System.setProperty("java.security.auth.login.config", jaasURL.toExternalForm());
+    @Override
+    public void setUp() throws Exception {
+        URL jaasURL =  this.getClass().getResource("/org/jboss/fuse/security/basic/myrealm-jaas.cfg");
+        setSystemProp("java.security.auth.login.config", jaasURL.toExternalForm());
+        super.setUp();
+    }
+
+    @Override
+    public void tearDown() throws Exception {
+        restoreSystemProperties();
+        super.tearDown();
+    }
+
+    protected void setSystemProp(String key, String value) {
+        String originalValue = System.setProperty(key, value);
+        originalValues.put(key, originalValue != null ? originalValue : NULL_VALUE_MARKER);
+    }
+
+    protected void restoreSystemProperties() {
+        for (Object key : originalValues.keySet()) {
+            Object value = originalValues.get(key);
+            if (NULL_VALUE_MARKER.equals(value)) {
+                System.getProperties().remove(key);
+            } else {
+                System.setProperty((String) key, (String) value);
+            }
+        }
     }
 
 
