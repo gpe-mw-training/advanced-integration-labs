@@ -5,7 +5,9 @@ import org.apache.camel.ExchangePattern;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.impl.JndiRegistry;
 import org.apache.camel.model.rest.RestBindingMode;
+import org.apache.camel.model.rest.RestConfigurationDefinition;
 import org.apache.camel.model.rest.RestPropertyDefinition;
+import org.apache.camel.spi.RestConfiguration;
 import org.apache.camel.test.junit4.CamelTestSupport;
 import org.apache.camel.util.jsse.KeyManagersParameters;
 import org.apache.camel.util.jsse.KeyStoreParameters;
@@ -57,7 +59,6 @@ public class TLSRestCamelDSLJettyTest extends BaseJettyTest {
 
         /*
         setSystemProp("javax.net.ssl.trustStorePassword", pwd);
-
         setSystemProp("org.eclipse.jetty.ssl.keystore",getKeyStore().toURI().getPath());
         setSystemProp("org.eclipse.jetty.ssl.keypassword",pwd);
         setSystemProp("org.eclipse.jetty.ssl.password",pwd);
@@ -183,7 +184,7 @@ public class TLSRestCamelDSLJettyTest extends BaseJettyTest {
         constraint0.setRoles(new String[] { "user", "admin" });
         ConstraintMapping mapping0 = new ConstraintMapping();
         mapping0.setPathSpec("/say/hello/*");
-        mapping0.setMethod("GET");
+        //mapping0.setMethod("GET");
         mapping0.setConstraint(constraint0);
 
         // Access alowed only for Admin role
@@ -193,7 +194,7 @@ public class TLSRestCamelDSLJettyTest extends BaseJettyTest {
         constraint1.setRoles(new String[]{ "admin" });
         ConstraintMapping mapping1 = new ConstraintMapping();
         mapping1.setPathSpec("/say/bye/*");
-        mapping1.setMethod("GET");
+        //mapping1.setMethod("GET");
         mapping1.setConstraint(constraint1);
 
         return Arrays.asList(mapping0, mapping1);
