@@ -16,7 +16,6 @@ import java.net.URL;
 
 public class TLSRestDSLNetty4HttpTest extends BaseNetty4Test {
 
-    private static final String NULL_VALUE_MARKER = CamelTestSupport.class.getCanonicalName();
     private static String SCHEME_HTTPS = "https";
     private static int PORT = getPort1();
     protected String pwd = "secUr1t8";
@@ -33,7 +32,10 @@ public class TLSRestDSLNetty4HttpTest extends BaseNetty4Test {
 
     @Override
     public void setUp() throws Exception {
-        URL jaasURL = this.getClass().getResource("myjaas.config");
+        // Realm included within the common file myrealm-jaas.cfg to avoid that the test fails when done with 'mvn clean test'
+        // The object javax.security.auth.login.Configuration is instaiated one time / maven surefire session
+        // and the object is not recreated with the System Prop
+        URL jaasURL =  this.getClass().getResource("/org/jboss/fuse/security/basic/myrealm-jaas.cfg");
         setSystemProp("java.security.auth.login.config", jaasURL.toExternalForm());
 
         URL trustStoreUrl = this.getClass().getResource("serverstore.jks");
@@ -46,22 +48,6 @@ public class TLSRestDSLNetty4HttpTest extends BaseNetty4Test {
     public void tearDown() throws Exception {
         restoreSystemProperties();
         super.tearDown();
-    }
-
-    protected void setSystemProp(String key, String value) {
-        String originalValue = System.setProperty(key, value);
-        originalValues.put(key, originalValue != null ? originalValue : NULL_VALUE_MARKER);
-    }
-
-    protected void restoreSystemProperties() {
-        for (Object key : originalValues.keySet()) {
-            Object value = originalValues.get(key);
-            if (NULL_VALUE_MARKER.equals(value)) {
-                System.getProperties().remove(key);
-            } else {
-                System.setProperty((String) key, (String) value);
-            }
-        }
     }
 
     @Test

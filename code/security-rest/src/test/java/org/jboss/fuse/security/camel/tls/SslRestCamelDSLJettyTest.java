@@ -31,8 +31,6 @@ import java.util.Map;
 
 public class SslRestCamelDSLJettyTest extends BaseJettyTest {
 
-    private static final String NULL_VALUE_MARKER = CamelTestSupport.class.getCanonicalName();
-
     private static String HOST = "localhost";
     private static int PORT = getPort1();
     protected String pwd = "secUr1t8";
@@ -61,22 +59,6 @@ public class SslRestCamelDSLJettyTest extends BaseJettyTest {
     public void tearDown() throws Exception {
         restoreSystemProperties();
         super.tearDown();
-    }
-
-    protected void setSystemProp(String key, String value) {
-        String originalValue = System.setProperty(key, value);
-        originalValues.put(key, originalValue != null ? originalValue : NULL_VALUE_MARKER);
-    }
-
-    protected void restoreSystemProperties() {
-        for (Object key : originalValues.keySet()) {
-            Object value = originalValues.get(key);
-            if (NULL_VALUE_MARKER.equals(value)) {
-                System.getProperties().remove(key);
-            } else {
-                System.setProperty((String) key, (String) value);
-            }
-        }
     }
 
     public URL getKeyStore() {

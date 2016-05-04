@@ -33,7 +33,7 @@ import java.util.*;
 
 public class TLSRestCamelDSLJettyTest extends BaseJettyTest {
 
-    private static final String NULL_VALUE_MARKER = CamelTestSupport.class.getCanonicalName();
+    private static final String NULL_VALUE_MARKER = TLSRestCamelDSLJettyTest.class.getCanonicalName();
 
     private static String HOST = "localhost";
     private static int PORT = getPort1();
@@ -54,11 +54,14 @@ public class TLSRestCamelDSLJettyTest extends BaseJettyTest {
 
         URL trustStoreUrl = this.getClass().getResource("serverstore.jks");
         setSystemProp("javax.net.ssl.trustStore", trustStoreUrl.toURI().getPath());
-/*        setSystemProp("javax.net.ssl.trustStorePassword", pwd);
+
+        /*
+        setSystemProp("javax.net.ssl.trustStorePassword", pwd);
 
         setSystemProp("org.eclipse.jetty.ssl.keystore",getKeyStore().toURI().getPath());
         setSystemProp("org.eclipse.jetty.ssl.keypassword",pwd);
-        setSystemProp("org.eclipse.jetty.ssl.password",pwd);*/
+        setSystemProp("org.eclipse.jetty.ssl.password",pwd);
+        */
 
         // setSystemProp("javax.net.debug","ssl,handshake,data");
 
@@ -69,22 +72,6 @@ public class TLSRestCamelDSLJettyTest extends BaseJettyTest {
     public void tearDown() throws Exception {
         restoreSystemProperties();
         super.tearDown();
-    }
-
-    protected void setSystemProp(String key, String value) {
-        String originalValue = System.setProperty(key, value);
-        originalValues.put(key, originalValue != null ? originalValue : NULL_VALUE_MARKER);
-    }
-
-    protected void restoreSystemProperties() {
-        for (Object key : originalValues.keySet()) {
-            Object value = originalValues.get(key);
-            if (NULL_VALUE_MARKER.equals(value)) {
-                System.getProperties().remove(key);
-            } else {
-                System.setProperty((String) key, (String) value);
-            }
-        }
     }
 
     public URL getKeyStore() {
