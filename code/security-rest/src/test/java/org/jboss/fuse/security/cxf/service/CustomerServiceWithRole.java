@@ -27,10 +27,11 @@ import javax.ws.rs.core.Response;
  * be inherited by classes implementing it.
  */
 @Path("/customerservice/")
-public interface CustomerService {
+public interface CustomerServiceWithRole {
 
     @GET
     @Path("/customers/{id}/")
+    @RolesAllowed({"user"})
     Customer getCustomer(@PathParam("id") String id);
     
     @PUT
@@ -39,6 +40,7 @@ public interface CustomerService {
      
     @POST
     @Path("/customers/")
+    @RolesAllowed({"admin"})
     Response addCustomer(Customer customer);
 
     @DELETE

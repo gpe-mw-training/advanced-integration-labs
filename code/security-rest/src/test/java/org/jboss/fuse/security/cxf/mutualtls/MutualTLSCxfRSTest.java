@@ -3,8 +3,6 @@ package org.jboss.fuse.security.cxf.mutualtls;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.protocol.Protocol;
-import org.apache.commons.httpclient.protocol.ProtocolSocketFactory;
-import org.apache.commons.httpclient.protocol.SSLProtocolSocketFactory;
 import org.apache.cxf.Bus;
 import org.apache.cxf.BusFactory;
 import org.apache.cxf.bus.spring.SpringBusFactory;
@@ -14,16 +12,15 @@ import org.apache.cxf.jaxrs.lifecycle.SingletonResourceProvider;
 import org.apache.cxf.jaxrs.validation.ValidationExceptionMapper;
 import org.apache.cxf.testutil.common.AbstractBusTestServerBase;
 import org.jboss.fuse.security.cxf.common.BaseCXF;
+import org.jboss.fuse.security.cxf.service.CustomerService;
 import org.jboss.fuse.security.cxf.service.CustomerServiceImpl;
 import org.junit.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.core.Response;
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URL;
-import java.security.KeyStore;
 import java.util.Scanner;
 
 public class MutualTLSCxfRSTest extends BaseCXF {
@@ -43,16 +40,9 @@ public class MutualTLSCxfRSTest extends BaseCXF {
         protected void run() {
             sf = new JAXRSServerFactoryBean();
 
-            // Configure the Interceptor responsible to scan the Classes, Interface in order to detect @RolesAllowed Annotation
-            // and creating a RolesMap
-            SecureAnnotationsInterceptor sai = new SecureAnnotationsInterceptor();
-            sai.setSecuredObject(new CustomerServiceImpl());
-            sf.getInInterceptors().add(sai);
-
-            sf.setResourceClasses(CustomerServiceImpl.class);
+            sf.setResourceClasses(CustomerService.class);
             sf.setProvider(new ValidationExceptionMapper());
-            sf.setResourceProvider(CustomerServiceImpl.class,
-                    new SingletonResourceProvider(new CustomerServiceImpl()));
+            sf.setResourceProvider(CustomerService.class, new SingletonResourceProvider(new CustomerServiceImpl()));
 
             sf.setAddress("https://localhost:" + PORT + "/");
 
@@ -81,23 +71,18 @@ public class MutualTLSCxfRSTest extends BaseCXF {
         sf.getBus().shutdown(true);
     }
 
-    @Test public void allowForDonalUserCorrectRoleTest() {
+    @Test public void testMutualTLS() {
 
         String CustomerResponse = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><Customer><id>123</id><name>John</name></Customer>";
         String BASE_SERVICE_URL = "https://localhost:" + PORT + "/customerservice/customers/123";
 
-        HttpResult res = callRestEndpoint("localhost", BASE_SERVICE_URL, "donald", "duck", "myrealm");
+        HttpResult res = callRestEndpoint("localhost", BASE_SERVICE_URL);
 
         Assert.assertEquals("Response status is 200", Response.Status.OK.getStatusCode(), res.getCode());
         Assert.assertEquals(CustomerResponse, res.getMessage());
     }
 
-    protected HttpResult callRestEndpoint(String host, String url, String user, String password,
-            String realm) {
-        return callRestEndpoint(false, host, url);
-    }
-
-    protected HttpResult callRestEndpoint(boolean isHttps, String host, String url) {
+    protected HttpResult callRestEndpoint(String host, String url) {
 
         // Define the Get Method with the String of the url to access the HTTP Resource
         GetMethod get = new GetMethod(url);
@@ -105,7 +90,6 @@ public class MutualTLSCxfRSTest extends BaseCXF {
 
         // Execute request
         try {
-
             int port = Integer.parseInt(PORT);
 
             URL keystoreUrl = this.getClass().getResource("clientKeystore.jks");
@@ -113,10 +97,11 @@ public class MutualTLSCxfRSTest extends BaseCXF {
             URL trustStoreUrl = this.getClass().getResource("clientKeystore.jks");
             String trustStorePwd = "cspass";
 
-            Protocol.registerProtocol("https", new Protocol("https", new AuthSSLProtocolSocketFactory(keystoreUrl,keystorePwd,trustStoreUrl,trustStorePwd), 443));
+            Protocol.registerProtocol("https", new Protocol("https", new AuthSSLProtocolSocketFactory(keystoreUrl,keystorePwd,trustStoreUrl,trustStorePwd), port));
 
             // Get HTTP client
             HttpClient httpclient = new HttpClient();
+            httpclient.getHostConfiguration().setHost(host);
             get.setRequestHeader("Accept", "text/xml");
             response.setCode(httpclient.executeMethod(get));
 

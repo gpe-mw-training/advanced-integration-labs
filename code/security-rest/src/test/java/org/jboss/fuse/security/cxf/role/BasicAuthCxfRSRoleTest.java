@@ -15,6 +15,8 @@ import org.apache.cxf.jaxrs.validation.ValidationExceptionMapper;
 import org.apache.cxf.testutil.common.AbstractBusTestServerBase;
 import org.jboss.fuse.security.cxf.common.BaseCXF;
 import org.jboss.fuse.security.cxf.service.CustomerServiceImpl;
+import org.jboss.fuse.security.cxf.service.CustomerServiceWithRole;
+import org.jboss.fuse.security.cxf.service.CustomerServiceWithRoleImpl;
 import org.junit.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,13 +46,12 @@ public class BasicAuthCxfRSRoleTest extends BaseCXF {
             // Configure the Interceptor responsible to scan the Classes, Interface in order to detect @RolesAllowed Annotation
             // and creating a RolesMap
             SecureAnnotationsInterceptor sai = new SecureAnnotationsInterceptor();
-            sai.setSecuredObject(new CustomerServiceImpl());
+            sai.setSecuredObject(new CustomerServiceWithRoleImpl());
             sf.getInInterceptors().add(sai);
 
-            sf.setResourceClasses(CustomerServiceImpl.class);
+            sf.setResourceClasses(CustomerServiceWithRole.class);
             sf.setProvider(new ValidationExceptionMapper());
-            sf.setResourceProvider(CustomerServiceImpl.class,
-                    new SingletonResourceProvider(new CustomerServiceImpl()));
+            sf.setResourceProvider(CustomerServiceWithRole.class, new SingletonResourceProvider(new CustomerServiceWithRoleImpl()));
 
             sf.setAddress("http://localhost:" + PORT + "/");
 
