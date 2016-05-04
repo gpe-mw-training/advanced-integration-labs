@@ -80,8 +80,8 @@ public class TLSRestDSLNetty4HttpTest extends BaseNetty4Test {
 
         // username:password is mickey:mouse
         String auth = "Basic bWlja2V5Om1vdXNl";
-        result = template.requestBodyAndHeader("netty4-http://https://localhost:" + PORT + "/say/hello/Donald", "", "Authorization", auth, String.class);
-        assertEquals("\"Hello World Donald\"", result);
+        result = template.requestBodyAndHeader("netty4-http://https://localhost:" + PORT + "/say/hello/Mickey", "", "Authorization", auth, String.class);
+        assertEquals("\"Hello World Mickey\"", result);
     }
 
     @Test
