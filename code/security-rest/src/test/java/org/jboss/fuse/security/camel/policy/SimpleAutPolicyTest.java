@@ -15,7 +15,6 @@ import java.util.Map;
 
 public class SimpleAutPolicyTest extends BaseNetty4Test {
 
-    private static String HOST = "localhost";
     private static int PORT = getPort1();
 
     @Test public void testBasicAuth() {
@@ -28,7 +27,7 @@ public class SimpleAutPolicyTest extends BaseNetty4Test {
         } catch (CamelExecutionException e) {
             NettyHttpOperationFailedException cause = assertIsInstanceOf(NettyHttpOperationFailedException.class, e.getCause());
             assertEquals(500, cause.getStatusCode());
-            assertEquals("",cause.getMessage());
+            assertEquals("Netty HTTP operation failed invoking http://localhost:23000/say/hello/noauthheader with statusCode: 500",cause.getMessage());
         }
 
         // Authorized with username:password is mickey:mouse

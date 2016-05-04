@@ -96,11 +96,11 @@ public class MutualTLSCxfRSTest extends BaseCXF {
             URL trustStoreUrl = this.getClass().getResource("clientKeystore.jks");
             String trustStorePwd = "cspass";
 
-            Protocol https = new Protocol("https", new AuthSSLProtocolSocketFactory(keystoreUrl,keystorePwd,trustStoreUrl,trustStorePwd), port);
+            Protocol.registerProtocol("https", new Protocol("https", new AuthSSLProtocolSocketFactory(keystoreUrl,keystorePwd,trustStoreUrl,trustStorePwd), port));
 
             // Get HTTP client
             HttpClient httpclient = new HttpClient();
-            httpclient.getHostConfiguration().setHost(host,port,https);
+            httpclient.getHostConfiguration().setHost(host);
             get.setRequestHeader("Accept", "text/xml");
             response.setCode(httpclient.executeMethod(get));
 
