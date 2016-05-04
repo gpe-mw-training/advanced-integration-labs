@@ -17,6 +17,8 @@
         <version.cxf>3.1.5.redhat-630055</version.cxf>
         <version.jetty9>9.2.9.v20150224</version.jetty9>
 
+        <version.apiman>1.2.5.Final</version.apiman>
+
         <!-- Fuse 6.3 Beta
         <version.fabric8>1.2.0.redhat-630055</version.fabric8>
         <version.camel>2.17.0.redhat-630055</version.camel>
@@ -44,7 +46,14 @@
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
-
+            <!-- Apiman & Keycloak -->
+            <dependency>
+                <groupId>io.apiman</groupId>
+                <artifactId>apiman</artifactId>
+                <version>${version.apiman}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
             <!-- Dep not declared within the BOM -->
             <dependency>
                 <groupId>xmlunit</groupId>

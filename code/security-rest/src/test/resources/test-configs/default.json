@@ -1,0 +1,6 @@
+{
+    "factory" : "org.jboss.fuse.security.oauth.junit.ServletGatewayTestServerFactory",
+    "config-files" : [
+      "default.properties"
+    ]
+}
