@@ -4,14 +4,7 @@ import io.apiman.gateway.engine.beans.PolicyFailure;
 import io.apiman.gateway.engine.beans.PolicyFailureType;
 import io.apiman.gateway.engine.policies.BasicAuthenticationPolicy;
 import io.apiman.test.common.mock.EchoResponse;
-import io.apiman.test.policies.ApimanPolicyTest;
-import io.apiman.test.policies.Configuration;
-import io.apiman.test.policies.PolicyFailureError;
-import io.apiman.test.policies.PolicyTestRequest;
-import io.apiman.test.policies.PolicyTestRequestType;
-import io.apiman.test.policies.PolicyTestResponse;
-import io.apiman.test.policies.TestingPolicy;
-
+import io.apiman.test.policies.*;
 import org.junit.Assert;
 import org.junit.Test;
 

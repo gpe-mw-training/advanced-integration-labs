@@ -10,16 +10,14 @@ import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.ProtocolException;
 import java.net.URI;
 import java.net.URL;
-import java.util.*;
+import java.util.Map;
 
-import static org.jboss.fuse.security.oauth.junit.GatewayTestUtil.*;
+import static org.jboss.fuse.security.oauth.junit.GatewayTestSupport.*;
 
 /**
  * A junit test runner that fires up an API Gateway and makes it ready for use
@@ -51,7 +49,6 @@ public class GatewayTester extends BlockJUnit4ClassRunner {
      */
     public GatewayTester(Class<?> testClass) throws InitializationError {
         super(testClass);
-        configureSystemProperties(getTestClass());
     }
 
     /**
@@ -139,9 +136,9 @@ public class GatewayTester extends BlockJUnit4ClassRunner {
             RestTest restTest;
 
             for (String cfg : config.cpConfigFiles()) {
-                restTest = GatewayTestUtil.loadRestTest(cfg, getTestClass().getClass().getClassLoader());
+                restTest = GatewayTestSupport.loadRestTest(cfg, getTestClass().getClass().getClassLoader());
 
-                String requestPath = GatewayTestUtil.doPropertyReplacement(restTest.getRequestPath());
+                String requestPath = GatewayTestSupport.doPropertyReplacement(restTest.getRequestPath());
                 URI uri = getUri(baseApiUrl, requestPath);
                 String rawType = restTest.getRequestHeaders().get("Content-Type") != null ?
                         restTest.getRequestHeaders().get("Content-Type") :
@@ -160,7 +157,7 @@ public class GatewayTester extends BlockJUnit4ClassRunner {
 
                 Map<String, String> requestHeaders = restTest.getRequestHeaders();
                 for (Map.Entry<String, String> entry : requestHeaders.entrySet()) {
-                    String value = GatewayTestUtil.doPropertyReplacement(entry.getValue());
+                    String value = GatewayTestSupport.doPropertyReplacement(entry.getValue());
                     // Handle system properties that may be configured in the rest-test itself
                     if (entry.getKey().startsWith("X-RestTest-System-Property")) {
                         String[] split = value.split("=");
@@ -177,7 +174,7 @@ public class GatewayTester extends BlockJUnit4ClassRunner {
                 }
 
                 Response response = client.newCall(requestBuilder.build()).execute();
-                GatewayTestUtil.assertResponse(restTest, response);
+                GatewayTestSupport.assertResponse(restTest, response);
             }
 
         } catch (Error e) {
@@ -202,7 +199,7 @@ public class GatewayTester extends BlockJUnit4ClassRunner {
         } else if ("gateway".equals(endpoint)) {
             return gatewayServer.getGatewayEndpoint();
         } else {
-            return GatewayTestUtil.doPropertyReplacement(endpoint);
+            return GatewayTestSupport.doPropertyReplacement(endpoint);
         }
     }
 

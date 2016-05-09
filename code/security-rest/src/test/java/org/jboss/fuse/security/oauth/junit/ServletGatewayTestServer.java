@@ -1,5 +1,6 @@
 package org.jboss.fuse.security.oauth.junit;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import io.apiman.common.util.ddl.DdlParser;
 import io.apiman.gateway.engine.components.IBufferFactoryComponent;
 import io.apiman.gateway.engine.components.IHttpClientComponent;
@@ -21,25 +22,6 @@ import io.searchbox.client.JestClient;
 import io.searchbox.client.JestClientFactory;
 import io.searchbox.client.config.HttpClientConfig;
 import io.searchbox.indices.DeleteIndex;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.sql.Connection;
-import java.sql.Driver;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Properties;
-
-import javax.naming.Context;
-import javax.naming.InitialContext;
-
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.commons.io.FileUtils;
 import org.elasticsearch.common.settings.ImmutableSettings.Builder;
@@ -49,7 +31,18 @@ import org.infinispan.Cache;
 import org.infinispan.manager.CacheContainer;
 import org.infinispan.manager.DefaultCacheManager;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.sql.Connection;
+import java.sql.Driver;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.*;
+import java.util.Map.Entry;
 
 /**
  * A servlet version of the gateway test server.
