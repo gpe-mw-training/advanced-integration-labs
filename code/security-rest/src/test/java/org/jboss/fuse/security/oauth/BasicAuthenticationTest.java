@@ -19,7 +19,7 @@ public class BasicAuthenticationTest extends GatewayTestSupport {
     @Configuration(cpConfigFiles = {
             "test-plan-data/policies/basic-auth-static/001-publish-api.resttest",
             "test-plan-data/policies/basic-auth-static/002-register-client.resttest" })
-    public void SimpleTest() throws IOException {
+    public void testBasicAuthenticationAgainstApi() throws IOException {
 
         String expectedResponse = "{\n" + "  \"method\" : \"GET\",\n"
                 + "  \"resource\" : \"/path/to/app/resource\",\n" + "  \"uri\" : \"/path/to/app/resource\",\n"
