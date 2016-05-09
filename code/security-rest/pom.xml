@@ -101,6 +101,12 @@
             <version>4.5</version>
         </dependency>
 
+        <!-- OkHTTP -->
+        <dependency>
+            <groupId>com.squareup.okhttp</groupId>
+            <artifactId>okhttp</artifactId>
+        </dependency>
+
         <!-- Java -->
         <dependency>
             <groupId>javax.servlet</groupId>

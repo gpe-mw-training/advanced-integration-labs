@@ -279,7 +279,7 @@ public class GatewayRestTester extends ParentRunner<TestInfo> {
      * Configure some proeprties.
      */
     private void configureSystemProperties() {
-        GatewayRestTestSystemProperties annotation = getTestClass().getJavaClass().getAnnotation(GatewayRestTestSystemProperties.class);
+        GatewayRestTestSystemProperties annotation = getTestClass().getClass().getAnnotation(GatewayRestTestSystemProperties.class);
         if (annotation != null) {
             String[] strings = annotation.value();
             for (int idx = 0; idx < strings.length; idx += 2) {
