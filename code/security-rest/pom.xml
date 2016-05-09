@@ -55,6 +55,13 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- Missing Netty4 HTTP deps -->
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-codec-http</artifactId>
+            <version>4.0.27.Final</version>
+        </dependency>
+
         <!-- CXF -->
 
         <!-- Apiman -->
@@ -212,14 +219,6 @@
                     <fileApplicationContextUri>
                         src/test/resources/org/jboss/fuse/security/encryption/EncryptDecryptPayloadTest-context.xml
                     </fileApplicationContextUri>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
                 </configuration>
             </plugin>
             <plugin>

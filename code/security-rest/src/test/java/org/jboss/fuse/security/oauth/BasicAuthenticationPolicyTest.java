@@ -22,8 +22,7 @@ public class BasicAuthenticationPolicyTest extends ApimanPolicyTest {
     @Test
     @Configuration("{\r\n" +
             "    \"realm\" : \"TestRealm\",\r\n" +
-            "    \"requireBasicAuth\":true\",\r\n" +
-            "    \"forwardIdentityHttpHeader\" : \"X-Authenticated-Identity\",\r\n" +
+            "    \"forwardIdentityHttpHeader\":\"X-Authenticated-Identity\",\r\n" +
             "    \"staticIdentity\" : {\r\n" +
             "      \"identities\" : [\r\n" +
             "        { \"username\" : \"ckent\", \"password\" : \"ckent123!\" },\r\n" +
