@@ -11,6 +11,7 @@ import io.apiman.test.common.resttest.RestTest;
 import io.apiman.test.common.util.TestUtil;
 import io.apiman.test.common.util.TestVariableResolver;
 import io.apiman.test.common.util.TestVariableResolverFactory;
+import org.apache.camel.test.junit4.CamelTestSupport;
 import org.apache.commons.io.IOUtils;
 import org.custommonkey.xmlunit.*;
 import org.junit.Assert;
@@ -34,7 +35,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class GatewayTestSupport {
+public class GatewayTestSupport extends CamelTestSupport {
 
     private static Set<String> resetSysProps = new HashSet<>();
     private static Logger logger = LoggerFactory.getLogger(GatewayTestSupport.class);
@@ -48,16 +49,6 @@ public class GatewayTestSupport {
             client.setFollowRedirects(false);
             client.setFollowSslRedirects(false);
         }
-    }
-
-    /**
-     * Resets the system properties that were set at the start of the test.
-     */
-    public static void resetSystemProperties() {
-        for (String propName : resetSysProps) {
-            System.clearProperty(propName);
-        }
-        resetSysProps.clear();
     }
 
     /**
@@ -555,7 +546,7 @@ public class GatewayTestSupport {
 
         Response response = client.newCall(requestBuilder.build()).execute();
         Assert.assertEquals(200,response.code());
-        Assert.assertEquals("OK",response.message());
+        Assert.assertEquals(expectedResponse,response.body().string());
     }
 
     /**

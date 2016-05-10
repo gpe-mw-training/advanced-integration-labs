@@ -3,10 +3,10 @@ Content-Type: application/json
 
 {
   "organizationId" : "Policy_BasicAuthStatic",
-  "apiId" : "echo",
-  "version" : "1.0.0",
+  "apiId" : "message",
+  "version" : "1.0",
   "endpointType" : "REST",
-  "endpoint" : "${apiman-gateway-test.endpoints.echo}/"
+  "endpoint" : "${apiman-gateway-test.endpoint}/"
 }
 ----
 204

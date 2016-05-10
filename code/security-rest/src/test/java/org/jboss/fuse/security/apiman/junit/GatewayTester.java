@@ -3,9 +3,11 @@ package org.jboss.fuse.security.apiman.junit;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.squareup.okhttp.*;
-import io.apiman.test.common.resttest.IGatewayTestServer;
-import io.apiman.test.common.resttest.IGatewayTestServerFactory;
 import io.apiman.test.common.resttest.RestTest;
+import io.apiman.test.common.util.TestUtil;
+import org.jboss.fuse.security.apiman.server.IGatewayTestServer;
+import org.jboss.fuse.security.apiman.server.IGatewayTestServerFactory;
+import org.junit.AfterClass;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.FrameworkMethod;
@@ -15,7 +17,9 @@ import java.io.IOException;
 import java.net.ProtocolException;
 import java.net.URI;
 import java.net.URL;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import static org.jboss.fuse.security.apiman.junit.GatewayTestSupport.*;
 
@@ -27,6 +31,9 @@ import static org.jboss.fuse.security.apiman.junit.GatewayTestSupport.*;
 public class GatewayTester extends BlockJUnit4ClassRunner {
 
     private static IGatewayTestServer gatewayServer;
+    private static String endpoint = "api";
+
+    private Set<String> resetSysProps = new HashSet<>();
 
     static {
         createAndConfigureGateway();
@@ -38,8 +45,6 @@ public class GatewayTester extends BlockJUnit4ClassRunner {
         client.setFollowRedirects(false);
         client.setFollowSslRedirects(false);
     }
-
-    private static String endpoint = "api";
 
     /**
      * Constructor.
@@ -77,10 +82,10 @@ public class GatewayTester extends BlockJUnit4ClassRunner {
     /**
      * @throws Exception
      */
-    protected static void startServer() {
+    protected void startServer() {
         try {
+            configureSystemProperties();
             gatewayServer.start();
-            System.setProperty("apiman-gateway-test.endpoints.echo", gatewayServer.getEchoTestEndpoint());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -89,7 +94,7 @@ public class GatewayTester extends BlockJUnit4ClassRunner {
     /**
      * @throws Exception
      */
-    protected static void stopServer() {
+    protected void stopServer() {
         try {
             gatewayServer.stop();
             resetSystemProperties();
@@ -186,6 +191,35 @@ public class GatewayTester extends BlockJUnit4ClassRunner {
             logPlain("[EXCEPTION] " + e.getMessage());
             throw new Error(e);
         }
+    }
+
+    /**
+     * Configure some properties.
+     */
+    private void configureSystemProperties() {
+        GatewayTesterSystemProperties annotation = getTestClass().getJavaClass().getAnnotation(GatewayTesterSystemProperties.class);
+        if (annotation != null) {
+            String[] strings = annotation.value();
+            for (int idx = 0; idx < strings.length; idx += 2) {
+                String pname = strings[idx];
+                String pval = strings[idx+1];
+                log("Setting system property \"{0}\" to \"{1}\".", pname, pval);
+                if (System.getProperty(pname) == null) {
+                    resetSysProps.add(pname);
+                }
+                TestUtil.setProperty(pname, pval);
+            }
+        }
+    }
+
+    /**
+     * Resets the system properties that were set at the start of the test.
+     */
+    private void resetSystemProperties() {
+        for (String propName : resetSysProps) {
+            System.clearProperty(propName);
+        }
+        resetSysProps.clear();
     }
 
     /**

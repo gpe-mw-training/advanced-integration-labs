@@ -1,5 +1,5 @@
 {
-    "factory" : "org.jboss.fuse.security.oauth.junit.ServletGatewayTestServerFactory",
+    "factory" : "org.jboss.fuse.security.apiman.server.ServletGatewayTestServerFactory",
     "config-files" : [
       "default.properties"
     ]
