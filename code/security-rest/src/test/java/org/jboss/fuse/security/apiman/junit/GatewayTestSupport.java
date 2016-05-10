@@ -514,7 +514,7 @@ public class GatewayTestSupport extends CamelTestSupport {
      * @param password
      * @throws IOException
      */
-    protected void runAndValidate(String expectedResponse, String uri, String payload, String httpMethod, Map<String, String> requestHeaders, String username, String password)
+    protected void runAndValidate(String expectedResponse, int code, String uri, String payload, String httpMethod, Map<String, String> requestHeaders, String username, String password)
             throws IOException {
 
         String rawType = "application/json";
@@ -545,7 +545,7 @@ public class GatewayTestSupport extends CamelTestSupport {
         }
 
         Response response = client.newCall(requestBuilder.build()).execute();
-        Assert.assertEquals(200,response.code());
+        Assert.assertEquals(code,response.code());
         Assert.assertEquals(expectedResponse,response.body().string());
     }
 
