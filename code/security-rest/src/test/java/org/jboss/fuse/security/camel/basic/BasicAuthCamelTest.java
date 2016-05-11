@@ -20,7 +20,8 @@ import java.util.Arrays;
 
 public class BasicAuthCamelTest extends BaseJettyTest {
 
-    @Override protected JndiRegistry createRegistry() throws Exception {
+    @Override
+    protected JndiRegistry createRegistry() throws Exception {
         JndiRegistry jndi = super.createRegistry();
         jndi.bind("myAuthHandler", getSecurityHandler());
         return jndi;
@@ -57,7 +58,8 @@ public class BasicAuthCamelTest extends BaseJettyTest {
         return sh;
     }
 
-    @Test public void testHttpBasicAuthCamel() throws Exception {
+    @Test
+    public void testHttpBasicAuthCamel() throws Exception {
         String out = template.requestBody(
                 "http://localhost:{{port1}}/test?authMethod=Basic&authUsername=donald&authPassword=duck",
                 "Hello World", String.class);

@@ -30,7 +30,8 @@ public class BasicAuthRESTCamelDSLJettyHashLoginTest extends BaseJettyTest {
     private static String HOST = "localhost";
     private static int PORT = getPort1();
 
-    @Override protected JndiRegistry createRegistry() throws Exception {
+    @Override
+    protected JndiRegistry createRegistry() throws Exception {
         JndiRegistry jndi = super.createRegistry();
         jndi.bind("myAuthHandler", getSecurityHandler());
         return jndi;
