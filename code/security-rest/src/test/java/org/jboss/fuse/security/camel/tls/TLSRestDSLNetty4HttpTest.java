@@ -25,6 +25,7 @@ public class TLSRestDSLNetty4HttpTest extends BaseNetty4Test {
 
         // Netty with HTTPS scheme, JAAS Auth & Security Path Constraint & Role
         jndi.bind("nettyConf", getNettyHttpSslConfiguration());
+        jndi.bind("nettyClientConf", getNettyHttpClientSslConfiguration());
         jndi.bind("mySecurityConfig", getJAASSecurityHttpConfiguration());
         return jndi;
     }
@@ -39,7 +40,7 @@ public class TLSRestDSLNetty4HttpTest extends BaseNetty4Test {
 
         URL trustStoreUrl = this.getClass().getResource("serverstore.jks");
         setSystemProp("javax.net.ssl.trustStore", trustStoreUrl.toURI().getPath());
-        //setSystemProp("javax.net.debug","ssl,handshake,data");
+        setSystemProp("javax.net.debug","all");
         super.setUp();
     }
 
@@ -63,7 +64,7 @@ public class TLSRestDSLNetty4HttpTest extends BaseNetty4Test {
 
         // username:password is mickey:mouse
         String auth = "Basic bWlja2V5Om1vdXNl";
-        result = template.requestBodyAndHeader("netty4-http://https://localhost:" + PORT + "/say/hello/Mickey", "", "Authorization", auth, String.class);
+        result = template.requestBodyAndHeader("netty4-http://https://localhost:" + PORT + "/say/hello/Mickey?configuration=#nettyClientConf", "", "Authorization", auth, String.class);
         assertEquals("\"Hello World Mickey\"", result);
     }
 
@@ -75,7 +76,7 @@ public class TLSRestDSLNetty4HttpTest extends BaseNetty4Test {
 
         // User without Admin Role
         try {
-            result = template.requestBodyAndHeader("netty4-http://https://localhost:" + PORT + "/say/hello/Donald", "", "Authorization", auth, String.class);
+            result = template.requestBodyAndHeader("netty4-http://https://localhost:" + PORT + "/say/hello/Donald?configuration=#nettyClientConf", "", "Authorization", auth, String.class);
             fail("Should send back 401");
         } catch (CamelExecutionException e) {
             NettyHttpOperationFailedException cause = assertIsInstanceOf(NettyHttpOperationFailedException.class, e.getCause());
