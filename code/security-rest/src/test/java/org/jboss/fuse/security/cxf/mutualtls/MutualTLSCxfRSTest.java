@@ -28,7 +28,8 @@ public class MutualTLSCxfRSTest extends BaseCXF {
     public static final String PORT = allocatePort(MutualTLSCxfRSTest.class);
     private static JAXRSServerFactoryBean sf;
 
-    @Ignore public static class Server extends AbstractBusTestServerBase {
+    @Ignore
+    public static class Server extends AbstractBusTestServerBase {
 
         static {
             SpringBusFactory factory = new SpringBusFactory();
@@ -62,11 +63,14 @@ public class MutualTLSCxfRSTest extends BaseCXF {
     }
 
     @BeforeClass public static void startServers() throws Exception {
+        System.setProperty("javax.net.debug","all");
         assertTrue("server did not launch correctly", launchServer(Server.class, true));
         createStaticBus();
     }
 
-    @AfterClass public static void shutdown() {
+    @AfterClass
+    public static void shutdown() {
+        System.clearProperty("javax.net.debug");
         sf.getBus().shutdown(true);
     }
 
