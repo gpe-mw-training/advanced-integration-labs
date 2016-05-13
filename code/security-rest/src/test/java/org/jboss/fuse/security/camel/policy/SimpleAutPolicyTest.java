@@ -17,26 +17,11 @@ public class SimpleAutPolicyTest extends BaseNetty4Test {
 
     private static int PORT = getPort1();
 
-    @Test public void testBasicAuth() {
-        String result;
-
-        // Unauthorized
-        try {
-            template.requestBodyAndHeader("netty4-http://http://localhost:" + PORT + "/say/hello/noauthheader", "", Exchange.HTTP_METHOD,"GET",String.class);
-            fail("Should send back 500");
-        } catch (CamelExecutionException e) {
-            NettyHttpOperationFailedException cause = assertIsInstanceOf(NettyHttpOperationFailedException.class, e.getCause());
-            assertEquals(500, cause.getStatusCode());
-            assertEquals("Netty HTTP operation failed invoking http://localhost:23000/say/hello/noauthheader with statusCode: 500",cause.getMessage());
-        }
-
-        // Authorized with username:password is mickey:mouse
-        String auth = "Basic bWlja2V5Om1vdXNl";
-        Map<String,Object> headers = new HashMap<String, Object>();
-        headers.put("Authorization", auth);
-        headers.put(Exchange.HTTP_METHOD,"GET");
-        result = template.requestBodyAndHeaders("netty4-http://http://localhost:" + PORT + "/say/hello/Donald", "",headers, String.class);
-        assertEquals("\"Hello World Donald\"", result);
+    @Test
+    public void testBasicAuth() {
     }
 
+    @Override
+    protected RouteBuilder createRouteBuilder() throws Exception {
+    }
 }

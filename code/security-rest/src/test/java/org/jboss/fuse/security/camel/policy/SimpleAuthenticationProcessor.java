@@ -31,7 +31,8 @@ public class SimpleAuthenticationProcessor extends DelegateAsyncProcessor {
         this.policy = policy;
     }
 
-    @Override public boolean process(Exchange exchange, AsyncCallback callback) {
+    @Override
+    public boolean process(Exchange exchange, AsyncCallback callback) {
         try {
             applySecurityPolicy(exchange);
         } catch (Exception e) {
@@ -45,27 +46,6 @@ public class SimpleAuthenticationProcessor extends DelegateAsyncProcessor {
     }
 
     private void applySecurityPolicy(Exchange exchange) {
-        try {
-            String auth = (String) exchange.getIn().getHeader(HttpHeaders.AUTHORIZATION);
-
-            // Extract 'Base ' string from the Header Authorization
-            String base64 = auth.substring(6,auth.length());
-
-            // Decrypt the base64 text
-            String decoded = new String(Base64.getDecoder().decode(base64), "UTF-8");
-
-            String[] values = decoded.split(":");
-
-            login(values[0],values[1]);
-            LOG.debug("Current user {} successfully authenticated", "");
-
-        } catch (NullPointerException ne) {
-            throw new AuthenticationException("Authorization Header is not present or can't be decoded");
-        } catch (AuthenticationException ae) {
-            throw new AuthenticationException("Authentication Failed. There is no user with username and/or password", ae.getCause());
-        } catch (UnsupportedEncodingException e) {
-            throw new AuthenticationException("Base64 String can't be decoded", e.getCause());
-        }
     }
 
     private void login(String user, String password) throws AuthenticationException {
