@@ -11,19 +11,6 @@
     <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"/>
     <httpj:engine-factory bus="cxf">
         <httpj:engine port="${testutil.ports.MutualTLSCxfRSTest}">
-            <httpj:tlsServerParameters>
-                <sec:keyManagers keyPassword="skpass">
-                    <sec:keyStore
-                            file="src/test/resources/org/jboss/fuse/security/cxf/mutualtls/serviceKeystore.jks"
-                            password="sspass" type="JKS"/>
-                </sec:keyManagers>
-                <sec:trustManagers>
-                    <sec:keyStore
-                            file="src/test/resources/org/jboss/fuse/security/cxf/mutualtls/serviceKeystore.jks"
-                            password="sspass" type="JKS"/>
-                </sec:trustManagers>
-                <sec:clientAuthentication want="true" required="true"/>
-            </httpj:tlsServerParameters>
         </httpj:engine>
     </httpj:engine-factory>
 </beans>

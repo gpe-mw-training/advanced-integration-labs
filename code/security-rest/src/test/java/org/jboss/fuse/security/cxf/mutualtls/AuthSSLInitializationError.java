@@ -4,7 +4,6 @@ package org.jboss.fuse.security.cxf.mutualtls;
  * <p>
  * Signals fatal error in initialization of {@link AuthSSLProtocolSocketFactory}.
  * </p>
- *
  */
 
 public class AuthSSLInitializationError extends Error {

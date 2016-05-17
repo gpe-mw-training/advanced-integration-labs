@@ -32,21 +32,9 @@ public class MutualTLSCxfRSTest extends BaseCXF {
     public static class Server extends AbstractBusTestServerBase {
 
         static {
-            SpringBusFactory factory = new SpringBusFactory();
-            Bus bus = factory.createBus("org/jboss/fuse/security/cxf/mutualtls/ServerConfig.xml");
-            BusFactory.setDefaultBus(bus);
         }
 
         protected void run() {
-            sf = new JAXRSServerFactoryBean();
-
-            sf.setResourceClasses(CustomerService.class);
-            sf.setProvider(new ValidationExceptionMapper());
-            sf.setResourceProvider(CustomerService.class, new SingletonResourceProvider(new CustomerServiceImpl()));
-
-            sf.setAddress("https://localhost:" + PORT + "/");
-
-            sf.create();
         }
 
         public static void main(String[] args) {
@@ -62,7 +50,8 @@ public class MutualTLSCxfRSTest extends BaseCXF {
         }
     }
 
-    @BeforeClass public static void startServers() throws Exception {
+    @BeforeClass
+    public static void startServers() throws Exception {
         System.setProperty("javax.net.debug","all");
         assertTrue("server did not launch correctly", launchServer(Server.class, true));
         createStaticBus();
@@ -74,15 +63,8 @@ public class MutualTLSCxfRSTest extends BaseCXF {
         sf.getBus().shutdown(true);
     }
 
-    @Test public void testMutualTLS() {
-
-        String CustomerResponse = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><Customer><id>123</id><name>John</name></Customer>";
-        String BASE_SERVICE_URL = "https://localhost:" + PORT + "/customerservice/customers/123";
-
-        HttpResult res = callRestEndpoint("localhost", BASE_SERVICE_URL);
-
-        Assert.assertEquals("Response status is 200", Response.Status.OK.getStatusCode(), res.getCode());
-        Assert.assertEquals(CustomerResponse, res.getMessage());
+    @Test
+    public void testMutualTLS() {
     }
 
     protected HttpResult callRestEndpoint(String host, String url) {
