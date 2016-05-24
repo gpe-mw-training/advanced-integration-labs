@@ -1,6 +1,7 @@
 package org.jboss.fuse.persistence;
 
 import org.apache.camel.impl.JndiRegistry;
+import org.apache.camel.spi.Registry;
 import org.apache.camel.test.junit4.CamelTestSupport;
 import org.apache.camel.test.spring.CamelSpringTestSupport;
 import org.junit.After;
@@ -26,9 +27,6 @@ public abstract class AbstractJdbcTestSupport extends CamelSpringTestSupport {
     @Before
     @Override
     public void setUp() throws Exception {
-        db = new EmbeddedDatabaseBuilder()
-            .setType(EmbeddedDatabaseType.H2)
-            .addScript("sql/h2-jdbc.sql").build();
         super.setUp();
     }
 
@@ -36,6 +34,5 @@ public abstract class AbstractJdbcTestSupport extends CamelSpringTestSupport {
     @Override
     public void tearDown() throws Exception {
         super.tearDown();
-        db.shutdown();
     }
 }

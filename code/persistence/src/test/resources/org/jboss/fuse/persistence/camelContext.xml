@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jdbc="http://www.springframework.org/schema/jdbc"
        xsi:schemaLocation="
        http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd
        http://camel.apache.org/schema/spring
        http://camel.apache.org/schema/spring/camel-spring.xsd
+       http://www.springframework.org/schema/jdbc
+       http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
     ">
 
 
@@ -13,11 +16,8 @@
 
         <!-- Route which will execute the select query every 20s and display result in the log-->
         <route id="trigger-database">
-            <from uri="timer://course?delay=20000&amp;period=20000"/>
-            <setBody>
-                <constant>SELECT * FROM REPORT.T_INCIDENT</constant>
-            </setBody>
-            <to uri="jdbc:testdb"/>
+            <from uri="direct://hello"/>
+            <to uri="jdbc:testdb?readSize=100"/>
             <split>
                 <simple>${body}</simple>
                 <log message="*** Select all : ${body}"/>
@@ -35,7 +35,7 @@
                    <simple>SELECT * FROM REPORT.T_INCIDENT WHERE INCIDENT_REF = '${body}' </simple>
                </setBody>
                <log message=">>> SQL Query : ${body}"/>
-               <to uri="jdbc:reportdb"/>
+               <to uri="jdbc:testdb"/>
                <log message=">>> Select using key : ${body}"/>
             </split>
         </route>
@@ -49,5 +49,11 @@
         <property name="username" value="sa"/>
         <property name="password" value=""/>
     </bean>-->
+
+    <jdbc:embedded-database id="testdb" type="H2">
+        <jdbc:script location="classpath:org/jboss/fuse/persistence/sql/h2-jdbc.sql"/>
+    </jdbc:embedded-database>
+
+
 
 </beans>

@@ -12,41 +12,21 @@ import java.util.Map;
 
 public class CamelJDBCH2Test extends AbstractJdbcTestSupport {
 
-
     @Test
     public void testJdbcRoutes() throws Exception {
-        // first we create our exchange using the endpoint
-        Endpoint endpoint = context.getEndpoint("direct:hello");
-        Exchange exchange = endpoint.createExchange();
-        // then we set the SQL on the in body
-        exchange.getIn().setBody("select * from customer order by ID");
 
         // now we send the exchange to the endpoint, and receives the response from Camel
-        Exchange result = template.send(endpoint, exchange);
+        List<Map<String, Object>> data = template.requestBody("direct:hello", "SELECT * FROM REPORT.T_INCIDENT", List.class);
 
         // assertions of the response
-        assertNotNull(result);
-        assertNotNull(result.getOut());
-        List<Map<String, Object>> data = result.getOut().getBody(List.class);
         assertNotNull(data);
-        assertEquals(3, data.size());
+        assertEquals(4, data.size());
         Map<String, Object> row = data.get(0);
-        assertEquals("cust1", row.get("ID"));
-        assertEquals("jstrachan", row.get("NAME"));
-        row = data.get(1);
-        assertEquals("cust2", row.get("ID"));
-        assertEquals("nsandhu", row.get("NAME"));
-        // END SNIPPET: invoke
-    }
-
-    @Override protected RouteBuilder createRouteBuilder() throws Exception {
-        return new RouteBuilder() {
-            // lets add simple route
-            public void configure() throws Exception {
-                from("direct:hello").to("jdbc:testdb?readSize=100");
-            }
-            // END SNIPPET: route
-        };
+        assertEquals("1", row.get("INCIDENT_ID").toString());
+        assertEquals("001", row.get("INCIDENT_REF"));
+        assertEquals("Charles", row.get("GIVEN_NAME"));
+        assertEquals("Moulliard", row.get("FAMILY_NAME"));
+        assertEquals("cmoulliard@redhat.com", row.get("EMAIL"));
     }
 
     @Override
