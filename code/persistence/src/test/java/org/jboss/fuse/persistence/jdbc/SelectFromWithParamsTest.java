@@ -15,14 +15,15 @@ public class SelectFromWithParamsTest extends AbstractJdbcTestSupport {
     public void testNamedParametersQuery() throws Exception {
 
         Map<String, Object> jdbcParams = new HashMap<String, Object>();
-        jdbcParams.put("id", "1");
+        jdbcParams.put("firstname", "Charles");
+        jdbcParams.put("lastname", "Moulliard");
 
         // now we send the exchange to the endpoint, and receives the response from Camel
-        List<Map<String, Object>> data = template.requestBodyAndHeaders("direct:select-with-params", "SELECT * FROM REPORT.T_INCIDENT where INCIDENT_ID = :?id", jdbcParams, List.class);
+        List<Map<String, Object>> data = template.requestBodyAndHeaders("direct:select-with-params", "SELECT * FROM REPORT.T_INCIDENT where GIVEN_NAME = :?firstname AND FAMILY_NAME = :?lastname", jdbcParams, List.class);
 
         // assertions of the response
         assertNotNull(data);
-        assertEquals(1, data.size());
+        assertEquals(2, data.size());
         Map<String, Object> row = data.get(0);
         assertEquals("1", row.get("INCIDENT_ID").toString());
         assertEquals("001", row.get("INCIDENT_REF"));
