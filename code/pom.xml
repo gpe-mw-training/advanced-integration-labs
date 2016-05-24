@@ -98,6 +98,7 @@
     <modules>
         <module>security-ws</module>
         <module>security-rest</module>
+        <module>persistence</module>
     </modules>
 
     <!-- Repository -->
