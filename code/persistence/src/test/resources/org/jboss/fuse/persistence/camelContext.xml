@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://camel.apache.org/schema/spring
+       http://camel.apache.org/schema/spring/camel-spring.xsd
+    ">
+
+
+    <camelContext id="camel" xmlns="http://camel.apache.org/schema/spring">
+
+        <!-- Route which will execute the select query every 20s and display result in the log-->
+        <route id="trigger-database">
+            <from uri="timer://course?delay=20000&amp;period=20000"/>
+            <setBody>
+                <constant>SELECT * FROM REPORT.T_INCIDENT</constant>
+            </setBody>
+            <to uri="jdbc:testdb"/>
+            <split>
+                <simple>${body}</simple>
+                <log message="*** Select all : ${body}"/>
+            </split>
+        </route>
+
+        <!-- Route which will execute the select query when a file will be poll from
+            data directory. this file contains the keys of the incidents to be find
+            and display result in the log -->
+        <route id="key-from-file">
+            <from uri="file://target/data"/>
+            <split>
+               <tokenize token=","/>
+               <setBody>
+                   <simple>SELECT * FROM REPORT.T_INCIDENT WHERE INCIDENT_REF = '${body}' </simple>
+               </setBody>
+               <log message=">>> SQL Query : ${body}"/>
+               <to uri="jdbc:reportdb"/>
+               <log message=">>> Select using key : ${body}"/>
+            </split>
+        </route>
+
+    </camelContext>
+
+<!--    &lt;!&ndash; H2 DB &ndash;&gt;
+    <bean id="reportdb" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="org.h2.Driver"/>
+        <property name="url" value="jdbc:h2:tcp://localhost/~/reportdb"/>
+        <property name="username" value="sa"/>
+        <property name="password" value=""/>
+    </bean>-->
+
+</beans>

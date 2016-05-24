@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://camel.apache.org/schema/spring
+       http://camel.apache.org/schema/spring/camel-spring.xsd
+    ">
+
+
+    <camelContext id="camel" xmlns="http://camel.apache.org/schema/spring">
+
+        <propertyPlaceholder id="properties" location="com/fusesource/examples/persistence/part1/query.properties"/>
+
+        <!-- Route which will execute the select query every 10s and display result in the log
+             The query is defined in the file query.properties that Camel will retrieve using
+             the property place holder -->
+        <route id="trigger-database">
+            <from uri="timer://webinar?{{timerParams}}"/>
+            <setBody>
+                   <simple>${properties:selectReportWithIds}</simple>
+            </setBody>
+            <!-- <log message=">> SQL query = {{selectReportWithIds}}"/> -->
+            <to uri="jdbc:reportdb"/>
+            <split>
+                <simple>${body}</simple>
+                <log message=">>> Select all but using properties to define query : ${body}"/>
+            </split>
+        </route>
+
+
+    </camelContext>
+
+    <!-- H2 DB -->
+    <bean id="reportdb" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="org.h2.Driver"/>
+        <property name="url" value="jdbc:h2:tcp://localhost/~/reportdb"/>
+        <property name="username" value="sa"/>
+        <property name="password" value=""/>
+    </bean>
+
+</beans>
