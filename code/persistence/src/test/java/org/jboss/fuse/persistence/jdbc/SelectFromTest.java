@@ -1,9 +1,6 @@
 package org.jboss.fuse.persistence.jdbc;
 
-import org.apache.camel.Endpoint;
-import org.apache.camel.Exchange;
-import org.apache.camel.builder.RouteBuilder;
-import org.jboss.fuse.persistence.AbstractJdbcTestSupport;
+import org.jboss.fuse.persistence.AbstractJdbcTest;
 import org.junit.Test;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -11,7 +8,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import java.util.List;
 import java.util.Map;
 
-public class SelectFromTest extends AbstractJdbcTestSupport {
+public class SelectFromTest extends AbstractJdbcTest {
 
     @Test
     public void testSelectFrom() throws Exception {
@@ -33,6 +30,6 @@ public class SelectFromTest extends AbstractJdbcTestSupport {
 
     @Override
     protected AbstractApplicationContext createApplicationContext() {
-        return new ClassPathXmlApplicationContext("org/jboss/fuse/persistence/camelContext.xml");
+        return new ClassPathXmlApplicationContext("org/jboss/fuse/persistence/sql/camelContext.xml");
     }
 }

@@ -1,10 +1,9 @@
 package org.jboss.fuse.persistence.jdbc;
 
-import org.apache.camel.Endpoint;
 import org.apache.camel.EndpointInject;
 import org.apache.camel.component.jdbc.JdbcConstants;
 import org.apache.camel.component.mock.MockEndpoint;
-import org.jboss.fuse.persistence.AbstractJdbcTestSupport;
+import org.jboss.fuse.persistence.AbstractJdbcTest;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.context.support.AbstractApplicationContext;
@@ -14,7 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class InsertAndSelectFromTest extends AbstractJdbcTestSupport {
+public class InsertAndSelectFromTest extends AbstractJdbcTest {
 
     @EndpointInject(uri = "mock:insert")
     MockEndpoint mockInsert;
@@ -56,6 +55,6 @@ public class InsertAndSelectFromTest extends AbstractJdbcTestSupport {
 
     @Override
     protected AbstractApplicationContext createApplicationContext() {
-        return new ClassPathXmlApplicationContext("org/jboss/fuse/persistence/camelContext.xml");
+        return new ClassPathXmlApplicationContext("org/jboss/fuse/persistence/sql/camelContext.xml");
     }
 }
