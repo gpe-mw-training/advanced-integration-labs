@@ -115,6 +115,11 @@
             <id>JBoss Early Access</id>
             <url>http://repository.jboss.org/nexus/content/groups/ea</url>
         </repository>
+        <repository>
+            <!-- for restlet -->
+            <id>springsource-libs-releases</id>
+            <url>http://repo.springsource.org/libs-release-remote</url>
+        </repository>
     </repositories>
 
     <pluginRepositories>
