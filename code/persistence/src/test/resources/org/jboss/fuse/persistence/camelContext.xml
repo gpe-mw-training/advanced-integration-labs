@@ -13,17 +13,16 @@
 
 
     <camelContext id="camel" xmlns="http://camel.apache.org/schema/spring">
-
         <route>
             <from uri="direct://select"/>
             <to uri="jdbc:testdb?useHeadersAsParameters=true"/>
+            <to uri="mock:select"/>
         </route>
-
         <route>
-            <from uri="direct://select-with-params"/>
+            <from uri="direct://insert"/>
             <to uri="jdbc:testdb?useHeadersAsParameters=true"/>
+            <to uri="mock:insert"/>
         </route>
-
     </camelContext>
 
     <jdbc:embedded-database id="testdb" type="DERBY">

@@ -24,6 +24,7 @@ public abstract class AbstractJdbcTestSupport extends CamelSpringTestSupport {
     @Override
     public void setUp() throws Exception {
         super.setUp();
+
     }
 
     @After
