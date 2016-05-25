@@ -13,7 +13,25 @@
 
     <properties>
         <hibernate.version>4.2.16.Final</hibernate.version>
+        <arquillian.version>1.1.10.Final</arquillian.version>
+        <shrinkwrap.version>1.2.2</shrinkwrap.version>
+        <wildfly-camel.version>3.3.0</wildfly-camel.version>
+        <wildfly.version>9.0.2.Final</wildfly.version>
+        <wildfly.dir>/Users/chmoulli/MyApplications</wildfly.dir>
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- Arquillian BOM -->
+            <dependency>
+                <groupId>org.jboss.arquillian</groupId>
+                <artifactId>arquillian-bom</artifactId>
+                <version>${arquillian.version}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <dependencies>
         <dependency>
@@ -34,6 +52,18 @@
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-jpa</artifactId>
+        </dependency>
+
+        <!-- WildFly & Camel -->
+        <dependency>
+            <groupId>org.wildfly.camel</groupId>
+            <artifactId>wildfly-camel-subsystem</artifactId>
+            <version>${wildfly-camel.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.wildfly.camel</groupId>
+            <artifactId>wildfly-camel-testenricher</artifactId>
+            <version>${wildfly-camel.version}</version>
         </dependency>
 
         <!-- JPA Spec & Hibernate -->
@@ -68,7 +98,112 @@
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
         </dependency>
+
+        <!-- Arquillian -->
+        <dependency>
+            <groupId>org.jboss.arquillian.junit</groupId>
+            <artifactId>arquillian-junit-container</artifactId>
+            <!--            <version>${arquillian.version}</version>-->
+        </dependency>
+
+        <!-- this is container adapter for wildfly-->
+        <dependency>
+            <groupId>org.wildfly.arquillian</groupId>
+            <artifactId>wildfly-arquillian-container-embedded</artifactId>
+            <version>1.1.0.Final</version>
+        </dependency>
+
+        <!-- this is the wildfly emb.container -->
+        <dependency>
+            <groupId>org.wildfly</groupId>
+            <artifactId>wildfly-embedded</artifactId>
+            <version>${wildfly.version}</version>
+        </dependency>
+
+        <!--        <dependency>
+                    <groupId>org.jboss.arquillian.core</groupId>
+                    <artifactId>arquillian-core-api</artifactId>
+                    <version>${arquillian.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.jboss.arquillian.core</groupId>
+                    <artifactId>arquillian-core-impl-base</artifactId>
+                    <version>${arquillian.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.jboss.arquillian.container</groupId>
+                    <artifactId>arquillian-container-test-api</artifactId>
+                    <version>${arquillian.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.jboss.arquillian.test</groupId>
+                    <artifactId>arquillian-test-impl-base</artifactId>
+                    <version>${arquillian.version}</version>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.jboss.shrinkwrap</groupId>
+                    <artifactId>shrinkwrap-impl-base</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>org.wildfly.arquillian</groupId>
+                    <artifactId>wildfly-arquillian-container-managed</artifactId>
+                    <version>1.0.1.Final</version>
+                </dependency>
+                -->
+
+        <!-- JUnit -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
     </dependencies>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.8</version>
+                <executions>
+                    <execution>
+                        <id>unpack</id>
+                        <phase>process-test-classes</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.wildfly</groupId>
+                                    <artifactId>wildfly-dist</artifactId>
+                                    <version>${wildfly.version}</version>
+                                    <type>zip</type>
+                                    <overWrite>false</overWrite>
+                                    <outputDirectory>${wildfly.dir}</outputDirectory>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.17</version>
+                <configuration>
+                    <!-- Fork every test because it will launch a separate AS instance -->
+                    <forkMode>always</forkMode>
+                    <systemPropertyVariables>
+                        <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
+                        <!-- the maven dependency plugin will have already downloaded the server on /target -->
+                        <jboss.home>${wildfly.dir}/wildfly-${wildfly.version}</jboss.home>
+                        <module.path>${wildfly.dir}/wildfly-${wildfly.version}/modules</module.path>
+                    </systemPropertyVariables>
+                    <redirectTestOutputToFile>false</redirectTestOutputToFile>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

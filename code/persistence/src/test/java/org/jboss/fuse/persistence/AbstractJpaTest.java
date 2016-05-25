@@ -22,7 +22,8 @@ public abstract class AbstractJpaTest extends CamelTestSupport {
     protected TransactionTemplate transactionTemplate;
     protected EntityManager entityManager;
 
-    @Before public void setUp() throws Exception {
+    @Before
+    public void setUp() throws Exception {
         super.setUp();
         EntityManagerFactory entityManagerFactory = applicationContext
                 .getBean("entityManagerFactory", EntityManagerFactory.class);
@@ -57,12 +58,12 @@ public abstract class AbstractJpaTest extends CamelTestSupport {
         });
     }
 
-    protected void assertEntityInDB(int size) throws Exception {
+/*    protected void assertEntityInDB(int size) throws Exception {
         List<?> list = entityManager.createQuery(selectAllString()).getResultList();
         assertEquals(size, list.size());
 
         assertIsInstanceOf(SendEmail.class, list.get(0));
-    }
+    }*/
 
     protected abstract String routeXml();
 

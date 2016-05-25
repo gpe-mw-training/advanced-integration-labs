@@ -1,0 +1,28 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://camel.apache.org/schema/spring"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+    <camelContext id="jpa-context" xmlns="http://camel.apache.org/schema/spring">
+        <route>
+            <from uri="direct:start" />
+            <to uri="jpa:org.jboss.fuse.persistence.jpa.model.Account" />
+        </route>
+    </camelContext>
+
+    <bean id="jpa" class="org.apache.camel.component.jpa.JpaComponent">
+        <property name="entityManagerFactory" ref="entityManagerFactory"/>
+        <property name="transactionManager" ref="jpaTxManager"/>
+    </bean>
+
+    <bean id="jpaTxManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory"/>
+    </bean>
+
+    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean">
+        <property name="persistenceUnitName" value="camel"/>
+    </bean>
+
+</beans>
