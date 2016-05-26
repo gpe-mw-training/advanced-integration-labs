@@ -9,6 +9,7 @@
         <class>org.jboss.fuse.persistence.jpa.model.Account</class>
         <properties>
             <property name="hibernate.hbm2ddl.auto" value="create-drop"/>
+            <property name="hibernate.show_sql" value="true"/>
         </properties>
     </persistence-unit>
 </persistence>

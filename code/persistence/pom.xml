@@ -15,19 +15,13 @@
         <version.camel>2.16.2</version.camel>
 
         <hibernate.version>4.2.16.Final</hibernate.version>
-        <arquillian.version>1.1.10.Final</arquillian.version>
-        <shrinkwrap.version>1.2.2</shrinkwrap.version>
         <wildfly-camel.version>3.3.0</wildfly-camel.version>
-
-        <version.jboss.arquillian.core>1.1.10.Final</version.jboss.arquillian.core>
 
         <!-- WildFly versions -->
         <version.wildfly>9.0.2.Final</version.wildfly>
-        <version.wildfly.arquillian>1.0.1.Final</version.wildfly.arquillian>
-        <version.wildfly.core>1.0.2.Final</version.wildfly.core>
+        <version.jboss.arquillian.core>1.1.10.Final</version.jboss.arquillian.core>
+        <version.wildfly.arquillian>1.1.0.Final</version.wildfly.arquillian>
         <version-wildfly-provisioning-maven-plugin>1.1.0.Final</version-wildfly-provisioning-maven-plugin>
-
-        <wildfly.dir>/Users/chmoulli/MyApplications</wildfly.dir>
 
         <jboss.home>${project.build.directory}/wildfly-${version.wildfly}</jboss.home>
         <jvmArgs>-Xmx1G -XX:MaxPermSize=512m -Djava.net.preferIPv4Stack=true</jvmArgs>
@@ -148,7 +142,6 @@
             <groupId>org.jboss.arquillian.junit</groupId>
             <artifactId>arquillian-junit-container</artifactId>
         </dependency>
-
         <!-- this is container adapter for wildfly-->
         <dependency>
             <groupId>org.wildfly.arquillian</groupId>
@@ -167,58 +160,6 @@
             <artifactId>junit</artifactId>
         </dependency>
     </dependencies>
-
-    <!--    <build>
-            <plugins>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-dependency-plugin</artifactId>
-                    <version>2.8</version>
-                    <executions>
-                        <execution>
-                            <id>unpack</id>
-                            <phase>process-test-classes</phase>
-                            <goals>
-                                <goal>unpack</goal>
-                            </goals>
-                            <configuration>
-                                <artifactItems>
-                                    <artifactItem>
-                                        <groupId>org.wildfly</groupId>
-                                        <artifactId>wildfly-dist</artifactId>
-                                        <version>${wildfly.version}</version>
-                                        <type>zip</type>
-                                        <overWrite>false</overWrite>
-                                        <outputDirectory>${wildfly.dir}</outputDirectory>
-                                    </artifactItem>
-                                </artifactItems>
-                            </configuration>
-                        </execution>
-                    </executions>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-surefire-plugin</artifactId>
-                    <version>2.17</version>
-                    <configuration>
-                        &lt;!&ndash; Fork every test because it will launch a separate AS instance &ndash;&gt;
-                        <forkMode>always</forkMode>
-                        <systemPropertyVariables>
-                            <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
-                            &lt;!&ndash; the maven dependency plugin will have already downloaded the server on /target &ndash;&gt;
-                            <jboss.home>${wildfly.dir}/wildfly-${wildfly.version}</jboss.home>
-                            <module.path>${wildfly.dir}/wildfly-${wildfly.version}/modules</module.path>
-                        </systemPropertyVariables>
-                        <redirectTestOutputToFile>false</redirectTestOutputToFile>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>org.wildfly.build</groupId>
-                    <artifactId>wildfly-server-provisioning-maven-plugin</artifactId>
-                    <version>1.1.6.Final</version>
-                </plugin>
-            </plugins>
-        </build>-->
 
     <build>
         <testResources>
