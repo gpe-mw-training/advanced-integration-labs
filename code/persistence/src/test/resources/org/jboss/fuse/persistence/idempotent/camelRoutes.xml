@@ -30,7 +30,7 @@
         <constructor-arg index="0" ref="emFactory"/>
         <!-- This 2nd parameter is the name  (= a category name).
              You can have different repositories with different names -->
-        <constructor-arg index="1" value="FileConsumer"/>
+        <constructor-arg index="1" value="DirectConsumer"/>
     </bean>
 
     <camelContext id="camel" trace="true" xmlns="http://camel.apache.org/schema/spring">
