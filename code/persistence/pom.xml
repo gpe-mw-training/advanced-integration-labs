@@ -48,15 +48,6 @@
                 <artifactId>wildfly-arquillian-container-managed</artifactId>
                 <version>${version.wildfly.arquillian}</version>
             </dependency>
-
-            <!-- Camel -->
-            <dependency>
-                <groupId>org.apache.camel</groupId>
-                <artifactId>camel-parent</artifactId>
-                <version>${version.camel}</version>
-                <scope>import</scope>
-                <type>pom</type>
-            </dependency>
         </dependencies>
     </dependencyManagement>
 
