@@ -86,7 +86,7 @@
             </handled>
             <log message="%%%%% Exception took place" />
             <to uri="mock:error"/>
-            <rollback message="######  Sorry, we can't insert your record !"/>
+            <rollback message="######  Sorry, we can't insert your record and place it on the queue !"/>
         </onException>
 
         <route id="direct-jpa">
