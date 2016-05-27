@@ -7,12 +7,13 @@
 	       http://camel.apache.org/schema/spring
            http://camel.apache.org/schema/spring/camel-spring.xsd http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd">
 
-    <bean id="jbossTransactionManager"
+    <!-- JTA & Transaction Managers -->
+    <bean id="jbossJtaTxManager"
           class="com.arjuna.ats.internal.jta.transaction.arjunacore.TransactionManagerImple"/>
 
     <bean id="txManager" class="org.springframework.transaction.jta.JtaTransactionManager">
         <property name="transactionManager">
-            <ref bean="jbossTransactionManager"/>
+            <ref bean="jbossJtaTxManager"/>
         </property>
     </bean>
 
@@ -24,11 +25,13 @@
         </constructor-arg>
     </bean>
 
+    <!-- JPA Component -->
     <bean id="jpa" class="org.apache.camel.component.jpa.JpaComponent">
         <property name="entityManagerFactory" ref="emFactory"/>
         <property name="transactionManager" ref="txManager"/>
     </bean>
 
+    <!-- EntityManager -->
     <bean id="emFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
         <property name="persistenceUnitName" value="camel"/>
         <property name="jpaDialect">
@@ -42,6 +45,23 @@
                 <property name="database" value="DERBY"/>
             </bean>
         </property>
+    </bean>
+
+    <!-- JMS Connection Factory -->
+    <bean id="jmsConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
+        <property name="brokerURL" value="vm://broker1?broker.persistent=false&amp;broker.useJmx=false"/>
+    </bean>
+    <bean id="poolConnectionFactory" class="org.apache.activemq.pool.PooledConnectionFactory" init-method="start" destroy-method="stop">
+        <property name="maxConnections" value="8"/>
+        <property name="connectionFactory" ref="jmsConnectionFactory"/>
+    </bean>
+    <bean id="jmsConfig" class="org.apache.camel.component.jms.JmsConfiguration">
+        <property name="connectionFactory" ref="poolConnectionFactory"/>
+        <property name="transactionManager" ref="txManager"/>
+        <property name="transacted" value="true"/>
+    </bean>
+    <bean id="activemq" class="org.apache.activemq.camel.component.ActiveMQComponent">
+        <property name="configuration" ref="jmsConfig"/>
     </bean>
 
     <bean id="sqlutil" class="org.jboss.fuse.transaction.route.SqlUtil" init-method="init"
@@ -75,6 +95,7 @@
             <unmarshal ref="csvReport"/>
             <convertBodyTo type="org.jboss.fuse.transaction.model.Incident"/>
             <to uri="jpa:org.jboss.fuse.transaction.model.Incident"/>
+            <to uri="activemq:queue:incidents"/>
         </route>
 
         <route id="direct-jpa-rb" errorHandlerRef="txEH">
@@ -93,6 +114,13 @@
             </setHeader>
             <bean ref="sqlutil"/>
             <to uri="mock:result"/>
+        </route>
+
+        <route>
+            <from uri="activemq:queue:incidents"/>
+            <marshal ref="csvReport"/>
+            <convertBodyTo type="String"/>
+            <to uri="mock:result-queue"/>
         </route>
 
     </camelContext>

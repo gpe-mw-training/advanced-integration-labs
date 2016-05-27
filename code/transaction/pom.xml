@@ -49,6 +49,11 @@
             <artifactId>camel-jpa</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-camel</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-jdbc</artifactId>
         </dependency>
@@ -74,7 +79,7 @@
             <version>${version.hibernate}</version>
         </dependency>
 
-        <!-- Transaction Mngt -->
+        <!-- Transaction Managers -->
         <dependency>
             <groupId>org.jboss.narayana.jta</groupId>
             <artifactId>narayana-jta</artifactId>
@@ -83,6 +88,11 @@
         <dependency>
             <groupId>org.jboss.narayana.jta</groupId>
             <artifactId>jta</artifactId>
+            <version>${version.narayana}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.narayana.jta</groupId>
+            <artifactId>jms</artifactId>
             <version>${version.narayana}</version>
         </dependency>
 
