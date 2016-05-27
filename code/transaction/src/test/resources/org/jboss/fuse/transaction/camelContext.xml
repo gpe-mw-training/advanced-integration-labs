@@ -10,15 +10,23 @@
     <bean id="jbossTransactionManager"
           class="com.arjuna.ats.internal.jta.transaction.arjunacore.TransactionManagerImple"/>
 
-    <bean id="transactionManager" class="org.springframework.transaction.jta.JtaTransactionManager">
+    <bean id="txManager" class="org.springframework.transaction.jta.JtaTransactionManager">
         <property name="transactionManager">
             <ref bean="jbossTransactionManager"/>
         </property>
     </bean>
 
+    <bean id="PROPAGATION_REQUIRED_POLICY" class="org.apache.camel.spring.spi.SpringTransactionPolicy">
+        <constructor-arg>
+            <bean class="org.springframework.transaction.support.TransactionTemplate">
+                <property name="transactionManager" ref="txManager"/>
+            </bean>
+        </constructor-arg>
+    </bean>
+
     <bean id="jpa" class="org.apache.camel.component.jpa.JpaComponent">
         <property name="entityManagerFactory" ref="emFactory"/>
-        <property name="transactionManager" ref="transactionManager"/>
+        <property name="transactionManager" ref="txManager"/>
     </bean>
 
     <bean id="emFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
@@ -39,11 +47,27 @@
     <bean id="sqlutil" class="org.jboss.fuse.transaction.route.SqlUtil" init-method="init"
           destroy-method="close"/>
 
+    <bean id="ioexception" class="java.io.IOException">
+        <constructor-arg index="0" value="Backend system is not available"/>
+    </bean>
+
     <camelContext id="camel" trace="true" xmlns="http://camel.apache.org/schema/spring">
+
+        <errorHandler id="txEH" type="TransactionErrorHandler" rollbackLoggingLevel="WARN"/>
 
         <dataFormats>
             <bindy type="Csv" classType="org.jboss.fuse.transaction.model.Incident" id="csvReport"/>
         </dataFormats>
+
+        <onException>
+            <exception>java.io.IOException</exception>
+            <handled>
+                <constant>true</constant>
+            </handled>
+            <log message="%%%%% Exception took place" />
+            <to uri="mock:error"/>
+            <rollback message="######  Sorry, we can't insert your record !"/>
+        </onException>
 
         <route id="direct-jpa">
             <from uri="direct:data-insert"/>
@@ -51,6 +75,15 @@
             <unmarshal ref="csvReport"/>
             <convertBodyTo type="org.jboss.fuse.transaction.model.Incident"/>
             <to uri="jpa:org.jboss.fuse.transaction.model.Incident"/>
+        </route>
+
+        <route id="direct-jpa-rb" errorHandlerRef="txEH">
+            <from uri="direct:data-insert-rb"/>
+            <transacted ref="PROPAGATION_REQUIRED_POLICY"/>
+            <unmarshal ref="csvReport"/>
+            <convertBodyTo type="org.jboss.fuse.transaction.model.Incident"/>
+            <to uri="jpa:org.jboss.fuse.transaction.model.Incident"/>
+            <throwException ref="ioexception"/>
         </route>
 
         <route>
