@@ -1,7 +1,9 @@
 package org.jboss.fuse.persistence.idempotent;
 
+import org.apache.camel.CamelExecutionException;
 import org.apache.camel.EndpointInject;
 import org.apache.camel.ProducerTemplate;
+import org.apache.camel.component.direct.DirectConsumerNotAvailableException;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.spring.CamelSpringTestSupport;
 import org.apache.commons.net.ntp.TimeStamp;
@@ -59,6 +61,14 @@ public class CamelIdempotentTest extends CamelSpringTestSupport {
             System.out.print("Something happened");
         } finally {
             conn.close();
+        }
+
+        try {
+            template.start();
+            template.requestBodyAndHeader("111,22-04-2016,Claus,Ibsen,incident camel-111,this is a report incident for camel-111,cibsen@gmail.com,+111 10 20 300","CamelRecord",1);
+
+        } catch(CamelExecutionException e) {
+            System.out.println("The consumer endpoint is not started so we can't use it");
         }
 
         startCamelContext();
