@@ -45,7 +45,7 @@ public class CamelIdempotentTest extends CamelSpringTestSupport {
         mockResult.expectedMessageCount(1);
 
         template.requestBodyAndHeader("111,22-04-2016,Claus,Ibsen,incident camel-111,this is a report incident for camel-111,cibsen@gmail.com,+111 10 20 300","CamelRecord",1);
-        stopCamelContext();
+        context.stopRoute("direct-idempotent");
 
         Connection conn = null;
         try {
@@ -71,8 +71,7 @@ public class CamelIdempotentTest extends CamelSpringTestSupport {
             System.out.println("&&&&& The consumer endpoint is not started so we can't use it");
         }
 
-        startCamelContext();
-        context().getRoute("direct-idempotent").getConsumer().start();
+        context.startRoute("direct-idempotent");
         template.requestBodyAndHeader("333,18-05-2016,Claus,Ibsen,incident camel-333,this is a report incident for camel-333,cibsen@gmail.com,+111 10 20 300","CamelRecord",1);
 
         mockResult.assertIsSatisfied();
