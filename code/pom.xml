@@ -99,6 +99,7 @@
         <module>security-ws</module>
         <module>security-rest</module>
         <module>persistence</module>
+        <module>transaction</module>
     </modules>
 
     <!-- Repository -->
