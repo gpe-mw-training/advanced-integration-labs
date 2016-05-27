@@ -11,8 +11,6 @@
     <name>Module :: Persistence</name>
     <artifactId>persistence</artifactId>
     <properties>
-        <!--<version.camel>2.15.1.redhat-621084</version.camel>-->
-        <version.camel>2.16.2</version.camel>
         <version.commons-dbcp2>2.1.1</version.commons-dbcp2>
         <version.h2>1.4.190</version.h2>
 

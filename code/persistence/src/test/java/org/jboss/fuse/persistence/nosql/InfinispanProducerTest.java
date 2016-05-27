@@ -49,21 +49,6 @@ public class InfinispanProducerTest extends InfinispanSupportTest {
         Object value = currentCache().get(KEY_ONE);
         assertEquals(VALUE_ONE, value.toString());
     }
-    
-    @Test
-    public void cacheSizeTest() throws Exception {
-        currentCache().put(KEY_ONE, VALUE_ONE);
-        currentCache().put(KEY_TWO, VALUE_TWO);
-
-        Exchange exchange = template.send("direct:size", new Processor() {
-            @Override public void process(Exchange exchange) throws Exception {
-                exchange.getIn().setHeader(InfinispanConstants.OPERATION, InfinispanConstants.SIZE);
-            }
-        });
-
-        Integer cacheSize = exchange.getIn().getHeader(InfinispanConstants.RESULT, Integer.class);
-        assertEquals(cacheSize, new Integer(2));
-    }
 
     @Test
     public void publishKeyAndValueByExplicitlySpecifyingTheOperation() throws Exception {
@@ -87,22 +72,6 @@ public class InfinispanProducerTest extends InfinispanSupportTest {
             public void configure() {
                 from("direct:start")
                         .to("infinispan://localhost?cacheContainer=#cacheContainer");
-                from("direct:put")
-                        .to("infinispan://localhost?cacheContainer=#cacheContainer&command=PUT");
-                from("direct:get")
-                        .to("infinispan://localhost?cacheContainer=#cacheContainer&command=GET");
-                from("direct:remove")
-                        .to("infinispan://localhost?cacheContainer=#cacheContainer&command=REMOVE");
-                from("direct:clear")
-                        .to("infinispan://localhost?cacheContainer=#cacheContainer&command=CLEAR");
-                from("direct:replace")
-                        .to("infinispan://localhost?cacheContainer=#cacheContainer&command=REPLACE");
-                from("direct:containskey")
-                        .to("infinispan://localhost?cacheContainer=#cacheContainer&command=CONTAINSKEY");
-                from("direct:containsvalue")
-                        .to("infinispan://localhost?cacheContainer=#cacheContainer&command=CONTAINSVALUE");
-                from("direct:size")
-                        .to("infinispan://localhost?cacheContainer=#cacheContainer&command=SIZE");
             }
         };
     }

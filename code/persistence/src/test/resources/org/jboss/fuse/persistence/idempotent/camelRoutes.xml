@@ -39,7 +39,7 @@
             <bindy type="Csv" classType="org.jboss.fuse.persistence.model.Incident" id="csvReport"/>
         </dataFormats>
 
-        <route id="file-to-queue">
+        <route id="direct-idempotent">
             <from uri="direct:data-insert"/>
             <idempotentConsumer messageIdRepositoryRef="jpaStore">
                 <header>CamelRecord</header>

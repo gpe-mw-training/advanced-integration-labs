@@ -23,7 +23,7 @@ public class CamelIdempotentTest extends CamelSpringTestSupport {
     @EndpointInject(uri="mock:result")
     MockEndpoint mockResult;
 
-    @Test
+   @Test
     public void testSendDifferentCsvRecords() throws InterruptedException {
         mockResult.expectedMessageCount(2);
         template.requestBodyAndHeader("111,22-04-2016,Claus,Ibsen,incident camel-111,this is a report incident for camel-111,cibsen@gmail.com,+111 10 20 300","CamelRecord",1);
@@ -68,11 +68,11 @@ public class CamelIdempotentTest extends CamelSpringTestSupport {
             template.requestBodyAndHeader("111,22-04-2016,Claus,Ibsen,incident camel-111,this is a report incident for camel-111,cibsen@gmail.com,+111 10 20 300","CamelRecord",1);
 
         } catch(CamelExecutionException e) {
-            System.out.println("The consumer endpoint is not started so we can't use it");
+            System.out.println("&&&&& The consumer endpoint is not started so we can't use it");
         }
 
         startCamelContext();
-        template.start();
+        context().getRoute("direct-idempotent").getConsumer().start();
         template.requestBodyAndHeader("333,18-05-2016,Claus,Ibsen,incident camel-333,this is a report incident for camel-333,cibsen@gmail.com,+111 10 20 300","CamelRecord",1);
 
         mockResult.assertIsSatisfied();
