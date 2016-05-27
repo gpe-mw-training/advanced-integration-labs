@@ -60,9 +60,6 @@ public class JTATxRouteTest extends CamelSpringTestSupport {
         MockEndpoint mockError = getMockEndpoint("mock:error");
         mockError.expectedMessageCount(1);
 
-        MockEndpoint mock = getMockEndpoint("mock:result");
-        mock.expectedMessageCount(1);
-
         // Send a CSV Record to insert it within the DB
         try {
             template.sendBody("direct:data-insert-rb",
@@ -71,11 +68,19 @@ public class JTATxRouteTest extends CamelSpringTestSupport {
         } catch(Exception e) {
             // Record should be rollbacked
         }
+
+        MockEndpoint mock = getMockEndpoint("mock:result");
+        mock.expectedMessageCount(1);
+
         // Perform a Select query to find the record
         template.sendBody("direct:select",null);
 
         // We expect an exchange with an empty string (= no record found) from the direct-select route
         Assert.assertEquals(true,((String)mock.getExchanges().get(0).getIn().getBody()).isEmpty());
+
+        // We will check that we don't have a message within the queue
+        MockEndpoint mockQueue = getMockEndpoint("mock:result-queue");
+        mockQueue.expectedMessageCount(0);
 
         assertMockEndpointsSatisfied();
     }

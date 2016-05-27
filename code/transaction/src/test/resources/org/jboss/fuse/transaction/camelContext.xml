@@ -104,6 +104,7 @@
             <unmarshal ref="csvReport"/>
             <convertBodyTo type="org.jboss.fuse.transaction.model.Incident"/>
             <to uri="jpa:org.jboss.fuse.transaction.model.Incident"/>
+            <to uri="activemq:queue:incidents"/>
             <throwException ref="ioexception"/>
         </route>
 
