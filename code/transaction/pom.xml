@@ -13,8 +13,10 @@
     <artifactId>transaction</artifactId>
 
     <properties>
-        <hibernate.version>4.2.16.Final</hibernate.version>
-        <wildfly-camel.version>3.3.0</wildfly-camel.version>
+        <version.hibernate>4.2.16.Final</version.hibernate>
+        <version.wildfly-camel>3.3.0</version.wildfly-camel>
+
+        <version.narayana>5.3.2.Final</version.narayana>
 
         <!-- WildFly versions -->
         <version.wildfly>9.0.2.Final</version.wildfly>
@@ -36,8 +38,15 @@
         </dependency>
         <dependency>
             <groupId>org.apache.camel</groupId>
+            <artifactId>camel-bindy</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
             <artifactId>camel-sql</artifactId>
-            <version>${version.camel}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-jpa</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
@@ -46,6 +55,35 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-orm</artifactId>
+        </dependency>
+
+        <!-- JPA Spec & Hibernate -->
+        <dependency>
+            <groupId>org.hibernate.javax.persistence</groupId>
+            <artifactId>hibernate-jpa-2.0-api</artifactId>
+            <version>1.0.1.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+            <version>${version.hibernate}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>${version.hibernate}</version>
+        </dependency>
+
+        <!-- Transaction Mngt -->
+        <dependency>
+            <groupId>org.jboss.narayana.jta</groupId>
+            <artifactId>narayana-jta</artifactId>
+            <version>${version.narayana}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.narayana.jta</groupId>
+            <artifactId>jta</artifactId>
+            <version>${version.narayana}</version>
         </dependency>
 
         <!-- DB & Driver -->
@@ -62,6 +100,10 @@
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.logging</groupId>
+            <artifactId>jboss-logging</artifactId>
         </dependency>
 
         <!-- Testing -->
