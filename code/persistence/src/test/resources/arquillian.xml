@@ -14,5 +14,9 @@
             <property name="allowConnectingToRunningServer">true</property>
         </configuration>
     </container>
+<!--
+    <extension qualifier="persistence">
+        <property name="defaultDataSource">java:jboss/datasources/AccountDS</property>
+    </extension>-->
 
 </arquillian>
