@@ -5,11 +5,9 @@ import org.apache.camel.Exchange;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.spring.CamelSpringTestSupport;
 import org.apache.xbean.spring.context.ClassPathXmlApplicationContext;
-import org.jboss.fuse.persistence.AbstractJpaTest;
 import org.jboss.fuse.persistence.model.SendEmail;
 import org.junit.Test;
 import org.springframework.context.support.AbstractApplicationContext;
-import org.wildfly.extension.camel.CamelAware;
 
 public class JpaConsumerTest extends CamelSpringTestSupport {
 
