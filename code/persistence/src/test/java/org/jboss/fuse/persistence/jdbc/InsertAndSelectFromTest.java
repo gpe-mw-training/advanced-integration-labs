@@ -3,7 +3,7 @@ package org.jboss.fuse.persistence.jdbc;
 import org.apache.camel.EndpointInject;
 import org.apache.camel.component.jdbc.JdbcConstants;
 import org.apache.camel.component.mock.MockEndpoint;
-import org.jboss.fuse.persistence.AbstractJdbcTest;
+import org.apache.camel.test.spring.CamelSpringTestSupport;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.context.support.AbstractApplicationContext;
@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class InsertAndSelectFromTest extends AbstractJdbcTest {
+public class InsertAndSelectFromTest  extends CamelSpringTestSupport {
 
     @EndpointInject(uri = "mock:insert")
     MockEndpoint mockInsert;

@@ -7,7 +7,7 @@ import org.junit.Before;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 
 /**
- * Unit test based on user forum request about this component
+ * Abstract Class registering the EmbeddedDatabase within the JNDI registry
  */
 public abstract class AbstractJdbcTest extends CamelSpringTestSupport {
     
@@ -16,7 +16,7 @@ public abstract class AbstractJdbcTest extends CamelSpringTestSupport {
     @Override
     protected JndiRegistry createRegistry() throws Exception {
         JndiRegistry reg = super.createRegistry();
-        reg.bind("testdb", db);
+        //reg.bind("testdb", db);
         return reg;
     }
 
@@ -24,7 +24,6 @@ public abstract class AbstractJdbcTest extends CamelSpringTestSupport {
     @Override
     public void setUp() throws Exception {
         super.setUp();
-
     }
 
     @After
