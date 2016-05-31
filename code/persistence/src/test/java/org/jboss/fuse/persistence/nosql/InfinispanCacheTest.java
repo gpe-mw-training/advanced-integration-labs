@@ -13,45 +13,10 @@ public class InfinispanCacheTest extends InfinispanSupportTest {
 
     @Test
     public void insertCache() throws Exception {
-        MockEndpoint mock = (MockEndpoint)context().getEndpoint("mock:put");
-        mock.expectedMessageCount(2);
-
-        Map<String, Object> cacheHeaders = new HashMap<String, Object>();
-        cacheHeaders.put(InfinispanConstants.KEY, KEY_ONE);
-        cacheHeaders.put(InfinispanConstants.VALUE, VALUE_ONE);
-
-        template.sendBodyAndHeaders("direct:put",null,cacheHeaders);
-
-        cacheHeaders.put(InfinispanConstants.KEY, KEY_TWO);
-        cacheHeaders.put(InfinispanConstants.VALUE, VALUE_TWO);
-
-        template.sendBodyAndHeaders("direct:put",null,cacheHeaders);
-
-        Assert.assertEquals("valueOne",currentCache().get(KEY_ONE));
-        Assert.assertEquals("valueTwo",currentCache().get(KEY_TWO));
-        mock.assertIsSatisfied();
     }
 
     @Test
     public void GetKeyFromCache() throws Exception {
-        MockEndpoint mock = (MockEndpoint)context().getEndpoint("mock:get");
-        mock.expectedMessageCount(2);
-
-        Assert.assertEquals("valueOne",currentCache().get(KEY_ONE));
-        Assert.assertEquals("valueTwo",currentCache().get(KEY_TWO));
-
-        Map<String, Object> cacheHeaders = new HashMap<String, Object>();
-        cacheHeaders.put(InfinispanConstants.KEY, KEY_ONE);
-        template.sendBodyAndHeaders("direct:get",null,cacheHeaders);
-
-        cacheHeaders.put(InfinispanConstants.KEY, KEY_TWO);
-        template.sendBodyAndHeaders("direct:get",null,cacheHeaders);
-
-        String val1 = (String) mock.getExchanges().get(0).getIn().getHeader(InfinispanConstants.RESULT);
-        String val2 = (String) mock.getExchanges().get(1).getIn().getHeader(InfinispanConstants.RESULT);
-        Assert.assertEquals("valueOne",val1);
-        Assert.assertEquals("valueTwo",val2);
-        mock.assertIsSatisfied();
     }
 
     @Override
