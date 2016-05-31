@@ -3,12 +3,15 @@ package org.jboss.fuse.persistence.jpa;
 import org.apache.camel.EndpointInject;
 import org.apache.camel.Exchange;
 import org.apache.camel.component.mock.MockEndpoint;
+import org.apache.camel.test.spring.CamelSpringTestSupport;
+import org.apache.xbean.spring.context.ClassPathXmlApplicationContext;
 import org.jboss.fuse.persistence.AbstractJpaTest;
 import org.jboss.fuse.persistence.model.SendEmail;
 import org.junit.Test;
+import org.springframework.context.support.AbstractApplicationContext;
 import org.wildfly.extension.camel.CamelAware;
 
-public class JpaConsumerTest extends AbstractJpaTest {
+public class JpaConsumerTest extends CamelSpringTestSupport {
 
     @EndpointInject(uri = "mock:result")
     MockEndpoint mock;
@@ -17,27 +20,10 @@ public class JpaConsumerTest extends AbstractJpaTest {
 
     @Test
     public void testInsertAndReceive() throws Exception {
-
-        mock.expectedMessageCount(3);
-        mock.expectedPropertyReceived(Exchange.BATCH_SIZE, 3);
-
-        template.sendBody("direct:start", new SendEmail("alpha"));
-        template.sendBody("direct:start", new SendEmail("beta"));
-        template.sendBody("direct:start", new SendEmail("dummy"));
-
-        assertMockEndpointsSatisfied();
-
-        SendEmail email = mock.getReceivedExchanges().get(2).getIn().getBody(SendEmail.class);
-        assertEquals("dummy@somewhere.org", email.getAddress());
     }
 
     @Override
-    protected String routeXml() {
-        return "org/jboss/fuse/persistence/jpa/springJpaRouteTest.xml";
-    }
-
-    @Override
-    protected String selectAllString() {
-        return SELECT_ALL_STRING;
+    protected AbstractApplicationContext createApplicationContext() {
+        return new ClassPathXmlApplicationContext("org/jboss/fuse/persistence/jpa/springJpaRouteTest.xml");
     }
 }
