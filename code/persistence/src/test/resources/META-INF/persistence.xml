@@ -9,5 +9,3 @@
     </persistence-unit>
 
     <persistence-unit name="idempotentDb" transaction-type="RESOURCE_LOCAL">
-    </persistence-unit>
-</persistence>

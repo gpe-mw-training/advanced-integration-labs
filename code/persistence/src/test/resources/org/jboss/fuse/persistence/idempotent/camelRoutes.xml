@@ -7,47 +7,13 @@
 	       http://camel.apache.org/schema/spring
            http://camel.apache.org/schema/spring/camel-spring.xsd http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd">
 
-    <bean id="jpaTxManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+<!--    <bean id="jpaTxManager" class="org.springframework.orm.jpa.JpaTransactionManager">
         <property name="entityManagerFactory" ref="emFactory"/>
-    </bean>
+    </bean>-->
 
-    <bean id="emFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-        <property name="persistenceUnitName" value="idempotentDb"/>
-        <property name="jpaDialect">
-            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaDialect"/>
-        </property>
-        <property name="jpaVendorAdapter">
-            <bean id="jpaAdapter" class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
-                <property name="databasePlatform" value="org.hibernate.dialect.H2Dialect"/>
-                <property name="showSql" value="true"/>
-                <property name="generateDdl" value="false"/>
-                <property name="database" value="DERBY"/>
-            </bean>
-        </property>
-    </bean>
 
-    <bean id="jpaStore" class="org.apache.camel.processor.idempotent.jpa.JpaMessageIdRepository">
-        <constructor-arg index="0" ref="emFactory"/>
-        <!-- This 2nd parameter is the name  (= a category name).
-             You can have different repositories with different names -->
-        <constructor-arg index="1" value="DirectConsumer"/>
-    </bean>
 
     <camelContext id="camel" trace="true" xmlns="http://camel.apache.org/schema/spring">
-
-        <dataFormats>
-            <bindy type="Csv" classType="org.jboss.fuse.persistence.model.Incident" id="csvReport"/>
-        </dataFormats>
-
-        <route id="direct-idempotent">
-            <from uri="direct:data-insert"/>
-            <idempotentConsumer messageIdRepositoryRef="jpaStore">
-                <header>CamelRecord</header>
-                <unmarshal ref="csvReport"/>
-                <log loggingLevel="INFO" message="%%% Record received"/>
-                <to uri="mock:result"/>
-            </idempotentConsumer>
-        </route>
 
     </camelContext>
 
