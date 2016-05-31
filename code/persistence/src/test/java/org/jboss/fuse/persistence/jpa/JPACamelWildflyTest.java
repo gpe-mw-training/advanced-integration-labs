@@ -42,11 +42,10 @@ public class JPACamelWildflyTest {
         JavaArchive archive = ShrinkWrap.create(JavaArchive.class, "camel-jpa-test.jar");
         archive.addClass(Account.class);
         archive.addPackage(DirectToJPABuilder.class.getPackage());
-        archive.addAsManifestResource("persistence-jpa.xml", "persistence.xml");
-        archive.addAsManifestResource("jbossas-ds.xml");
+        archive.addAsManifestResource("org/jboss/fuse/persistence/jpa/persistence-jpa.xml", "persistence.xml");
+        archive.addAsManifestResource("org/jboss/fuse/persistence/jpa/jbossas-ds.xml");
         // Turn our project into CDI
         archive.addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
-        //archive.addAsResource("org/jboss/fuse/persistence/jpa/jpa-camel-context.xml", "META-INF/jboss-camel-context.xml");
         return archive;
     }
 
@@ -60,11 +59,6 @@ public class JPACamelWildflyTest {
         Account account = new Account(1, 500);
         camelctx.createProducerTemplate().sendBody("direct:start", account);
 
-        //JpaComponent component = camelctx.getComponent("jpa", JpaComponent.class);
-        //EntityManagerFactory entityManagerFactory = component.getEntityManagerFactory();
-
-        // Read the saved entity back from the database
-        //EntityManager em = entityManagerFactory.createEntityManager();
         Account result = em.getReference(Account.class, 1);
 
         Assert.assertEquals(account, result);
