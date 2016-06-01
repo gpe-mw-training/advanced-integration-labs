@@ -33,3 +33,10 @@ public class JTATxRouteTest extends CamelSpringTestSupport {
 
     @Test
     public void testInsertRecord() throws Exception {
+    }
+
+    @Test
+    public void testRollbackRecord() throws Exception {
+    }
+
+}

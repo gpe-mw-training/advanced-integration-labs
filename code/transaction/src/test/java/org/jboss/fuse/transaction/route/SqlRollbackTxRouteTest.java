@@ -44,24 +44,5 @@ public class SqlRollbackTxRouteTest extends CamelTestSupport {
     }
 
     @Override protected RouteBuilder createRouteBuilder() throws Exception {
-        return new RouteBuilder() {
-            @Override public void configure() throws Exception {
-
-                from("direct:start")
-                   .transacted()
-                   .to("sql:delete from projects where id = :#${header.id}")
-                   .to("mock:result");
-
-                from("direct:rollback")
-                    .transacted()
-                    .to("sql:delete from projects where id = :#${header.id}")
-                    .process(new Processor() {
-                        @Override public void process(Exchange exchange) throws Exception {
-                            throw new Exception("forced Exception");
-                        }
-                    })
-                    .to("mock:delete");
-            }
-        };
     }
 }
