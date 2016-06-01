@@ -27,22 +27,6 @@ public class SqlRollbackTxRouteTest extends CamelTestSupport {
     @Override
     protected JndiRegistry createRegistry() throws Exception {
         JndiRegistry reg = super.createRegistry();
-
-        db = new EmbeddedDatabaseBuilder().setType(EmbeddedDatabaseType.DERBY)
-                .addScript("sql/createAndPopulateDatabase.sql").build();
-        reg.bind("testdb", db);
-
-        jdbcTemplate = new JdbcTemplate(db);
-
-        DataSourceTransactionManager dtm = new DataSourceTransactionManager(db);
-        dtm.setDataSource(db);
-        reg.bind("txManager", dtm);
-
-        SqlComponent sql = new SqlComponent();
-        sql.setDataSource(db);
-        reg.bind("sql", sql);
-
-        return reg;
     }
 
     @After
@@ -53,29 +37,10 @@ public class SqlRollbackTxRouteTest extends CamelTestSupport {
 
     @Test
     public void testProducer() throws Exception {
-        MockEndpoint mock = getMockEndpoint("mock:result");
-        mock.expectedMessageCount(1);
-
-        template.sendBodyAndHeader("direct:start", null, "id", "1");
-
-        assertMockEndpointsSatisfied();
-        assertEquals("Should have deleted record for id 1", new Integer(2), jdbcTemplate.queryForObject("select count(*) from projects", Integer.class));
     }
 
     @Test
     public void testProduceWithRollback() throws Exception {
-        MockEndpoint mock = getMockEndpoint("mock:delete");
-        mock.expectedMessageCount(0);
-
-        try {
-            template.sendBodyAndHeader("direct:rollback", null, "id", "1");
-            fail("forced Exception");
-        } catch (Exception e) {
-            assertMockEndpointsSatisfied();
-            assertEquals("Should Not have deleted record for id 1", new Integer(3),
-                    jdbcTemplate.queryForObject("select count(*) from projects", Integer.class));
-        }
-
     }
 
     @Override protected RouteBuilder createRouteBuilder() throws Exception {
