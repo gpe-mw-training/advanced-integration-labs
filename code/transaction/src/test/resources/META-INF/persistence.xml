@@ -8,14 +8,25 @@
    <persistence-unit name="camel" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.ejb.HibernatePersistence</provider>
         <class>org.jboss.fuse.transaction.model.Incident</class>
-
         <properties>
             <property name="hibernate.dialect" value="org.hibernate.dialect.DerbyTenSixDialect"/>
             <property name="hibernate.connection.driver_class" value="org.apache.derby.jdbc.EmbeddedDriver"/>
             <property name="hibernate.connection.url" value="jdbc:derby:memory:reportdb;create=true"/>
             <property name="hibernate.hbm2ddl.auto" value="create-drop"/>
         </properties>
+    </persistence-unit>
 
+    <persistence-unit name="project" transaction-type="RESOURCE_LOCAL">
+        <provider>org.hibernate.ejb.HibernatePersistence</provider>
+        <class>org.jboss.fuse.transaction.model.Project</class>
+        <properties>
+            <property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.DerbyTenSixDialect"/>
+            <property name="hibernate.connection.driver_class" value="org.apache.derby.jdbc.EmbeddedDriver"/>
+            <property name="hibernate.connection.url" value="jdbc:derby:memory:projectdb;create=true"/>
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.hbm2ddl.auto" value="create-drop"/>
+        </properties>
     </persistence-unit>
 
 </persistence>
