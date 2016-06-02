@@ -7,7 +7,6 @@ import org.infinispan.commons.api.BasicCacheContainer;
 import org.infinispan.manager.DefaultCacheManager;
 import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 
 public class InfinispanSupportTest extends CamelTestSupport {
 

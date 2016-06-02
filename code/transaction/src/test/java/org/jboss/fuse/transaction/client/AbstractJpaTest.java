@@ -1,14 +1,9 @@
 package org.jboss.fuse.transaction.client;
 
-import org.apache.camel.CamelContext;
-import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.component.mock.MockEndpoint;
-import org.apache.camel.spring.SpringCamelContext;
 import org.apache.camel.test.junit4.CamelTestSupport;
 import org.jboss.fuse.transaction.model.Project;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
@@ -18,7 +13,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import java.util.List;
 
-public class JpaConsumeDeleteTest extends CamelTestSupport {
+public class AbstractJpaTest extends CamelTestSupport {
 
     protected ApplicationContext applicationContext;
     protected TransactionTemplate transactionTemplate;
@@ -58,26 +53,14 @@ public class JpaConsumeDeleteTest extends CamelTestSupport {
         });
     }
 
-    @Override
-    protected CamelContext createCamelContext() throws Exception {
-        applicationContext = new org.springframework.context.support.ClassPathXmlApplicationContext(
-                "org/jboss/fuse/transaction/springJpaRouteTest.xml");
-        return SpringCamelContext.springCamelContext(applicationContext);
-    }
-
-    @Test
-    public void testConsumeNoDelete() throws Exception {
-    }
-
     protected void assertEntityInDB(int size) throws Exception {
         List<?> list = entityManager.createQuery(selectAllString()).getResultList();
         assertEquals(size, list.size());
-        if(!list.isEmpty()) {
-            assertIsInstanceOf(Project.class, list.get(0));
-        }
+        assertIsInstanceOf(Project.class, list.get(0));
     }
 
     protected String selectAllString() {
         return SELECT_ALL_STRING;
     }
+
 }
