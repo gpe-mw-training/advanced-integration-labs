@@ -6,6 +6,8 @@ import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.component.sql.SqlComponent;
 import org.apache.camel.impl.JndiRegistry;
+import org.apache.camel.spi.TransactedPolicy;
+import org.apache.camel.spring.spi.SpringTransactionPolicy;
 import org.apache.camel.test.junit4.CamelTestSupport;
 import org.junit.After;
 import org.junit.Test;
@@ -29,10 +31,6 @@ public class SqlRollbackTxRouteTest extends CamelTestSupport {
     public void tearDown() throws Exception {
         super.tearDown();
         db.shutdown();
-    }
-
-    @Test
-    public void testProducer() throws Exception {
     }
 
     @Test
