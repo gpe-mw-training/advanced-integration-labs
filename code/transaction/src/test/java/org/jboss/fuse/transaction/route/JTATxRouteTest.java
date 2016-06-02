@@ -1,6 +1,8 @@
 package org.jboss.fuse.transaction.route;
 
+import org.apache.camel.CamelExecutionException;
 import org.apache.camel.Exchange;
+import org.apache.camel.RuntimeCamelException;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.spring.CamelSpringTestSupport;
 import org.junit.Assert;
@@ -18,10 +20,6 @@ public class JTATxRouteTest extends CamelSpringTestSupport {
     @Before
     public void cfgSystemProperties() {
         System.setProperty("org.apache.activemq.SERIALIZABLE_PACKAGES","*");
-    }
-
-    @Test
-    public void testInsertRecord() throws Exception {
     }
 
     @Test

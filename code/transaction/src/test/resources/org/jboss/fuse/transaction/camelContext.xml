@@ -16,113 +16,12 @@
         </property>
     </bean>
 
-    <bean id="PROPAGATION_REQUIRED_POLICY" class="org.apache.camel.spring.spi.SpringTransactionPolicy">
-        <constructor-arg>
-            <bean class="org.springframework.transaction.support.TransactionTemplate">
-                <property name="transactionManager" ref="txManager"/>
-            </bean>
-        </constructor-arg>
-    </bean>
 
     <!-- JPA Component -->
-    <bean id="jpa" class="org.apache.camel.component.jpa.JpaComponent">
-        <property name="entityManagerFactory" ref="emFactory"/>
-        <property name="transactionManager" ref="txManager"/>
-    </bean>
 
     <!-- EntityManager -->
-    <bean id="emFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-        <property name="persistenceUnitName" value="camel"/>
-        <property name="jpaDialect">
-            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaDialect"/>
-        </property>
-        <property name="jpaVendorAdapter">
-            <bean id="jpaAdapter" class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
-                <property name="databasePlatform" value="org.hibernate.dialect.DerbyTenSevenDialect"/>
-                <property name="showSql" value="true"/>
-                <property name="generateDdl" value="false"/>
-                <property name="database" value="DERBY"/>
-            </bean>
-        </property>
-    </bean>
 
     <!-- JMS Connection Factory -->
-    <bean id="jmsConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
-        <property name="brokerURL" value="vm://broker1?broker.persistent=false&amp;broker.useJmx=false"/>
-    </bean>
-    <bean id="poolConnectionFactory" class="org.apache.activemq.pool.PooledConnectionFactory" init-method="start" destroy-method="stop">
-        <property name="maxConnections" value="8"/>
-        <property name="connectionFactory" ref="jmsConnectionFactory"/>
-    </bean>
-    <bean id="jmsConfig" class="org.apache.camel.component.jms.JmsConfiguration">
-        <property name="connectionFactory" ref="poolConnectionFactory"/>
-        <property name="transactionManager" ref="txManager"/>
-        <property name="transacted" value="true"/>
-    </bean>
-    <bean id="activemq" class="org.apache.activemq.camel.component.ActiveMQComponent">
-        <property name="configuration" ref="jmsConfig"/>
-    </bean>
-
-    <bean id="sqlutil" class="org.jboss.fuse.transaction.route.SqlUtil" init-method="init"
-          destroy-method="close"/>
-
-    <bean id="ioexception" class="java.io.IOException">
-        <constructor-arg index="0" value="Backend system is not available"/>
-    </bean>
-
-    <camelContext id="camel" trace="true" xmlns="http://camel.apache.org/schema/spring">
-
-        <errorHandler id="txEH" type="TransactionErrorHandler" rollbackLoggingLevel="WARN"/>
-
-        <dataFormats>
-            <bindy type="Csv" classType="org.jboss.fuse.transaction.model.Incident" id="csvReport"/>
-        </dataFormats>
-
-        <onException>
-            <exception>java.io.IOException</exception>
-            <handled>
-                <constant>true</constant>
-            </handled>
-            <log message="%%%%% Exception took place" />
-            <to uri="mock:error"/>
-            <rollback message="######  Sorry, we can't insert your record and place it on the queue !"/>
-        </onException>
-
-        <route id="direct-jpa">
-            <from uri="direct:data-insert"/>
-            <transacted/>
-            <unmarshal ref="csvReport"/>
-            <convertBodyTo type="org.jboss.fuse.transaction.model.Incident"/>
-            <to uri="jpa:org.jboss.fuse.transaction.model.Incident"/>
-            <to uri="activemq:queue:incidents"/>
-        </route>
-
-        <route id="direct-jpa-rb" errorHandlerRef="txEH">
-            <from uri="direct:data-insert-rb"/>
-            <transacted ref="PROPAGATION_REQUIRED_POLICY"/>
-            <unmarshal ref="csvReport"/>
-            <convertBodyTo type="org.jboss.fuse.transaction.model.Incident"/>
-            <to uri="jpa:org.jboss.fuse.transaction.model.Incident"/>
-            <to uri="activemq:queue:incidents"/>
-            <throwException ref="ioexception"/>
-        </route>
-
-        <route>
-            <from uri="direct:select"/>
-            <setHeader headerName="query">
-                <constant>select * from T_INCIDENT</constant>
-            </setHeader>
-            <bean ref="sqlutil"/>
-            <to uri="mock:result"/>
-        </route>
-
-        <route>
-            <from uri="activemq:queue:incidents"/>
-            <marshal ref="csvReport"/>
-            <convertBodyTo type="String"/>
-            <to uri="mock:result-queue"/>
-        </route>
-
     </camelContext>
 
 </beans>
