@@ -1,8 +1,6 @@
 package org.jboss.fuse.transaction.client;
 
 import org.apache.camel.CamelContext;
-import org.apache.camel.Exchange;
-import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.spring.SpringCamelContext;
@@ -16,17 +14,18 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class JpaTxRollbackTest extends CamelTestSupport {
+public class JpaConsumeDeleteTest extends CamelTestSupport {
 
     protected ApplicationContext applicationContext;
     protected TransactionTemplate transactionTemplate;
     protected EntityManager entityManager;
-    private static AtomicInteger amq = new AtomicInteger();
-    private static AtomicInteger linux = new AtomicInteger();
-    private static AtomicInteger kaboom = new AtomicInteger();
 
     protected static final String SELECT_ALL_STRING = "select x from " + Project.class.getName() + " x";
 
@@ -69,18 +68,16 @@ public class JpaTxRollbackTest extends CamelTestSupport {
         return SpringCamelContext.springCamelContext(applicationContext);
     }
 
-    @Test @Ignore
-    public void testNoRollBack() throws Exception {
-    }
-
-    protected String getEndpointUri() {
-        return "jpa://" + Project.class.getName() + "?consumer.transacted=true&delay=1000";
+    @Test
+    public void testConsumeNoDelete() throws Exception {
     }
 
     protected void assertEntityInDB(int size) throws Exception {
         List<?> list = entityManager.createQuery(selectAllString()).getResultList();
         assertEquals(size, list.size());
-        assertIsInstanceOf(Project.class, list.get(0));
+        if(!list.isEmpty()) {
+            assertIsInstanceOf(Project.class, list.get(0));
+        }
     }
 
     protected String selectAllString() {

@@ -14,21 +14,7 @@
 
     <properties>
         <version.hibernate>4.2.16.Final</version.hibernate>
-        <version.wildfly-camel>3.3.0</version.wildfly-camel>
-
         <version.narayana>5.3.2.Final</version.narayana>
-
-        <!-- WildFly versions -->
-        <version.wildfly>9.0.2.Final</version.wildfly>
-        <version.jboss.arquillian.core>1.1.10.Final</version.jboss.arquillian.core>
-        <version.wildfly.arquillian>1.1.0.Final</version.wildfly.arquillian>
-        <version-wildfly-provisioning-maven-plugin>1.1.0.Final</version-wildfly-provisioning-maven-plugin>
-
-        <jboss.home>${project.build.directory}/wildfly-${version.wildfly}</jboss.home>
-        <jvmArgs>-Xmx1G -XX:MaxPermSize=512m -Djava.net.preferIPv4Stack=true</jvmArgs>
-        <jvmDebugArgs>-agentlib:jdwp=transport=dt_socket,address=8787,server=y,suspend=n</jvmDebugArgs>
-
-        <server.config>standalone.xml</server.config>
     </properties>
 
     <dependencies>
