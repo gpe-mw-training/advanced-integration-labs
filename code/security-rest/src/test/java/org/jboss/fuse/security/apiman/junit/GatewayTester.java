@@ -7,7 +7,6 @@ import io.apiman.test.common.resttest.RestTest;
 import io.apiman.test.common.util.TestUtil;
 import org.jboss.fuse.security.apiman.server.IGatewayTestServer;
 import org.jboss.fuse.security.apiman.server.IGatewayTestServerFactory;
-import org.junit.AfterClass;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.FrameworkMethod;

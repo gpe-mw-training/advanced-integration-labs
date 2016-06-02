@@ -1,9 +1,7 @@
 package org.jboss.fuse.security.camel.tls;
 
-import io.netty.handler.ssl.NotSslRecordException;
 import org.apache.camel.CamelExecutionException;
 import org.apache.camel.Exchange;
-import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.netty4.http.*;
 import org.apache.camel.impl.JndiRegistry;
@@ -13,7 +11,6 @@ import org.jboss.fuse.security.camel.common.BaseNetty4Test;
 import org.junit.Assert;
 import org.junit.Test;
 
-import javax.ws.rs.core.Response;
 import java.net.URL;
 
 public class TLSRestDSLNetty4HttpTest extends BaseNetty4Test {

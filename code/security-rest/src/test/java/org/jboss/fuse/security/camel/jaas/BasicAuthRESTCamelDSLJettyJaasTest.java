@@ -4,7 +4,6 @@ import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.impl.JndiRegistry;
 import org.apache.camel.model.rest.RestBindingMode;
 import org.apache.camel.model.rest.RestPropertyDefinition;
-import org.apache.camel.test.junit4.CamelTestSupport;
 import org.apache.commons.httpclient.Credentials;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
@@ -18,7 +17,6 @@ import org.eclipse.jetty.security.SecurityHandler;
 import org.eclipse.jetty.security.authentication.BasicAuthenticator;
 import org.eclipse.jetty.util.security.Constraint;
 import org.jboss.fuse.security.camel.common.BaseJettyTest;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;

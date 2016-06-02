@@ -6,7 +6,7 @@ import org.jboss.fuse.security.apiman.junit.Configuration;
 import org.jboss.fuse.security.apiman.junit.GatewayTestSupport;
 import org.jboss.fuse.security.apiman.junit.GatewayTester;
 import org.jboss.fuse.security.apiman.junit.GatewayTesterSystemProperties;
-import org.junit.*;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.IOException;
