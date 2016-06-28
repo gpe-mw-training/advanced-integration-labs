@@ -14,7 +14,7 @@
         <!-- Fuse 6.2.1.GA -->
         <version.fabric8>1.2.0.redhat-621084</version.fabric8>
         <version.camel>2.15.1.redhat-621084</version.camel>
-        <version.cxf>3.1.5.redhat-630055</version.cxf>
+        <version.cxf>3.0.4.redhat-621084</version.cxf>
         <version.jetty9>9.2.9.v20150224</version.jetty9>
 
         <version.apiman>1.2.5.Final</version.apiman>
