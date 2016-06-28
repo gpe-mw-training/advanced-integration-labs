@@ -100,6 +100,7 @@
         <module>security-rest</module>
         <module>persistence</module>
         <module>transaction</module>
+        <module>largefileprocessing</module>
     </modules>
 
     <!-- Repository -->
