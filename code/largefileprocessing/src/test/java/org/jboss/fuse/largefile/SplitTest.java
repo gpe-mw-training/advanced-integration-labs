@@ -14,7 +14,7 @@ import java.io.FileOutputStream;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class StreamSplitTest extends CamelTestSupport {
+public class SplitTest extends CamelTestSupport {
 
     private int size;
     private final AtomicInteger tiny = new AtomicInteger();
@@ -88,8 +88,8 @@ public class StreamSplitTest extends CamelTestSupport {
                                     log.info("Used Memory before : " + usedMemoryBefore);
                                 }
                             })
-                            .split().xpath("/orders/order").streaming()
-                            .log(LoggingLevel.DEBUG,"Order splitted");
+                            .split().xpath("/orders/order")
+                                .log(LoggingLevel.DEBUG,"Order splitted");
                 }
 
             }
