@@ -10,6 +10,7 @@
     </parent>
     <name>Module :: Persistence</name>
     <artifactId>persistence</artifactId>
+
     <properties>
         <version.commons-dbcp2>2.1.1</version.commons-dbcp2>
         <version.h2>1.4.190</version.h2>

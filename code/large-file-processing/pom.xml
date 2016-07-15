@@ -2,15 +2,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>project</artifactId>
         <groupId>org.jboss.fuse</groupId>
         <version>1.0</version>
     </parent>
-    <modelVersion>4.0.0</modelVersion>
     <name>Module :: Large file Processing</name>
-
-    <artifactId>Module :: Large File Processing</artifactId>
+    <artifactId>large-file-processing</artifactId>
 
     <dependencies>
         <dependency>
@@ -25,6 +24,12 @@
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-test-spring</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!-- Required by XTokenizer -->
+        <dependency>
+            <groupId>org.codehaus.woodstox</groupId>
+            <artifactId>woodstox-core-asl</artifactId>
             <scope>test</scope>
         </dependency>
 
