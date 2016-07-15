@@ -50,4 +50,18 @@
             <artifactId>log4j</artifactId>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.5.0</version>
+                <configuration>
+                    <executable>java</executable>
+                    <mainClass>org.jboss.fuse.largefile.GenerateCsvFile</mainClass>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
