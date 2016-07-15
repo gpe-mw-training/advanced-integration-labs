@@ -16,7 +16,18 @@ public class SimpleXMLSplitTest extends CamelTestSupport {
     }
 
     @Test
-    public void testMessageToTokenize() throws Exception {
+    public void testMessageToTokenizeWithXpath() throws Exception {
+        MockEndpoint resultEndpoint = getMockEndpoint("mock:xmltokenize");
+        resultEndpoint.expectedMessageCount(4);
+        String message = "<persons><person>James</person><person>Claus</person><person>Jonathan</person><person>Hadrian</person></persons>";
+
+        template.sendBody("direct:start-xpath", message);
+
+        resultEndpoint.assertIsSatisfied();
+    }
+
+    @Test
+    public void testMessageToTokenizeWithXMLTokenize() throws Exception {
         MockEndpoint resultEndpoint = getMockEndpoint("mock:xmltokenize");
         resultEndpoint.expectedMessageCount(4);
         String message = "<persons><person>James</person><person>Claus</person><person>Jonathan</person><person>Hadrian</person></persons>";
@@ -38,7 +49,7 @@ public class SimpleXMLSplitTest extends CamelTestSupport {
     }
 
     @Test
-    public void testMessageWithXTokenize() throws Exception {
+    public void testMessageToTokenizeWithXTokenizer() throws Exception {
         MockEndpoint mock = getMockEndpoint("mock:xtokenize");
         mock.expectedMessageCount(3);
         mock.message(0).body().isEqualTo("<order id=\"1\" xmlns=\"http:acme.com\">Camel in Action</order>");
@@ -70,6 +81,10 @@ public class SimpleXMLSplitTest extends CamelTestSupport {
                 from("file:target/xtokenizer")
                     .split().xtokenize("//orders/order",ns).streaming()
                     .to("mock:xtokenize");
+
+                from("direct:start-xpath")
+                    .split().xpath("//persons/person")
+                    .to("mock:xmltokenize");
             }
         };
     }
