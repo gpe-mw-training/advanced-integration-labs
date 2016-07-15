@@ -1,11 +1,16 @@
 package org.jboss.fuse.largefile;
 
+import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class GenerateCsvFile {
+public class GenerateXmlFile {
 
     private static final int ITERATIONS = 5;
     private static final double MEG = (Math.pow(1024, 2));
@@ -21,21 +26,31 @@ public class GenerateCsvFile {
 
     public static void main(String[] args) throws Exception {
         List<String> records = new ArrayList<String>(RECORD_COUNT);
-        StringBuffer buffer;
+        StringBuffer b;
 
         boolean isDirCreated = new File(targetDir).mkdirs();
 
-        if (isDirCreated) {
+        //if (isDirCreated) {
             int size = 0;
+            //records.add("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n");
+            records.add("<records>");
             for (int i = 0; i < RECORD_COUNT; i++) {
-                buffer = new StringBuffer();
+                b = new StringBuffer();
                 String name = generateName();
-                buffer.append(i).append(",").append(name).append(",").append(getEmail(name)).append(",")
-                        .append(getIpAddress()).append("\n");
-                String record = buffer.toString();
+
+                b.append("<record>");
+                b.append("<id>" + i + "</id>");
+                b.append(name);
+                b.append("<email>" + getEmail(name) + "<email>");
+                b.append("<ip>" + getIpAddress() + "<ip>");
+                b.append("</record>\n");
+
+                String record = b.toString();
                 records.add(record);
                 size += record.getBytes().length;
             }
+            records.add("</records>");
+
             System.out.println(records.size() + " 'records'");
             System.out.println(size / MEG + " MB");
 
@@ -43,12 +58,12 @@ public class GenerateCsvFile {
                 System.out.println("\nIteration " + i);
                 writeRaw(records);
             }
-        }
+        //}
     }
 
     private static void writeRaw(List<String> records) throws IOException {
         try {
-            File file = File.createTempFile("foo", ".txt", new File(targetDir));
+            File file = File.createTempFile("foo", ".xml", new File(targetDir));
             FileWriter writer = new FileWriter(file);
             System.out.print("Writing raw... ");
             write(records, writer);
@@ -84,13 +99,18 @@ public class GenerateCsvFile {
     }
 
     public static String generateName() {
-        return FirstName[r.nextInt(FirstName.length)] + "," + LastName[r.nextInt(LastName.length)];
+        return "<firstname>" + FirstName[r.nextInt(FirstName.length)] + "</firstname><lastname>" + LastName[r.nextInt(LastName.length)] + "</lastname>";
     }
 
-    public static String getEmail(String name) {
-        String[] parts = name.split(",");
+    public static String getEmail(String name) throws Exception {
         StringBuffer buffer = new StringBuffer();
-        return buffer.append(parts[0].toLowerCase()).append(".").append(parts[1].toLowerCase()).append(domain)
+        DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+        Document parse = db.parse(new InputSource(new StringReader("<?xml version='1.0'?>\n" + name)));
+
+        return buffer.append(parse.getElementsByTagName("firstname").toString().toLowerCase())
+                .append(".")
+                .append(parse.getElementsByTagName("lastname").toString().toLowerCase())
+                .append(domain)
                 .toString();
     }
 
