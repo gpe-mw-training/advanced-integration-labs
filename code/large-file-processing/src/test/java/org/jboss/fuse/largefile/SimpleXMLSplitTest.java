@@ -3,6 +3,7 @@ package org.jboss.fuse.largefile;
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.builder.xml.Namespaces;
+import org.apache.camel.builder.xml.XPathBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.junit4.CamelTestSupport;
 import org.junit.Test;
@@ -68,6 +69,7 @@ public class SimpleXMLSplitTest extends CamelTestSupport {
         return new RouteBuilder() {
 
             Namespaces ns = new Namespaces("", "http:acme.com");
+            XPathBuilder xPathBuilder = new XPathBuilder("//persons/person");
 
             public void configure() {
                 from("direct:start")
@@ -82,8 +84,9 @@ public class SimpleXMLSplitTest extends CamelTestSupport {
                     .split().xtokenize("//orders/order",ns).streaming()
                     .to("mock:xtokenize");
 
+                // Use DOM and load all XML structure in memory
                 from("direct:start-xpath")
-                    .split().xpath("//persons/person")
+                    .split(xPathBuilder)
                     .to("mock:xmltokenize");
             }
         };
