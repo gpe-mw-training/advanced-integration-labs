@@ -9,6 +9,8 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class GenerateXmlFile {
 
@@ -30,10 +32,10 @@ public class GenerateXmlFile {
 
         boolean isDirCreated = new File(targetDir).mkdirs();
 
-        //if (isDirCreated) {
+        if (isDirCreated) {
             int size = 0;
             //records.add("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n");
-            records.add("<records>");
+            records.add("<records>\n");
             for (int i = 0; i < RECORD_COUNT; i++) {
                 b = new StringBuffer();
                 String name = generateName();
@@ -41,8 +43,8 @@ public class GenerateXmlFile {
                 b.append("<record>");
                 b.append("<id>" + i + "</id>");
                 b.append(name);
-                b.append("<email>" + getEmail(name) + "<email>");
-                b.append("<ip>" + getIpAddress() + "<ip>");
+                b.append("<email>" + getEmail(name) + "</email>");
+                b.append("<ip>" + getIpAddress() + "</ip>");
                 b.append("</record>\n");
 
                 String record = b.toString();
@@ -58,7 +60,7 @@ public class GenerateXmlFile {
                 System.out.println("\nIteration " + i);
                 writeRaw(records);
             }
-        //}
+        }
     }
 
     private static void writeRaw(List<String> records) throws IOException {
@@ -104,12 +106,20 @@ public class GenerateXmlFile {
 
     public static String getEmail(String name) throws Exception {
         StringBuffer buffer = new StringBuffer();
-        DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-        Document parse = db.parse(new InputSource(new StringReader("<?xml version='1.0'?>\n" + name)));
+        String fn = "";
+        String ln = "";
 
-        return buffer.append(parse.getElementsByTagName("firstname").toString().toLowerCase())
+        Matcher fnMatcher = Pattern.compile("<firstname>(.+?)</firstname>").matcher(name);
+        Matcher lnMatcher = Pattern.compile("<lastname>(.+?)</lastname>").matcher(name);
+
+        while(fnMatcher.find() && lnMatcher.find()) {
+            fn = fnMatcher.group(1);
+            ln = lnMatcher.group(1);
+        }
+
+        return buffer.append(fn.toLowerCase())
                 .append(".")
-                .append(parse.getElementsByTagName("lastname").toString().toLowerCase())
+                .append(ln.toLowerCase())
                 .append(domain)
                 .toString();
     }
