@@ -15,9 +15,9 @@ public class GenerateCsvFile {
     private static String targetDir = "target/data";
 
     private static String[] FirstName = { "Charles", "James", "Claus", "Jeff", "Rachel", "Sylvie", "Pauline",
-            "Marc", "Eric", "John", "Keith", "Ken", "Rob" };
+            "Marc", "Eric", "John", "Keith", "Ken", "Rob", "Bruno", "Isabelle","Eleonor","Chad","Nandan","Satya" };
     private static String[] LastName = { "Moulliard", "Cassidy", "Yordan", "Bailly", "Baboo", "Johnson",
-            "Britton", "Ibsen", "Davies", "Strachan", "Rawling" };
+            "Britton", "Ibsen", "Davies", "Strachan", "Rawling", "Sativa", "Joshi", "Bride" };
 
     public static void main(String[] args) throws Exception {
         List<String> records = new ArrayList<String>(RECORD_COUNT);

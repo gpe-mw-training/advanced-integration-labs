@@ -22,9 +22,9 @@ public class GenerateXmlFile {
     private static String targetDir = "target/data";
 
     private static String[] FirstName = { "Charles", "James", "Claus", "Jeff", "Rachel", "Sylvie", "Pauline",
-            "Marc", "Eric", "John", "Keith", "Ken", "Rob" };
+            "Marc", "Eric", "John", "Keith", "Ken", "Rob", "Bruno", "Isabelle","Eleonor","Chad","Nandan","Satya" };
     private static String[] LastName = { "Moulliard", "Cassidy", "Yordan", "Bailly", "Baboo", "Johnson",
-            "Britton", "Ibsen", "Davies", "Strachan", "Rawling" };
+            "Britton", "Ibsen", "Davies", "Strachan", "Rawling", "Sativa", "Joshi", "Bride" };
 
     public static void main(String[] args) throws Exception {
         List<String> records = new ArrayList<String>(RECORD_COUNT);
@@ -34,7 +34,6 @@ public class GenerateXmlFile {
 
         if (isDirCreated) {
             int size = 0;
-            //records.add("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n");
             records.add("<records>\n");
             for (int i = 0; i < RECORD_COUNT; i++) {
                 b = new StringBuffer();
