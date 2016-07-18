@@ -39,6 +39,17 @@ public class SimpleXMLSplitTest extends CamelTestSupport {
     }
 
     @Test
+    public void testMessageToTokenizeWithXMLTokenizeAndInheritNamespace() throws Exception {
+        MockEndpoint resultEndpoint = getMockEndpoint("mock:xmltokenize-inherit");
+        resultEndpoint.expectedMessageCount(3);
+        String message = "<orders xmlns=\"http:acme.com\"><order id=\"1\">Camel in Action</order><order id=\"2\">ActiveMQ in Action</order><order id=\"3\">DSL in Action</order></orders>";
+
+        template.sendBody("direct:start-inherit", message);
+
+        resultEndpoint.assertIsSatisfied();
+    }
+
+    @Test
     public void testGroupMessageToTokenize() throws Exception {
         MockEndpoint resultEndpoint = getMockEndpoint("mock:xmltokenize-group");
         resultEndpoint.expectedMessageCount(1);
@@ -79,6 +90,10 @@ public class SimpleXMLSplitTest extends CamelTestSupport {
                 from("direct:start-group")
                     .split().tokenizeXML("person",4).streaming()
                     .to("mock:xmltokenize-group");
+
+                from("direct:start-inherit")
+                    .split().tokenizeXML("order","orders")
+                    .to("mock:xmltokenize-inherit");
 
                 from("file:target/xtokenizer")
                     .split().xtokenize("//orders/order",ns).streaming()
