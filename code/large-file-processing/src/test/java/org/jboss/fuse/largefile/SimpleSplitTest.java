@@ -1,10 +1,7 @@
 package org.jboss.fuse.largefile;
 
-import org.apache.camel.Exchange;
-import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
-import org.apache.camel.model.language.TokenizerExpression;
 import org.apache.camel.test.junit4.CamelTestSupport;
 import org.junit.Test;
 
@@ -27,7 +24,7 @@ public class SimpleSplitTest extends CamelTestSupport {
         return new RouteBuilder() {
             public void configure() {
                 from("direct:start")
-                   .split(body(String.class).tokenizePair("\n")).streaming()
+                   .split(body(String.class).tokenize("\n")).streaming()
                    .to("mock:result");
             }
         };
