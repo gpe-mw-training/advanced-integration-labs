@@ -2,6 +2,7 @@ package org.jboss.fuse.largefile.parallel;
 
 import org.apache.camel.EndpointInject;
 import org.apache.camel.Exchange;
+import org.apache.camel.LoggingLevel;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.processor.aggregate.AggregationStrategy;
@@ -25,15 +26,15 @@ public class ParallelAggregateXMLSplitTest extends CamelTestSupport {
     }
 
     @Test
-    public void testAggregate() {
-    }
-
-    @Test
     public void testParallel() throws Exception {
     }
 
     @Test
     public void testParallelThreadPool() throws Exception {
+    }
+
+    @Test
+    public void testAggregate() throws InterruptedException {
     }
 
     @Override
