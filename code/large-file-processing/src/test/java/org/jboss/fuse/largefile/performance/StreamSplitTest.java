@@ -55,17 +55,6 @@ public class StreamSplitTest extends CamelTestSupport {
 
         long usedMemoryAfter = runtime.totalMemory() - runtime.freeMemory();
         log.info("Memory increased : " + (usedMemoryAfter-usedMemoryBefore));
-
-/*        log.debug("Processed " + tiny.get() + " tiny messages");
-        log.debug("Processed " + small.get() + " small messages");
-        log.debug("Processed " + med.get() + " medium messages");
-        log.debug("Processed " + large.get() + " large messages");
-
-        assertEquals((size / 10) * 4, tiny.get());
-        assertEquals((size / 10) * 2, small.get());
-        assertEquals((size / 10) * 3, med.get());
-        assertEquals((size / 10) * 1, large.get());*/
-
         assertTrue("Should complete route", matches);
     }
 
@@ -88,7 +77,7 @@ public class StreamSplitTest extends CamelTestSupport {
                                     log.info("Used Memory before : " + usedMemoryBefore);
                                 }
                             })
-                            .split().xpath("/orders/order").streaming()
+                            .split().xtokenize("/orders/order",null).streaming()
                             .log(LoggingLevel.DEBUG,"Order splitted");
                 }
 
