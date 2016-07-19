@@ -27,7 +27,7 @@ public class SimpleSplitTest extends CamelTestSupport {
         return new RouteBuilder() {
             public void configure() {
                 from("direct:start")
-                   .split(body(String.class).tokenize("\n")).streaming()
+                   .split(body(String.class).tokenizePair("\n")).streaming()
                    .to("mock:result");
             }
         };
