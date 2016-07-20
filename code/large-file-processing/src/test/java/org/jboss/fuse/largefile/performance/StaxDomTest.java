@@ -1,44 +1,52 @@
 package org.jboss.fuse.largefile.performance;
 
 import org.apache.camel.Exchange;
+import org.apache.camel.LoggingLevel;
+import org.apache.camel.builder.NotifyBuilder;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.builder.xml.Namespaces;
 import org.apache.camel.builder.xml.XPathBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.junit4.CamelTestSupport;
+import org.apache.camel.util.StopWatch;
+import org.junit.Ignore;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.concurrent.TimeUnit;
 
 public class StaxDomTest extends CamelTestSupport {
 
+    private int files = 10;
+    private int rows = 100000;
+    private int total = (files * rows) + files;
+    private Runtime runtime;
+
+    private static final Logger LOG = LoggerFactory.getLogger(CamelTestSupport.class);
+    private static final long MEGABYTE = 1024L * 1024L;
+
+    public static long bytesToMegabytes(long bytes) {
+        return bytes / MEGABYTE;
+    }
+
     @Override
     public void setUp() throws Exception {
-        deleteDirectory("target/xtokenizer");
+        runtime = Runtime.getRuntime();
+        runtime.gc();
         super.setUp();
     }
 
     @Test
-    public void testMessageToTokenizeWithXpath() throws Exception {
-        MockEndpoint resultEndpoint = getMockEndpoint("mock:xmltokenize");
-        resultEndpoint.expectedMessageCount(4);
-        String message = "<persons><person>James</person><person>Claus</person><person>Jonathan</person><person>Hadrian</person></persons>";
-
-        template.sendBody("direct:start-xpath", message);
-
-        resultEndpoint.assertIsSatisfied();
+    public void testWithXTokenizer() throws Exception {
     }
 
     @Test
-    public void testMessageToTokenizeWithXTokenizer() throws Exception {
-        MockEndpoint mock = getMockEndpoint("mock:xtokenize");
-        mock.expectedMessageCount(3);
-        mock.message(0).body().isEqualTo("<order id=\"1\" xmlns=\"http:acme.com\">Camel in Action</order>");
-        mock.message(1).body().isEqualTo("<order id=\"2\" xmlns=\"http:acme.com\">ActiveMQ in Action</order>");
-        mock.message(2).body().isEqualTo("<order id=\"3\" xmlns=\"http:acme.com\">DSL in Action</order>");
+    public void testWithXPath() throws Exception {
+    }
 
-        String body = createBody();
-        template.sendBodyAndHeader("file:target/xtokenizer", body, Exchange.FILE_NAME, "orders.xml");
-
-        assertMockEndpointsSatisfied();
+    @Test @Ignore
+    public void testDummy() throws Exception {
     }
 
     @Override
@@ -46,31 +54,29 @@ public class StaxDomTest extends CamelTestSupport {
 
         return new RouteBuilder() {
 
-            Namespaces ns = new Namespaces("", "http:acme.com");
-            XPathBuilder xPathBuilder = new XPathBuilder("//persons/person");
+            Namespaces ns = new Namespaces("acme", "http:acme.com");
 
             public void configure() {
-                from("file:target/xtokenizer")
-                    .split().xtokenize("//orders/order",ns).streaming()
-                    .to("mock:xtokenize");
+                from("file:target/data?noop=true").id("xtokenize").noAutoStartup()
+                    .split().xtokenize("//acme:record",ns).streaming()
+                    .log(LoggingLevel.DEBUG,"Record : ${body}");
 
                 // Use DOM and load all XML structure in memory
-                from("direct:start-xpath")
-                    .split(xPathBuilder)
-                    .to("mock:xmltokenize");
+                from("file:target/data?noop=true").id("dom").noAutoStartup()
+                    .convertBodyTo(String.class)
+                    .split().xpath("//acme:record",ns)
+                        .log(LoggingLevel.DEBUG,"Record : ${body}");
+
+                // Use DOM and load all XML structure in memory
+                from("direct:test")
+                        .log(LoggingLevel.INFO,"Records : ${body}")
+                        .filter()
+                          .xpath("//acme:record",ns)
+                          .log(LoggingLevel.INFO,"Record : ${body}")
+                          .to("mock:result")
+                        .end();
             }
         };
-    }
-
-    protected String createBody() {
-        StringBuilder sb = new StringBuilder("<?xml version=\"1.0\"?>\n");
-        sb.append("<orders xmlns=\"http:acme.com\">\n");
-        sb.append("  <order id=\"1\">Camel in Action</order>\n");
-        sb.append("  <order id=\"2\">ActiveMQ in Action</order>\n");
-        sb.append("  <order id=\"3\">DSL in Action</order>\n");
-        sb.append("  <order id=\"4\" xmlns=\"\">Illegal Action</order>\n");
-        sb.append("</orders>");
-        return sb.toString();
     }
 
 }

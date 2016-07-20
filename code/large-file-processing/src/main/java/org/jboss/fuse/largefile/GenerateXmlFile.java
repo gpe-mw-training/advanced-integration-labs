@@ -14,9 +14,9 @@ import java.util.regex.Pattern;
 
 public class GenerateXmlFile {
 
-    private static final int ITERATIONS = 5;
+    private static final int ITERATIONS = 10;
     private static final double MEG = (Math.pow(1024, 2));
-    private static final int RECORD_COUNT = 10000;
+    private static final int RECORD_COUNT = 100000;
     private static Random r = new Random();
     private static final String domain = "@acme.com";
     private static String targetDir = "target/data";
@@ -34,7 +34,7 @@ public class GenerateXmlFile {
 
         if (isDirCreated) {
             int size = 0;
-            records.add("<records>\n");
+            records.add("<records xmlns=\"http:acme.com\">\n");
             for (int i = 0; i < RECORD_COUNT; i++) {
                 b = new StringBuffer();
                 String name = generateName();
