@@ -32,7 +32,7 @@ public class SplitAsyncToFileTest extends CamelTestSupport {
     }
 
     @Test
-    public void testStreamAndSeda() throws Exception {
+    public void testStreamAndseda() throws Exception {
     }
 
     @Override

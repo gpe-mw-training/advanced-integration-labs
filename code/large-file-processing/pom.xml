@@ -20,6 +20,7 @@
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-spring</artifactId>
         </dependency>
+
         <!-- Apache Camel -->
         <dependency>
             <groupId>org.apache.camel</groupId>
