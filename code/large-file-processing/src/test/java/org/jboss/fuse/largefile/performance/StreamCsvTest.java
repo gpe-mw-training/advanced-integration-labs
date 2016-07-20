@@ -24,30 +24,33 @@ public class StreamCsvTest extends CamelTestSupport {
     private static final Logger LOG = LoggerFactory.getLogger(CamelTestSupport.class);
 
     private int files = 10;
-    private int rows = 500000;
+    private int rows = 100000;
+    private int total = (files * rows) + files;
 
     @Test
     public void testWithoutStream() throws Exception {
-        StopWatch watch = new StopWatch();
-        int total = files * rows;
+
         NotifyBuilder notify = new NotifyBuilder(context).whenDone(total).create();
+
+        StopWatch watch = new StopWatch();
         context.startRoute("nostream");
 
-        notify.matches(3, TimeUnit.MINUTES);
-        log.info("Took " + watch.taken() + " millis to process " + total + " records without stream.");
+        // Check that the splitted items have been processed during this period of time
+        notify.matches(1, TimeUnit.MINUTES);
+        log.info("Took : " + watch.taken() + " millis to process " + files * rows + " records without stream.");
     }
 
     @Test
     public void testWithStream() throws Exception {
-        int total = files * rows;
         NotifyBuilder notify = new NotifyBuilder(context).whenDone(total).create();
 
         // Start the route
         StopWatch watch = new StopWatch();
         context.startRoute("stream");
 
-        notify.matches(3, TimeUnit.MINUTES);
-        log.info("Took " + watch.taken() + " millis to process " + total + " records using stream.");
+        // Check that the splitted items have been processed during this period of time
+        notify.matches(1, TimeUnit.MINUTES);
+        log.info("Took : " + watch.taken() + " millis to process " + files * rows + " records with stream.");
     }
 
     @Override

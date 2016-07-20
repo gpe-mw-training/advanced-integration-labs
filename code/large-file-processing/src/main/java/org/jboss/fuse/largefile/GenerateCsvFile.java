@@ -9,7 +9,7 @@ public class GenerateCsvFile {
 
     private static final int ITERATIONS = 10;
     private static final double MEG = (Math.pow(1024, 2));
-    private static final int RECORD_COUNT = 500000;
+    private static final int RECORD_COUNT = 100000;
     private static Random r = new Random();
     private static final String domain = "@acme.com";
     private static String targetDir = "target/data";
