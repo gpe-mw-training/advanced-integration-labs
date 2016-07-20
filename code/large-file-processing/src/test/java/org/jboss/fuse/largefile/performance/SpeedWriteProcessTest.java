@@ -28,11 +28,15 @@ public class SpeedWriteProcessTest extends CamelTestSupport {
     }
 
     @Test
-    public void testWithoutAggregation() throws Exception {
+    public void testNoStreamNoAggregate() throws Exception {
     }
 
     @Test
-    public void testWithAggregation() throws Exception {
+    public void testStreamWithoutAggregation() throws Exception {
+    }
+
+    @Test
+    public void testStreamWithAggregation() throws Exception {
     }
 
     @Override
