@@ -29,46 +29,14 @@ public class StreamCsvTest extends CamelTestSupport {
 
     @Test
     public void testWithoutStream() throws Exception {
-
-        NotifyBuilder notify = new NotifyBuilder(context).whenDone(total).create();
-
-        StopWatch watch = new StopWatch();
-        context.startRoute("nostream");
-
-        // Check that the splitted items have been processed during this period of time
-        notify.matches(1, TimeUnit.MINUTES);
-        log.info("Took : " + watch.taken() + " millis to process " + files * rows + " records without stream.");
     }
 
     @Test
     public void testWithStream() throws Exception {
-        NotifyBuilder notify = new NotifyBuilder(context).whenDone(total).create();
-
-        // Start the route
-        StopWatch watch = new StopWatch();
-        context.startRoute("stream");
-
-        // Check that the splitted items have been processed during this period of time
-        notify.matches(1, TimeUnit.MINUTES);
-        log.info("Took : " + watch.taken() + " millis to process " + files * rows + " records with stream.");
     }
 
     @Override
     protected RouteBuilder createRouteBuilder() throws Exception {
-
-        return new RouteBuilder() {
-            @Override
-            public void configure() throws Exception {
-                    from("file://target/data?noop=true").id("nostream").noAutoStartup()
-                       .split().tokenize("\n")
-                       .log(LoggingLevel.DEBUG,"Record : ${body}");
-
-                from("file://target/data?noop=true").id("stream").noAutoStartup()
-                        .split().tokenize("\n").streaming()
-                        .log(LoggingLevel.DEBUG,"Record : ${body}");
-            }
-        };
-
     }
 
 }
