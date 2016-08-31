@@ -96,12 +96,14 @@
     </build>
 
     <modules>
-        <module>security-ws</module>
-        <module>security-rest</module>
-        <module>persistence</module>
+        <!--module>security-ws</module-->
+        <module>security-rest</module> 
         <module>transaction</module>
         <module>large-file-processing</module>
-        <module>bam</module>
+	<module>persistence</module>
+	<!--    
+	    <module>bam</module> 
+	    -->
     </modules>
 
     <!-- Repository -->
@@ -109,6 +111,10 @@
         <repository>
             <id>JBoss Fuse Public</id>
             <url>http://repository.jboss.org/nexus/content/groups/fs-public</url>
+        </repository>
+        <repository>
+            <id>Red Hat</id>
+            <url>http://maven.repository.redhat.com/ga</url>
         </repository>
         <repository>
             <id>JBoss Public</id>
