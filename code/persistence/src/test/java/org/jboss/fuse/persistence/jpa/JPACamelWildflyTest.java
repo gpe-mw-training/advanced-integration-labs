@@ -35,6 +35,8 @@ public class JPACamelWildflyTest {
 
     @Deployment
     public static JavaArchive deployment() {
+        JavaArchive archive = ShrinkWrap.create(JavaArchive.class, "camel-jpa-test.jar");
+
         return archive;
     }
 
@@ -51,4 +53,3 @@ public class JPACamelWildflyTest {
     }
 
 }
-
