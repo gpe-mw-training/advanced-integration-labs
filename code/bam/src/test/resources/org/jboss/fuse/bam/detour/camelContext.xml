@@ -9,8 +9,8 @@
        http://camel.apache.org/schema/spring/camel-spring.xsd
     ">
 
-    <camelContext id="camel" xmlns="http://camel.apache.org/schema/spring">
-    </camelContext>
+  <camelContext id="camel" xmlns="http://camel.apache.org/schema/spring">
+  </camelContext>
 
 
 </beans>

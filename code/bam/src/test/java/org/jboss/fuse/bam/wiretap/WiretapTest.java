@@ -17,12 +17,10 @@ public class WiretapTest extends CamelSpringTestSupport {
 
     @Test
     public void testWiretapWithCopy() throws Exception {
-
     }
 
     @Test
     public void testWiretapWithNew() throws Exception {
-
     }
 
     @Override

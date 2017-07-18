@@ -37,9 +37,11 @@ public class BasicAuthRESTCamelDSLJettyRoleConstraintTest extends BaseJettyTest 
         return jndi;
     }
 
+    /*
     @Before
     public void init() throws IOException {
     }
+    */
 
     @Test
     public void shouldSayHelloTest() {

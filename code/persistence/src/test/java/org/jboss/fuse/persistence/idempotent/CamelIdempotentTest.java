@@ -3,6 +3,7 @@ package org.jboss.fuse.persistence.idempotent;
 import org.apache.camel.CamelExecutionException;
 import org.apache.camel.EndpointInject;
 import org.apache.camel.ProducerTemplate;
+import org.apache.camel.Exchange;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.spring.CamelSpringTestSupport;
 import org.junit.Assert;
@@ -14,6 +15,11 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+
+       
+import org.jboss.fuse.persistence.model.Incident;
+
+import java.util.*;
 
 public class CamelIdempotentTest extends CamelSpringTestSupport {
 
